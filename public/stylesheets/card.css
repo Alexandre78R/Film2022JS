@@ -1,0 +1,87 @@
+/* Format de la card  */
+.card {
+    height: 200px;
+    width: 320px;
+    overflow: hidden;
+}
+
+
+/* Format  card header */
+.card header {
+    padding: 1px;
+    height: 190px;
+    width: 100%;
+}
+
+/* Format header card img*/
+.card header img {
+    border: 5px solid #f1f1f1;
+    height: 100%;
+    width: 100%;
+}
+
+/*  Positionnement  de la card bio*/
+.card .card-bio {
+    padding: 25px;
+    position: sticky;
+    /* opacity: 0; */
+}
+
+/* Format d'écriture dans card-bio pour les balise P */
+.card .card-bio p {
+    color: rgb(129, 126, 126);
+    font-size: 14px;
+    font-style: italic;
+    text-align: center;
+    font-family :'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif ;
+}
+
+/* Format d'écriture dans card-bio pour les balise H5 */
+.card .card-bio h5 {
+    color: rgb(129, 126, 126);
+    text-align: center;
+    font-family :'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif ;
+}
+
+/* Format d'écriture dans card-bio pour les balise li */
+.card .card-bio li {
+    text-align: center;
+    font-size: 15px;
+    display:inline;
+    font-family :'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif ;
+}
+
+/* Format d'écriture dans card-bio pour les balise a */
+.card .card-bio li a {
+    text-decoration: none;
+    color: rgb(87, 167, 237);
+    font-family :'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif ;
+}
+.card .card-social-links li {
+    display: block;
+    float: left;
+}
+
+/* Format d'écriture dans card-social-links pour les balise li a */
+.card .card-social-links li a {
+    display: block;
+    text-decoration: none;
+    color: rgb(87, 167, 237);
+}
+
+/*  CHANGES  ON HOVER  */
+
+.card:hover {
+    height: 100%;
+    width: 30%;
+    background-color: rgba(252, 252, 252, 0.863);
+}
+
+.card:hover header h1,
+.card:hover header h2 {
+    color: #f1f1f1;
+}
+
+.card:hover .card-bio {
+    opacity: 1;
+}

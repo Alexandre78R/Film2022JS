@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <!-- Import l'icon -->
+    <link rel="icon" href="./images/icon.png" />
+    <!-- Import du css de la navBar -->
+    <link rel="stylesheet" href="./stylesheets/navBar.css">
+    <!-- Import du css de container -->
+    <link rel="stylesheet" href="./stylesheets/container.css">
+    <!-- Import du css des contact -->
+    <link rel="stylesheet" href="./stylesheets/contact.css">
+    <!-- Import du css du footer -->
+    <link rel="stylesheet" href="./stylesheets/footer.css">
+    <!-- Titre de la page -->
+    <title><%= title %></title>
+</head>
+<body>
+    <header>
+        <!-- Nav Bar -->
+        <%- include('../Components/navBar', {online}); %>
+        <!-- Carrousel -->
+        <%- include('../Components/Carrousel', {online}); %>
+    </header>
+
+    <section>
+        <div class="container_app">
+            <div class="container_app_Contact">
+                <form id="contact_form" action="/user/login" method="post">
+                    <div class="structure-contact">
+                        <label>Identifiant</label><br/>
+                        <input id="username" name="username" type="text" placeholder="Identifiant" size="30" /><br />
+                        <span id="username_validation"></span>
+                    </div>
+                    <div class="structure-contact">
+                        <label>Mot de passe</label><br />
+                        <input id="password" name="password" type="password" placeholder="Mot de passe" size="30" /><br />
+                        <span id="password_validation"></span>
+                    </div>
+                    <div class="structure-button-contact">
+                        <input id="submit_button" class="button-contact" type="submit" value="Envoyer"/>
+                    </div>
+                  </form>
+              </div>
+        </div>
+    </section>
+    <%- include('../Components/footer', {online}); %>
+</body> -->
+</html>

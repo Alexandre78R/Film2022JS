@@ -1,0 +1,18 @@
+<!-- Import du css de la navBar -->
+<link rel="stylesheet" href="/stylesheets/navBar.css">
+
+<!-- Nav Bar -->
+<nav id="navBar">
+    <a id="logo" class="nav-link" href="/">Film 2022</a>
+    <a class="nav-link" href="/">Acceuil</a>
+    <a class="nav-link" href="/contact">Contact</a>
+    <a class="nav-link" href="/faq">FAQ</a>
+    <% if(!online) { %>
+        <a id="about" class="nav-link" href="/login">Connexion</a>
+    <% } else { %>
+        <% console.log("Online dans NNavBar --->", online)%>
+        
+        <a class="nav-link" href="/logout">Déconnexion</a>
+        <a id="about" class="nav-link" href="/"><%= online.username %></a>
+    <% } %>
+</nav>

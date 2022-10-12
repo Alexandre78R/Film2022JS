@@ -1,0 +1,63 @@
+
+html, body {
+	height: 100%;
+	margin: 0; padding: 0;
+}
+body {
+	display : table;
+	width: 100%;
+}
+
+/* Background du footer */
+footer{
+    display : table-row;
+	height: 100px; /* à titre d'exemple */
+    /* Maintenir le footer en bas */
+    background: rgb(59, 59, 60);
+    /* height: auto; */
+    width: 100%;
+    padding-top: 5px;
+    color: #fff;
+}
+
+/* A l'intérrieur du footer */
+.footer-content{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    text-align: center;
+}
+
+ /* Alignement du menu dans le footer */
+.footer-menu{
+    float: right;
+}
+
+/* Alignement du menu dans le footer */
+.footer-menu ul{
+    display: flex;
+} 
+  
+.footer-menu ul li{
+  padding-right: 5px;
+  display: block;
+}
+  
+/* Format d'écriture du menu dans le footer */
+.footer-menu ul li a{
+    color: white;
+    font-family :'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif ;
+    text-decoration: none;
+}
+  
+.footer-menu ul li a:hover{
+    color: rgb(87, 167, 237);
+}
+ 
+/* Redimention du button github dans le footer */
+.social-img {
+    max-width : 50px;
+    max-height : 25px;
+}
+

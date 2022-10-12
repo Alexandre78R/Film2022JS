@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <!-- Import l'icon -->
+    <link rel="icon" href="./images/icon.png" />
+    <!-- Import du css de container -->
+    <link rel="stylesheet" href="./stylesheets/container.css">
+    <!-- Import du css des cartes -->
+    <link rel="stylesheet" href="./stylesheets/card.css">
+    <!-- Titre de la page -->
+    <title><%= title %></title>
+</head>
+<body>
+    <header>
+        <!-- Nav Bar -->
+        <%- include('../Components/navBar', {online}); %>
+        <!-- Carrousel -->
+        <%- include('../Components/Carrousel', {online}); %>
+    </header>
+
+    <section>
+        <div class="container_app">
+            <aside class="card">
+                
+                <header>
+                <img src="./images/slide-film/the-batman.jpg">
+                </header>
+    
+                <div class="card-bio">
+                    <p>Dans sa deuxième année de lutte contre le crime, le milliardaire et justicier masqué Batman explore la corruption qui sévit à Gotham et notamment comment elle pourrait être liée à sa propre famille, les Wayne, à qui il doit toute sa fortune. En parallèle, il enquête sur les meurtres d'un tueur en série qui se fait connaître sous le nom de Sphinx et sème des énigmes cruelles sur son passage.</p>
+                    <h5>Note : </h5>
+                    <ul>
+                        <li><a href="https://www.allocine.fr/film/fichefilm_gen_cfilm=211012.html">AlloCiné</a></li>
+                        <li><a href="https://www.senscritique.com/film/the_batman/8466396">SensCritique</a></li>
+                        <li><a href="https://www.premiere.fr/film/The-Batman">CinéSéries</a></li>
+                    </ul>
+                </div>
+            
+                <ul class="card-social-links">
+            
+                <li>
+                    <a href="#">
+                        <p>Source</p>
+                    </a> 
+                </li>
+            </aside>  
+            <aside class="card">
+                
+                <header>
+                <img src="./images/slide-film/top-gun-slide.jpg">
+                </header>
+    
+                <div class="card-bio">
+                    <p>Après plus de 30 ans de service en tant que l'un des meilleurs aviateurs de la Marine, Pete Maverick Mitchell est à sa place, repoussant les limites en tant que pilote d'essai courageux et esquivant l'avancement de grade qui le mettrait à la terre.</p>
+                    <h5>Note : </h5>
+                    <ul>
+                        <li><a href="https://www.allocine.fr/film/fichefilm_gen_cfilm=186636.html">AlloCiné</a></li>
+                        <li><a href="https://www.senscritique.com/film/top_gun_maverick/critique/270585716">SensCritique</a></li>
+                        <li><a href="#">CinéSéries</a></li>
+                    </ul>
+                </div>
+            
+                <ul class="card-social-links">
+            
+                <li>
+                    <a href="#">
+                        <p>Source</p>
+                    </a> 
+                </li>
+            </aside>  
+            <aside class="card">
+                
+                <header>
+                <img src="./images/slide-film/doctor-strange.jpg">
+                </header>
+    
+                <div class="card-bio">
+                    <p>Le Docteur Stephen Strange continue ses recherches sur la Pierre du Temps. Cependant, un vieil ami devenu ennemi tente de détruire tous les sorciers de la Terre, ce qui perturbe le plan de Strange.</p>
+                    <h5>Note : </h5>
+                    <ul>
+                        <li><a href="https://www.allocine.fr/film/fichefilm_gen_cfilm=251390.html">AlloCiné</a></li>
+                        <li><a href="https://www.cineserie.com/movies/2298598/">SensCritique</a></li>
+                        <li><a href="https://www.senscritique.com/film/doctor_strange_in_the_multiverse_of_madness/23302273">CinéSéries</a></li>
+                    </ul>
+                </div>
+            
+                <ul class="card-social-links">
+            
+                <li>
+                    <a href="#">
+                        <p>Source</p>
+                    </a> 
+                </li>
+            </aside>  
+            <aside class="card">
+                
+                <header>
+                <img src="./images/slide-film/one-piece-red.jpg">
+                </header>
+    
+                <div class="card-bio">
+                    <p>Luffy et son équipage s'apprêtent à assister à un festival de musique attendu avec impatience. La chanteuse la plus populaire du monde, Uta, va monter sur scène pour la première fois. Celle qui n'est autre que la fille du légendaire pirate Shanks Le Roux va révéler la puissance exceptionnelle de sa voix qui pourrait bien changer le monde.</p>
+                    <h5>Note : </h5>
+                    <ul>
+                        <li><a href="https://www.allocine.fr/film/fichefilm_gen_cfilm=298674.html">AlloCiné</a></li>
+                        <li><a href="https://www.cineserie.com/movies/4713262/">SensCritique</a></li>
+                        <li><a href="#">CinéSéries</a></li>
+                    </ul>
+                </div>
+            
+                <ul class="card-social-links">
+            
+                <li>
+                    <a href="#">
+                        <p>Source</p>
+                    </a> 
+                </li>
+            </aside>  
+
+            <aside class="card">
+                
+                <header>
+                <img src="./images/slide-film/fantastic-beasts-3.jpg">
+                </header>
+    
+                <div class="card-bio">
+                    <p> Le professeur Albus Dumbledore sait que le puissant sorcier noir Gellert Grindelwald cherche à prendre le contrôle du monde des sorciers. Incapable de l'arrêter seul, il confie à Newt Scamander, magizoologiste, le soin de diriger une équipe intrépide de sorciers et de sorcières.</p>
+                    <h5>Note : </h5>
+                    <ul>
+                        <li><a href="https://www.allocine.fr/film/fichefilm_gen_cfilm=228087.html">AlloCiné</a></li>
+                        <li><a href="https://www.senscritique.com/film/les_animaux_fantastiques_les_secrets_de_dumbledore/critique/159541412">SensCritique</a></li>
+                        <li><a href="#">CinéSéries</a></li>
+                    </ul>
+                </div>
+            
+                <ul class="card-social-links">
+            
+                <li>
+                    <a href="#">
+                        <p>Source</p>
+                    </a> 
+                </li>
+            </aside>  
+            <aside class="card">
+                
+                <header>
+                <img src="./images/slide-film/uncharted.jpg">
+                </header>
+    
+                <div class="card-bio">
+                    <p> Le chasseur de trésors Victor Sully Sullivan recrute Nathan Drake pour l'aider à récupérer une fortune vieille de 500 ans amassée par l'explorateur Ferdinand Magellan.</p>
+                    <h5>Note : </h5>
+                    <ul>
+                        <li><a href="https://www.allocine.fr/film/fichefilm_gen_cfilm=186437.html">AlloCiné</a></li>
+                        <li><a href="https://www.senscritique.com/film/uncharted/461150">SensCritique</a></li>
+                        <li><a href="https://www.cineserie.com/movies/2574229/">CinéSéries</a></li>
+                    </ul>
+                </div>
+            
+                <ul class="card-social-links">
+            
+                <li>
+                    <a href="#">
+                        <p>Source</p>
+                    </a> 
+                </li>
+            </aside> 
+            <aside class="card">
+                
+                <header>
+                <img src="./images/slide-film/harry-potter.jpg">
+                </header>
+    
+                <div class="card-bio">
+                    <p>Daniel Radcliffe, Emma Watson et Rupert Grint participent à la célébration du 20e anniversaire de la sortie de Harry Potter. On raconte l'histoire fascinante de cette extraordinaire épopée à travers des séquences derrière les coulisses.</p>
+                    <h5>Note : </h5>
+                    <ul>
+                        <li><a href="#">AlloCiné</a></li>
+                        <li><a href="https://www.senscritique.com/film/harry_potter_retour_a_poudlard/45497664">SensCritique</a></li>
+                        <li><a href="https://www.cineserie.com/movies/4712437/">CinéSéries</a></li>
+                    </ul>
+                </div>
+            
+                <ul class="card-social-links">
+            
+                <li>
+                    <a href="#">
+                        <p>Source</p>
+                    </a> 
+                </li>
+            </aside> 
+            <aside class="card">
+                
+                <header>
+                <img src="./images/slide-film/ThorLoveThunder.jpg">
+                </header>
+    
+                <div class="card-bio">
+                    <p>Thor se lance dans un voyage différent de tout ce qu'il a connu jusqu'à présent : une quête de paix intérieure. Cependant, sa retraite est interrompue par Gorr le boucher des dieux, un tueur galactique qui cherche l'extinction des dieux. Pour combattre la menace, Thor fait appel à l'aide du roi Valk…</p>
+                    <h5>Note : </h5>
+                    <ul>
+                        <li><a href="https://www.allocine.fr/film/fichefilm_gen_cfilm=275207.html">AlloCiné</a></li>
+                        <li><a href="https://www.senscritique.com/film/thor_love_and_thunder/critique/205491192">SensCritique</a></li>
+                        <li><a href="#">CinéSéries</a></li>
+                    </ul>
+                </div>
+            
+                <ul class="card-social-links">
+            
+                <li>
+                    <a href="#">
+                        <p>Source</p>
+                    </a> 
+                </li>
+            </aside> 
+          </div>
+    </section>
+    <%- include('../Components/footer', {online}); %>
+</body>
+</html>

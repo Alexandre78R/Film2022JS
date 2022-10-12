@@ -1,0 +1,25 @@
+/* external css: flickity.css */
+  
+  /* Couleur de fond  */
+  .gallery {
+    background: #EEE;
+  }
+
+  /* Format des slides*/
+  .gallery-cell {
+    width: 50%;
+    height: 200px;
+  }
+  
+  /* cell number */
+  .gallery-cell:before {
+    display: block;
+    text-align: center;
+    line-height: 250px;
+    font-size: 80px;
+  }
+
+  /* PLacement de du carrousel en de sous de la nav bar */
+  .block-Carrousel {
+    margin-top: 55px;
+  }

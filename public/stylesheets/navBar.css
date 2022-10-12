@@ -1,0 +1,46 @@
+#navBar {
+    /* fond de bar à 100% */
+    width: 100%;
+    /* Position de la barre toute en haut */
+    position: absolute;
+    top: 0;
+    left: 0;
+    /* Coleur de la barre  */
+    background-color: rgb(59, 59, 60);
+    /* format d'écriture */
+    font-family :'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif ;
+    /* Taille de l'écriture  */
+    font-size: 15px;
+ }
+ 
+ .nav-link {
+    /* Permet de définir une largeur et une hauteur sur l'élément */
+    display: inline-block;
+    /* Taille entre les links */
+    width: 90px;
+    height: 55px;
+    /* Couleur d'écriture */
+    color: White;
+    /* On centre le link au milieu du display */
+    text-align: center;
+    /* on définit la hauteur des links */
+    line-height: 55px;
+    /* On retire la barre de kink de base (html) */
+    text-decoration: none;
+ }
+ 
+ #logo {
+    /* Dimention du logo */
+    width: 120px;
+    /* Couleur du logp */
+    background-color: rgb(87, 167, 237);
+    /* Épaisseur de la police en gras. Identique à 700 */
+    font-weight: bold;
+ }
+ 
+ #about {
+    /* position du button */
+    position: absolute;
+    top: 0;
+    right: 0;
+ }
