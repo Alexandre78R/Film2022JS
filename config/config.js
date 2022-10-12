@@ -1,5 +1,5 @@
 module.exports = {
     //Clé secret de cryptage password
-    "secret" : "",
-    "userBDD" : ""
+    "secret" : "tesskssknqknds",
+    "userBDD" : "dddfsdfds"
 }
