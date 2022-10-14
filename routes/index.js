@@ -4,6 +4,9 @@ var router = express.Router();
 //Shéma bdd de l'user
 const User = require('../models/users.js');
 
+// Shéma FAQ 
+const FAQ = require('../models/faq.js');
+
 //Import des modules pour le password
 var uid2 = require("uid2");
 var CryptoJS = require("crypto-js");
@@ -31,7 +34,13 @@ router.get('/contact', function(req, res, next) {
 
 /* GET faq page. */
 router.get('/faq', function(req, res, next) {
-  res.render('./pages/faq', { online: req.session.user, title: 'Film 2022 - FAQ' });
+  FAQ.find().then(faq => { 
+    // console.log("FAQ", faq);
+    res.render('./pages/faq', { online: req.session.user, title: 'Film 2022 - Panel FAQ', faqResponse : faq});
+  }).catch(err => {
+    console.log("FAQ", err);
+    res.render('./pages/faq', { online: req.session.user, title: 'Film 2022 - Panel FAQ', faqResponse : err});
+});
 });
 
 /* GET login */
@@ -85,7 +94,13 @@ router.get('/panel-faq', function(req, res, next) {
     if (!req.session.user) {
         res.redirect("/");
     }
-    res.render('./pages/panel-faq', { online: req.session.user, title: 'Film 2022 - Panel FAQ' });
+    FAQ.find().then(faq => { 
+        // console.log("FAQ", faq);
+        res.render('./pages/panel-faq', { online: req.session.user, title: 'Film 2022 - Panel FAQ', faqResponse : faq});
+      }).catch(err => {
+        console.log("FAQ", err);
+        res.render('./pages/panel-faq', { online: req.session.user, title: 'Film 2022 - Panel FAQ', faqResponse : err});
+    });
 });
 
 /* GET panel-faq-add page. */
@@ -104,6 +119,32 @@ router.get('/panel-faq-edit', function(req, res, next) {
         res.redirect("/");
     }
     res.render('./pages/panel-faq-edit ', { online: req.session.user, title: 'Film 2022 - Panel FAQ - Modifier' });
+});
+
+//Route pour enregistrer une nouvelle FAQ.
+router.post('/faq/add', function(req, res, next) {
+
+    //Stockage des données reçus du front
+    var faqDataAdd  = {
+        quest: req.body.quest,
+        response: req.body.response,
+    };
+
+    //Création du document FAQ
+    FAQ.create(faqDataAdd)
+        .then(faq => {
+            res.json({
+                "text" : "Création réussie de FAQ !",
+                "data" : faq
+            });
+        })
+        //Si il y a une erreur
+        .catch(err => {
+            res.status(500).json({
+                "text" : "Erreur Interne !",
+                "code" : 500
+            });
+    });
 });
 
 //Route pour enregistrer un nouveau compte.
@@ -138,7 +179,7 @@ router.post('/user/signup', function(req, res, next) {
         salt: salt,//Pour le déchiffrage mdp
         email: req.body.email, // email
         password : CryptoJS.AES.encrypt(req.body.password, salt).toString(),//MDP crypté
-    }
+    };
 
     //Recherche dans la BDD 
     User.findOne({

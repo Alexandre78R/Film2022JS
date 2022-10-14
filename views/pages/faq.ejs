@@ -21,120 +21,15 @@
 
     <section>
         <div class="container_app_FAQ">
-            <div class="tab">
-                <input id="tab-1" type="checkbox">
-                <label for="tab-1">Question 1 ?</label>
-                <div class="content">
-                    <p>
-                        Nisi mihi Phaedrum, inquam, tu mentitum aut Zenonem putas, quorum utrumque audivi, cum mihi nihil sane praeter sedulitatem probarent,
-                        omnes mihi Epicuri sententiae satis notae sunt. atque eos, quos nominavi, cum Attico nostro frequenter audivi, cum miraretur ille quidem utrumque,
-                        Phaedrum autem etiam amaret, cotidieque inter nos ea, quae audiebamus, conferebamus, neque erat umquam controversia, quid ego intellegerem, sed quid probarem.
-                    </p>
+            <% for (let i = 0; i < faqResponse.length; i++) { %>
+                <% console.log("faqResponse[i] -->", faqResponse[i].quest); %>
+                <div class="tab">
+                    <input id="tab-<%= faqResponse[i]%>" type="checkbox">
+                    <label for="tab-<%= faqResponse[i]%>"><%= faqResponse[i].quest %></label>
+                    <div class="content">
+                        <p> <%= faqResponse[i].response %> </p>
                 </div>
-            </div>
-            
-            <!-- SECOND TAB -->
-            <div class="tab">
-                <input id="tab-2" type="checkbox">
-                <label for="tab-2">Question 2 ?</label>
-                <div class="content">
-                    <p>
-                        Nisi mihi Phaedrum, inquam, tu mentitum aut Zenonem putas, quorum utrumque audivi, cum mihi nihil sane praeter sedulitatem probarent,
-                        omnes mihi Epicuri sententiae satis notae sunt. atque eos, quos nominavi, cum Attico nostro frequenter audivi, cum miraretur ille quidem utrumque,
-                        Phaedrum autem etiam amaret, cotidieque inter nos ea, quae audiebamus, conferebamus, neque erat umquam controversia, quid ego intellegerem, sed quid probarem.
-                    </p>
-                </div>
-            </div>
-            
-            <!-- THIRD TAB -->
-            <div class="tab">
-                <input id="tab-3" type="checkbox">
-                <label for="tab-3">Question 3 ?</label>
-                <div class="content">
-                    <p>
-                        Nisi mihi Phaedrum, inquam, tu mentitum aut Zenonem putas, quorum utrumque audivi, cum mihi nihil sane praeter sedulitatem probarent,
-                        omnes mihi Epicuri sententiae satis notae sunt. atque eos, quos nominavi, cum Attico nostro frequenter audivi, cum miraretur ille quidem utrumque,
-                        Phaedrum autem etiam amaret, cotidieque inter nos ea, quae audiebamus, conferebamus, neque erat umquam controversia, quid ego intellegerem, sed quid probarem.
-                    </p>
-                </div>
-            </div>
-            <div class="tab">
-                <input id="tab-4" type="checkbox">
-                <label for="tab-4">Question 4 ?</label>
-                <div class="content">
-                    <p>
-                        Nisi mihi Phaedrum, inquam, tu mentitum aut Zenonem putas, quorum utrumque audivi, cum mihi nihil sane praeter sedulitatem probarent,
-                        omnes mihi Epicuri sententiae satis notae sunt. atque eos, quos nominavi, cum Attico nostro frequenter audivi, cum miraretur ille quidem utrumque,
-                        Phaedrum autem etiam amaret, cotidieque inter nos ea, quae audiebamus, conferebamus, neque erat umquam controversia, quid ego intellegerem, sed quid probarem.
-                    </p>
-                </div>
-            </div>
-            <div class="tab">
-                <input id="tab-5" type="checkbox">
-                <label for="tab-5">Question 5 ?</label>
-                <div class="content">
-                    <p>
-                        Nisi mihi Phaedrum, inquam, tu mentitum aut Zenonem putas, quorum utrumque audivi, cum mihi nihil sane praeter sedulitatem probarent,
-                        omnes mihi Epicuri sententiae satis notae sunt. atque eos, quos nominavi, cum Attico nostro frequenter audivi, cum miraretur ille quidem utrumque,
-                        Phaedrum autem etiam amaret, cotidieque inter nos ea, quae audiebamus, conferebamus, neque erat umquam controversia, quid ego intellegerem, sed quid probarem.
-                    </p>
-                </div>
-            </div>
-            <div class="tab">
-                <input id="tab-6" type="checkbox">
-                <label for="tab-6">Question 6 ?</label>
-                <div class="content">
-                    <p>
-                        Nisi mihi Phaedrum, inquam, tu mentitum aut Zenonem putas, quorum utrumque audivi, cum mihi nihil sane praeter sedulitatem probarent,
-                        omnes mihi Epicuri sententiae satis notae sunt. atque eos, quos nominavi, cum Attico nostro frequenter audivi, cum miraretur ille quidem utrumque,
-                        Phaedrum autem etiam amaret, cotidieque inter nos ea, quae audiebamus, conferebamus, neque erat umquam controversia, quid ego intellegerem, sed quid probarem.
-                    </p>
-                </div>
-            </div>
-            <div class="tab">
-                <input id="tab-7" type="checkbox">
-                <label for="tab-7">Question 7 ?</label>
-                <div class="content">
-                    <p>
-                        Nisi mihi Phaedrum, inquam, tu mentitum aut Zenonem putas, quorum utrumque audivi, cum mihi nihil sane praeter sedulitatem probarent,
-                        omnes mihi Epicuri sententiae satis notae sunt. atque eos, quos nominavi, cum Attico nostro frequenter audivi, cum miraretur ille quidem utrumque,
-                        Phaedrum autem etiam amaret, cotidieque inter nos ea, quae audiebamus, conferebamus, neque erat umquam controversia, quid ego intellegerem, sed quid probarem.
-                    </p>
-                </div>
-            </div>
-            <div class="tab">
-                <input id="tab-8" type="checkbox">
-                <label for="tab-8">Question 8 ?</label>
-                <div class="content">
-                    <p>
-                        Nisi mihi Phaedrum, inquam, tu mentitum aut Zenonem putas, quorum utrumque audivi, cum mihi nihil sane praeter sedulitatem probarent,
-                        omnes mihi Epicuri sententiae satis notae sunt. atque eos, quos nominavi, cum Attico nostro frequenter audivi, cum miraretur ille quidem utrumque,
-                        Phaedrum autem etiam amaret, cotidieque inter nos ea, quae audiebamus, conferebamus, neque erat umquam controversia, quid ego intellegerem, sed quid probarem.
-                    </p>
-                </div>
-            </div>
-            <div class="tab">
-                <input id="tab-9" type="checkbox">
-                <label for="tab-9">Question 9 ?</label>
-                <div class="content">
-                    <p>
-                        Nisi mihi Phaedrum, inquam, tu mentitum aut Zenonem putas, quorum utrumque audivi, cum mihi nihil sane praeter sedulitatem probarent,
-                        omnes mihi Epicuri sententiae satis notae sunt. atque eos, quos nominavi, cum Attico nostro frequenter audivi, cum miraretur ille quidem utrumque,
-                        Phaedrum autem etiam amaret, cotidieque inter nos ea, quae audiebamus, conferebamus, neque erat umquam controversia, quid ego intellegerem, sed quid probarem.
-                    </p>
-                </div>
-            </div>
-            <div class="tab">
-                <input id="tab-10" type="checkbox">
-                <label for="tab-10">Question 10 ?</label>
-                <div class="content">
-                    <p>
-                        Nisi mihi Phaedrum, inquam, tu mentitum aut Zenonem putas, quorum utrumque audivi, cum mihi nihil sane praeter sedulitatem probarent,
-                        omnes mihi Epicuri sententiae satis notae sunt. atque eos, quos nominavi, cum Attico nostro frequenter audivi, cum miraretur ille quidem utrumque,
-                        Phaedrum autem etiam amaret, cotidieque inter nos ea, quae audiebamus, conferebamus, neque erat umquam controversia, quid ego intellegerem, sed quid probarem.
-                    </p>
-                </div>
-            </div>
+            <% } %>
         </div>
     </section>
     <!-- Import footer -->
