@@ -1,3 +1,4 @@
+
 table {
     border-collapse: collapse;
 }
@@ -8,6 +9,7 @@ td, th{
 
 .tab-text-from {
     padding: 25px;
+    text-decoration: none;
     position: sticky;
     font-size: 14px;
     font-style: italic;
@@ -47,4 +49,12 @@ td, th{
 .tab-buton-add:hover {
     border-color: rgb(64, 160, 69);
     background-color: rgb(57, 141, 61);
+}
+
+.tab-text-a {
+    color: rgb(59, 59, 60);
+}
+
+.tab-text-a:hover {
+    color: rgb(31, 106, 119);
 }

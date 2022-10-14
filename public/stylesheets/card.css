@@ -77,11 +77,13 @@
     background-color: rgba(252, 252, 252, 0.863);
 }
 
+/* Card Hover format écriture  */
 .card:hover header h1,
 .card:hover header h2 {
     color: #f1f1f1;
 }
 
+/* Card Hover card bio */
 .card:hover .card-bio {
     opacity: 1;
 }
