@@ -11,6 +11,12 @@ var CryptoJS = require("crypto-js");
 //Module session
 var session = require('express-session');
 
+// Param Reponse User login par défault 
+var reponseUserLogin = { 
+    status : true,
+    text : ""
+};
+
 /* GET Acceuil page. */
 router.get('/', function(req, res, next) {
   console.log("LOG DE SESSION DANS LA HOME ===>", req.session.user);
@@ -28,15 +34,18 @@ router.get('/faq', function(req, res, next) {
   res.render('./pages/faq', { online: req.session.user, title: 'Film 2022 - FAQ' });
 });
 
-/* GET faq page. */
+/* GET login */
 router.get('/login', function(req, res, next) {
-  res.render('./pages/login', { online: req.session.user, title: 'Film 2022 - Login : Panel Admin' });
+    reponseUserLogin.status = true;
+    reponseUserLogin.text = "";
+    res.render('./pages/login', { online: req.session.user, title: 'Film 2022 - Panel Admin', reponseUserLogin,});
 });
 
 /* GET panel-contact page. */
 router.get('/panel-contact', function(req, res, next) {
     res.render('./pages/panel-contact', { online: req.session.user, title: 'Film 2022 - Panel Contact' });
 });
+
 
 /* GET panel-film page. */
 router.get('/panel-film', function(req, res, next) {
@@ -68,29 +77,29 @@ router.get('/panel-faq-edit', function(req, res, next) {
     res.render('./pages/panel-faq-edit ', { online: req.session.user, title: 'Film 2022 - Panel FAQ - Modifier' });
 });
 
-
-
 //Route pour enregistrer un nouveau compte.
 router.post('/user/signup', function(req, res, next) {
 
-  //Vérification de tous les informations sois là à la request
-  if (req.body.username == "" || req.body.username == undefined) {
+
+    console.log("req.body.username",req.body);
+    //Vérification de tous les informations sois là à la request
+    if (req.body.username == "" || req.body.username == undefined) {
     res.json({
-      "text" : "Merci d'indiquer un username !",
-      "code" : 403
+        "text" : "Merci d'indiquer un username !",
+        "code" : 403
     });
-  }else if (req.body.email === "" || req.body.username == undefined){
+    }else if (req.body.email === "" || req.body.username == undefined){
     res.json({
-      "text" : "Merci d'indiquer un email !",
-      "code" : 403
+        "text" : "Merci d'indiquer un email !",
+        "code" : 403
     });
-  }else if (req.body.password === "" || req.body.username == undefined) {
+    }else if (req.body.password === "" || req.body.username == undefined) {
     res.json({
-      "text" : "Merci d'indiquer un mot de passe !",
-      "code" : 403
+        "text" : "Merci d'indiquer un mot de passe !",
+        "code" : 403
     });
 
-  } else {
+    } else {
     //Création du sel
     var salt = uid2(32);
 
@@ -157,7 +166,7 @@ router.post('/user/signup', function(req, res, next) {
                 res.json({
                     "text" : "L'email " + email.email + " existe déjà !",
                     "code" : 404
-              })
+                })
             }
         //En cas d'erreur
         })
@@ -168,52 +177,59 @@ router.post('/user/signup', function(req, res, next) {
             "code" : 500
         });
     })
-  }
+    }
 
 });
 
 //Route pour la connexion.
 router.post('/user/login', function(req, res, next) {
 
-  console.log(req.session)
-  //On regarde dans la BDD si l'username existe bien.
-  User.findOne({
-      username: req.body.username
-  }).then(async user => {
-          //Si on ne touve pas l'username on r'envois erreur 401
-      if (!user) {
-          res.json({
-              "text": "L'utilisateur " + req.body.username +  " n'existe pas !",
-              "code": 401
-          })
-          //Si l'username est trouvé + le passwoard est correct on lui donne le token
-      } else {
-          var bytes  = CryptoJS.AES.decrypt(user.password, user.salt);
-          var hash = bytes.toString(CryptoJS.enc.Utf8);
-          if (hash === req.body.password) {
-              console.log("Hello " + user.email + " !");
-              req.session.user = user;
-              console.log('MON LOG REQ.SESSION USER', user);
-              console.log("req.session.user.online avant", req.session.user.online);
-              req.session.user.online = true;
-              console.log("req.session.user.online après", req.session.user.online);
-              return res.redirect('/');
-              //Si l'username est trouvé mais le password est incorrect on lui envois l'erreur 402.
-          } else {
-              res.json({
-                  "text": "Mot de passe incorrect !",
-                  "code": 402
-              })
-          }
-      }
-  //En cas d'erreur on sort leport 500
-  }).catch(err => {
-      console.log("/user/login ERR (Login (Interne))", err)
-      res.status(500).json({
-          "text" : "Erreur Interne !",
-          "code" : 500
-      });
-  })
+    if (req.body.username === "") {
+        reponseUserLogin.status = false;
+        reponseUserLogin.text = "Merci d'insérer votre identifiant !";
+        res.render('./pages/login', { online: req.session.user, title: 'Film 2022 - Panel Admin', reponseUserLogin,});
+    } else if (req.body.password === ""){
+        reponseUserLogin.status = false;
+        reponseUserLogin.text = "Merci d'insérer votre mot de passe !";
+        res.render('./pages/login', { online: req.session.user, title: 'Film 2022 - Panel Admin', reponseUserLogin,});
+    }else {
+        console.log("req username", req.body);
+        //On regarde dans la BDD si l'username existe bien.
+        User.findOne({
+            username: req.body.username
+        }).then(async user => {
+                //Si on ne touve pas l'username on r'envois erreur 401
+            if (!user) {
+                reponseUserLogin.status = false;
+                reponseUserLogin.text = "L'utilisateur " + req.body.username +  " n'existe pas !";
+                res.render('./pages/login', { online: req.session.user, title: 'Film 2022 - Panel Admin', reponseUserLogin,});
+                //Si l'username est trouvé + le passwoard est correct on lui donne le token
+            } else {
+                var bytes  = CryptoJS.AES.decrypt(user.password, user.salt);
+                var hash = bytes.toString(CryptoJS.enc.Utf8);
+                if (hash === req.body.password) {
+                    console.log("Hello " + user.email + " !");
+                    req.session.user = user;
+                    console.log('MON LOG REQ.SESSION USER', user);
+                    console.log("req.session.user.online avant", req.session.user.online);
+                    req.session.user.online = true;
+                    console.log("req.session.user.online après", req.session.user.online);
+                    return res.redirect('/');
+                    //Si l'username est trouvé mais le password est incorrect on lui envois l'erreur 402.
+                } else {
+                    reponseUserLogin.status = false;
+                    reponseUserLogin.text = "Mot de passe incorrect !";
+                    res.render('./pages/login', { online: req.session.user, title: 'Film 2022 - Panel Admin', reponseUserLogin,});
+                }
+            }
+        //En cas d'erreur on sort leport 500
+        }).catch(err => {
+            console.log("/user/login ERR (Login (Interne))", err);
+            reponseUserLogin.status = false;
+            reponseUserLogin.text = "Erreur Interne !";
+            res.render('./pages/login', { online: req.session.user, title: 'Film 2022 - Panel Admin', reponseUserLogin,});
+        })
+    }
 });
 
 // GET Syntax Logout

@@ -1,0 +1,28 @@
+.alertError {
+    background-color: rgb(240, 90, 90); /* Red */
+    color: white;
+    width: 100%;
+    border-radius: 20px;
+}
+
+/* <div class="alert">
+  <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
+  This is an alert box.
+</div> */
+
+/* Close button */
+.closebtn {
+    margin-left: 15px;
+    color: white;
+    font-weight: bold;
+    float: right;
+    font-size: 22px;
+    line-height: 20px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+/* close button hover */
+.closebtn:hover {
+    color: black;
+}

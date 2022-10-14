@@ -11,8 +11,19 @@ var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var session = require("express-session");
 
+var livereload = require("livereload");
+var connectLiveReload = require("connect-livereload");
+
 var app = express();
 
+const liveReloadServer = livereload.createServer();
+liveReloadServer.server.once("connection", () => {
+  setTimeout(() => {
+    liveReloadServer.refresh("/");
+  }, 100);
+});
+
+app.use(connectLiveReload());
 app.use(
   session({
       secret: 'a4f8071f-c873-4447-8ee2',
@@ -20,15 +31,6 @@ app.use(
       saveUninitialized: false,
   })
 ); 
-
-//Gestion du CORS
-app.use(function(req, res, next) {
-  res.header('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
-  res.header('Access-Control-Allow-Origin', '*');
-  res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
-  res.header('Access-Control-Allow-Credentials', true);
-  next();
-});
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
