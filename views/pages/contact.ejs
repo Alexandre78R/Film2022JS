@@ -15,12 +15,11 @@
 </head>
 <body>
     <header>
-        <!-- Nav Bar -->
+        <!-- Import Nav Bar -->
         <%- include('../Components/navBar', {online}); %>
-        <!-- Carrousel -->
+        <!-- Import Carrousel -->
         <%- include('../Components/Carrousel', {online}); %>
     </header>
-
     <section>
       <div class="container_app_Contact">
         <form id="contact_form" action="/contact.html">
@@ -55,6 +54,7 @@
           </form>
       </div>
     </section>
+    <!-- Import footer -->
     <%- include('../Components/footer', {online}); %>
 </body>
 </html>

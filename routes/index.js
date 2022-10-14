@@ -33,6 +33,43 @@ router.get('/login', function(req, res, next) {
   res.render('./pages/login', { online: req.session.user, title: 'Film 2022 - Login : Panel Admin' });
 });
 
+/* GET panel-contact page. */
+router.get('/panel-contact', function(req, res, next) {
+    res.render('./pages/panel-contact', { online: req.session.user, title: 'Film 2022 - Panel Contact' });
+});
+
+/* GET panel-film page. */
+router.get('/panel-film', function(req, res, next) {
+    res.render('./pages/panel-film', { online: req.session.user, title: 'Film 2022 - Panel Film' });
+});
+
+/* GET panel-film-add page. */
+router.get('/panel-film-add', function(req, res, next) {
+    res.render('./pages/panel-film-add ', { online: req.session.user, title: 'Film 2022 - Panel Film - Ajouter' });
+});
+
+/* GET panel-film-edit page. */
+router.get('/panel-film-edit', function(req, res, next) {
+    res.render('./pages/panel-film-edit ', { online: req.session.user, title: 'Film 2022 - Panel Film - Modifier' });
+});
+
+/* GET panel-faq page. */
+router.get('/panel-faq', function(req, res, next) {
+    res.render('./pages/panel-faq', { online: req.session.user, title: 'Film 2022 - Panel FAQ' });
+});
+
+/* GET panel-faq-add page. */
+router.get('/panel-faq-add', function(req, res, next) {
+    res.render('./pages/panel-faq-add ', { online: req.session.user, title: 'Film 2022 - Panel FAQ - Ajouter' });
+});
+
+/* GET panel-faq-edit page. */
+router.get('/panel-faq-edit', function(req, res, next) {
+    res.render('./pages/panel-faq-edit ', { online: req.session.user, title: 'Film 2022 - Panel FAQ - Modifier' });
+});
+
+
+
 //Route pour enregistrer un nouveau compte.
 router.post('/user/signup', function(req, res, next) {
 

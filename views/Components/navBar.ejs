@@ -3,16 +3,23 @@
 
 <!-- Nav Bar -->
 <nav id="navBar">
-    <a id="logo" class="nav-link" href="/">Film 2022</a>
-    <a class="nav-link" href="/">Acceuil</a>
+    <a id="logo" class="nav-link" href="/">Films 2022</a>
+    <a class="nav-link" href="/">Accueil</a>
     <a class="nav-link" href="/contact">Contact</a>
     <a class="nav-link" href="/faq">FAQ</a>
     <% if(!online) { %>
         <a id="about" class="nav-link" href="/login">Connexion</a>
     <% } else { %>
-        <% console.log("Online dans NNavBar --->", online)%>
-        
-        <a class="nav-link" href="/logout">Déconnexion</a>
-        <a id="about" class="nav-link" href="/"><%= online.username %></a>
+        <% console.log("Online dans navBar --->", online)%>
+        <div class="dropdown-nav">
+            <button class="dropbtn-nav">Administrateur
+            </button>
+            <div class="dropdown-content-nav">
+                <a href="/panel-film">Gestion - Flims</a>
+                <a href="/panel-contact">Gestion - Contacts</a>
+                <a href="/panel-faq">Gestion- FAQ</a>
+                <a href="/logout">Déconnexion</a>
+            </div>
+        </div>
     <% } %>
 </nav>

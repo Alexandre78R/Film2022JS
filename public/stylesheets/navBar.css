@@ -17,7 +17,7 @@
     /* Permet de définir une largeur et une hauteur sur l'élément */
     display: inline-block;
     /* Taille entre les links */
-    width: 90px;
+    width: 100px;
     height: 55px;
     /* Couleur d'écriture */
     color: White;
@@ -32,15 +32,63 @@
  #logo {
     /* Dimention du logo */
     width: 120px;
-    /* Couleur du logp */
+    /* Couleur du logà */
     background-color: rgb(87, 167, 237);
     /* Épaisseur de la police en gras. Identique à 700 */
     font-weight: bold;
  }
+
+ /* The dropdown container */
+.dropdown-nav {
+   /* Permet de définir une largeur et une hauteur sur l'élément */
+   display: inline-block;
+ }
  
- #about {
-    /* position du button */
-    position: absolute;
-    top: 0;
-    right: 0;
+ /* Dropdown button */
+ .dropdown-nav .dropbtn-nav {
+   font-size: 16px;
+   border: none;
+   outline: none;
+   color: white;
+   padding: 14px 20px;
+   flex-wrap: wrap;
+   background-color: inherit;
+   margin: 0; /* Important for vertical align on mobile phones */
+   /* inheritpour téléphone */
+   font-family :'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif, inherit ; 
+ }
+ 
+ /* Ajout font rouge  navbar links  hover */
+ .navbar a:hover, .dropdown-nav:hover .dropbtn-nav {
+   background-color: red;
+ }
+ 
+ /* Dropdown content */
+ .dropdown-content-nav {
+   display: none;
+   position: absolute;
+   background-color: rgb(59, 59, 60);
+   min-width: 160px;
+   box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+   z-index: 1;
+   
+ }
+ 
+ /* Links dropdown */
+ .dropdown-content-nav a {
+   float: none;
+   color: white;
+   padding: 12px 16px;
+   text-decoration: none;
+   display: block;
+   text-align: left;
+ }
+ 
+ /* Ajout font color hover link dropdown */
+ .dropdown-content-nav a:hover {
+   background-color: rgb(129, 177, 185);
+ }
+ 
+ .dropdown-nav:hover .dropdown-content-nav {
+   display: block;
  }

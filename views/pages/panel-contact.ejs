@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <!-- Import l'icon -->
+    <link rel="icon" href="./images/icon.png" />
+    <!-- Import du css de la navBar -->
+    <link rel="stylesheet" href="./stylesheets/navBar.css">
+    <!-- Import du css de container -->
+    <link rel="stylesheet" href="./stylesheets/container.css">
+    <!-- Import du css des from -->
+    <link rel="stylesheet" href="./stylesheets/from.css">
+    <!-- Import du css des Tab -->
+    <link rel="stylesheet" href="./stylesheets/tab.css">
+    <!-- Import du css du footer -->
+    <link rel="stylesheet" href="./stylesheets/footer.css">
+    <!-- Titre de la page -->
+    <title><%= title %></title>
+</head>
+<body>
+    <header>
+        <!-- Import Nav Bar -->
+        <%- include('../Components/navBar', {online}); %>
+        <!-- Import Carrousel -->
+        <%- include('../Components/Carrousel', {online}); %>
+    </header>
+
+    <section>
+        <div class="container_tab">
+            <table>
+                <table>
+                    <tr>
+                        <th>id</th>
+                        <th>Nom</th>
+                        <th>Prénom</th>
+                        <th>Email</th>
+                        <th>Question</th>
+                        <th>Message</th>
+                        <th>Suprimer</th>
+                    </tr>
+                    <tr class="tab-ligne">
+                        <td>0</td>
+                        <td class="tab-text-from">Nom </td>
+                        <td class="tab-text-from">Prénom</td>
+                        <td class="tab-text-from">Email</td>
+                        <td class="tab-text-from">Question 1 ? </td>
+                        <td class="tab-text-from">
+                            Nisi mihi Phaedrum, inquam, tu mentitum aut Zenonem putas, quorum utrumque audivi, cum mihi nihil sane praeter sedulitatem probarent,
+                            omnes mihi Epicuri sententiae satis notae sunt. atque eos, quos nominavi, cum Attico nostro frequenter audivi, cum miraretur ille quidem utrumque, Phaedrum autem etiam amaret, cotidieque inter nos ea,
+                            quae audiebamus, conferebamus, neque erat umquam controversia, quid ego intellegerem, sed quid probarem.
+                        </td>
+                        <td>
+                            <form  action="#delete">
+                                <input id="submit_button_tab_delete"   class="tab-buton-delete" type="submit" value="Suprimer"/>
+                            </form>
+                        </td>
+                    </tr>
+                    <tr class="tab-ligne">
+                        <td>1</td>
+                        <td class="tab-text-from">Nom </td>
+                        <td class="tab-text-from">Prénom</td>
+                        <td class="tab-text-from">Email</td>
+                        <td class="tab-text-from">Question 2 ? </td>
+                        <td class="tab-text-from">
+                            Nisi mihi Phaedrum, inquam, tu mentitum aut Zenonem putas, quorum utrumque audivi, cum mihi nihil sane praeter sedulitatem probarent,
+                            omnes mihi Epicuri sententiae satis notae sunt. atque eos, quos nominavi, cum Attico nostro frequenter audivi, cum miraretur ille quidem utrumque, Phaedrum autem etiam amaret, cotidieque inter nos ea,
+                            quae audiebamus, conferebamus, neque erat umquam controversia, quid ego intellegerem, sed quid probarem.
+                        </td>
+                        <td>
+                            <form  action="#delete">
+                                <input id="submit_button_tab_delete"   class="tab-buton-delete" type="submit" value="Suprimer"/>
+                            </form>
+                        </td>
+                    </tr>
+                    <tr class="tab-ligne">
+                        <td>2</td>
+                        <td class="tab-text-from">Nom </td>
+                        <td class="tab-text-from">Prénom</td>
+                        <td class="tab-text-from">Email</td>
+                        <td class="tab-text-from">Question 3 ? </td>
+                        <td class="tab-text-from">
+                            Nisi mihi Phaedrum, inquam, tu mentitum aut Zenonem putas, quorum utrumque audivi, cum mihi nihil sane praeter sedulitatem probarent,
+                            omnes mihi Epicuri sententiae satis notae sunt. atque eos, quos nominavi, cum Attico nostro frequenter audivi, cum miraretur ille quidem utrumque, Phaedrum autem etiam amaret, cotidieque inter nos ea,
+                            quae audiebamus, conferebamus, neque erat umquam controversia, quid ego intellegerem, sed quid probarem.
+                        </td>
+                        <td>
+                            <form  action="#delete">
+                                <input id="submit_button_tab_delete"   class="tab-buton-delete" type="submit" value="Suprimer"/>
+                            </form>
+                        </td>
+                    </tr>
+                    <tr class="tab-ligne">
+                        <td>3</td>
+                        <td class="tab-text-from">Nom </td>
+                        <td class="tab-text-from">Prénom</td>
+                        <td class="tab-text-from">Email</td>
+                        <td class="tab-text-from">Question 4 ? </td>
+                        <td class="tab-text-from">
+                            Nisi mihi Phaedrum, inquam, tu mentitum aut Zenonem putas, quorum utrumque audivi, cum mihi nihil sane praeter sedulitatem probarent,
+                            omnes mihi Epicuri sententiae satis notae sunt. atque eos, quos nominavi, cum Attico nostro frequenter audivi, cum miraretur ille quidem utrumque, Phaedrum autem etiam amaret, cotidieque inter nos ea,
+                            quae audiebamus, conferebamus, neque erat umquam controversia, quid ego intellegerem, sed quid probarem.
+                        </td>
+                        <td>
+                            <form  action="#delete">
+                                <input id="submit_button_tab_delete"   class="tab-buton-delete" type="submit" value="Suprimer"/>
+                            </form>
+                        </td>
+                    </tr>
+                    <tr class="tab-ligne">
+                        <td>4</td>
+                        <td class="tab-text-from">Nom </td>
+                        <td class="tab-text-from">Prénom</td>
+                        <td class="tab-text-from">Email</td>
+                        <td class="tab-text-from">Question 5 ? </td>
+                        <td class="tab-text-from">
+                            Nisi mihi Phaedrum, inquam, tu mentitum aut Zenonem putas, quorum utrumque audivi, cum mihi nihil sane praeter sedulitatem probarent,
+                            omnes mihi Epicuri sententiae satis notae sunt. atque eos, quos nominavi, cum Attico nostro frequenter audivi, cum miraretur ille quidem utrumque, Phaedrum autem etiam amaret, cotidieque inter nos ea,
+                            quae audiebamus, conferebamus, neque erat umquam controversia, quid ego intellegerem, sed quid probarem.
+                        </td>
+                        <td>
+                            <form  action="#delete">
+                                <input id="submit_button_tab_delete"   class="tab-buton-delete" type="submit" value="Suprimer"/>
+                            </form>
+                        </td>
+                    </tr>
+                    <tr class="tab-ligne">
+                        <td>5</td>
+                        <td class="tab-text-from">Nom </td>
+                        <td class="tab-text-from">Prénom</td>
+                        <td class="tab-text-from">Email</td>
+                        <td class="tab-text-from">Question 6 ? </td>
+                        <td class="tab-text-from">
+                            Nisi mihi Phaedrum, inquam, tu mentitum aut Zenonem putas, quorum utrumque audivi, cum mihi nihil sane praeter sedulitatem probarent,
+                            omnes mihi Epicuri sententiae satis notae sunt. atque eos, quos nominavi, cum Attico nostro frequenter audivi, cum miraretur ille quidem utrumque, Phaedrum autem etiam amaret, cotidieque inter nos ea,
+                            quae audiebamus, conferebamus, neque erat umquam controversia, quid ego intellegerem, sed quid probarem.
+                        </td>
+                        <td>
+                            <form  action="#delete">
+                                <input id="submit_button_tab_delete"   class="tab-buton-delete" type="submit" value="Suprimer"/>
+                            </form>
+                        </td>
+                    </tr>
+                    <tr class="tab-ligne">
+                        <td>6</td>
+                        <td class="tab-text-from">Nom </td>
+                        <td class="tab-text-from">Prénom</td>
+                        <td class="tab-text-from">Email</td>
+                        <td class="tab-text-from">Question 7 ? </td>
+                        <td class="tab-text-from">
+                            Nisi mihi Phaedrum, inquam, tu mentitum aut Zenonem putas, quorum utrumque audivi, cum mihi nihil sane praeter sedulitatem probarent,
+                            omnes mihi Epicuri sententiae satis notae sunt. atque eos, quos nominavi, cum Attico nostro frequenter audivi, cum miraretur ille quidem utrumque, Phaedrum autem etiam amaret, cotidieque inter nos ea,
+                            quae audiebamus, conferebamus, neque erat umquam controversia, quid ego intellegerem, sed quid probarem.
+                        </td>
+                        <td>
+                            <form  action="#delete">
+                                <input id="submit_button_tab_delete"   class="tab-buton-delete" type="submit" value="Suprimer"/>
+                            </form>
+                        </td>
+                    </tr>
+                    <tr class="tab-ligne">
+                        <td>7</td>
+                        <td class="tab-text-from">Nom </td>
+                        <td class="tab-text-from">Prénom</td>
+                        <td class="tab-text-from">Email</td>
+                        <td class="tab-text-from">Question 8 ? </td>
+                        <td class="tab-text-from">
+                            Nisi mihi Phaedrum, inquam, tu mentitum aut Zenonem putas, quorum utrumque audivi, cum mihi nihil sane praeter sedulitatem probarent,
+                            omnes mihi Epicuri sententiae satis notae sunt. atque eos, quos nominavi, cum Attico nostro frequenter audivi, cum miraretur ille quidem utrumque, Phaedrum autem etiam amaret, cotidieque inter nos ea,
+                            quae audiebamus, conferebamus, neque erat umquam controversia, quid ego intellegerem, sed quid probarem.
+                        </td>
+                        <td>
+                            <form  action="#delete">
+                                <input id="submit_button_tab_delete"   class="tab-buton-delete" type="submit" value="Suprimer"/>
+                            </form>
+                        </td>
+                    </tr>
+                    <tr class="tab-ligne">
+                        <td>8</td>
+                        <td class="tab-text-from">Nom </td>
+                        <td class="tab-text-from">Prénom</td>
+                        <td class="tab-text-from">Email</td>
+                        <td class="tab-text-from">Question 9 ? </td>
+                        <td class="tab-text-from">
+                            Nisi mihi Phaedrum, inquam, tu mentitum aut Zenonem putas, quorum utrumque audivi, cum mihi nihil sane praeter sedulitatem probarent,
+                            omnes mihi Epicuri sententiae satis notae sunt. atque eos, quos nominavi, cum Attico nostro frequenter audivi, cum miraretur ille quidem utrumque, Phaedrum autem etiam amaret, cotidieque inter nos ea,
+                            quae audiebamus, conferebamus, neque erat umquam controversia, quid ego intellegerem, sed quid probarem.
+                        </td>
+                        <td>
+                            <form  action="#delete">
+                                <input id="submit_button_tab_delete"   class="tab-buton-delete" type="submit" value="Suprimer"/>
+                            </form>
+                        </td>
+                    </tr>
+                    <tr class="tab-ligne">
+                        <td>9</td>
+                        <td class="tab-text-from">Nom </td>
+                        <td class="tab-text-from">Prénom</td>
+                        <td class="tab-text-from">Email</td>
+                        <td class="tab-text-from">Question 10 ? </td>
+                        <td class="tab-text-from">
+                            Nisi mihi Phaedrum, inquam, tu mentitum aut Zenonem putas, quorum utrumque audivi, cum mihi nihil sane praeter sedulitatem probarent,
+                            omnes mihi Epicuri sententiae satis notae sunt. atque eos, quos nominavi, cum Attico nostro frequenter audivi, cum miraretur ille quidem utrumque, Phaedrum autem etiam amaret, cotidieque inter nos ea,
+                            quae audiebamus, conferebamus, neque erat umquam controversia, quid ego intellegerem, sed quid probarem.
+                        </td>
+                        <td>
+                            <form  action="#delete">
+                                <input id="submit_button_tab_delete"   class="tab-buton-delete" type="submit" value="Suprimer"/>
+                            </form>
+                        </td>
+                    </tr>
+                </table>
+            </table>
+        </div>
+    </section>
+    <!-- Import footer -->
+    <%- include('../Components/footer', {online}); %>
+</body>
+</html>

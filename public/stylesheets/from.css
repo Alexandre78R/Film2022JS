@@ -4,6 +4,7 @@ label {
     font-weight : bold;
     font-family :'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif ;
 }
+
 /* Input texture */
 input {
     border-radius: 4px;
@@ -23,6 +24,16 @@ input:focus {
     border-color : rgb(87, 167, 237);
 }
 
+h3 {
+    color: rgb(87, 167, 237);
+    font-weight : bold;
+    font-family :'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif ;
+}
+
+h3:hover {
+    color: rgb(77, 140, 195);
+    font-size: 20px;
+}
 
 /* textarea texture */
 textarea {
@@ -39,17 +50,6 @@ textarea:hover {
 /* textarea texture focus*/
 textarea:focus {
     border-color : rgb(87, 167, 237);
-}
-
-h3 {
-    color: rgb(87, 167, 237);
-    font-weight : bold;
-    font-family :'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif ;
-}
-
-h3:hover {
-    color: rgb(77, 140, 195);
-    font-size: 20px;
 }
 
 /* input  typer="text" texture */

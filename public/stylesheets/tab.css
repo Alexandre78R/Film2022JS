@@ -1,0 +1,50 @@
+table {
+    border-collapse: collapse;
+}
+
+td, th{
+    border: 2px solid rgb(59, 59, 60);
+}
+
+.tab-text-from {
+    padding: 25px;
+    position: sticky;
+    font-size: 14px;
+    font-style: italic;
+    text-align: center;
+    font-family :'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif ;
+}
+
+.tab-ligne:hover {
+    background-color: rgb(183, 177, 177);
+}
+
+.tab-buton-edit {
+    background-color: rgb(246, 190, 70);
+    border-color: rgb(246, 190, 70);
+}
+
+.tab-buton-delete {
+    background-color: rgb(255, 11, 11);
+    border-color: rgb(255, 11, 11);
+}
+
+.tab-buton-edit:hover {
+    border-color: rgb(248, 182, 39);
+    background-color: rgb(248, 182, 39);
+}
+
+.tab-buton-delete:hover {
+    border-color: rgb(222, 25, 25);
+    background-color: rgb(222, 25, 25);
+}
+
+.tab-buton-add {
+    background-color: rgb(64, 160, 69);
+    border-color: rgb(64, 160, 69);
+}
+
+.tab-buton-add:hover {
+    border-color: rgb(64, 160, 69);
+    background-color: rgb(57, 141, 61);
+}

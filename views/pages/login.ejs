@@ -17,9 +17,9 @@
 </head>
 <body>
     <header>
-        <!-- Nav Bar -->
+        <!-- Import Nav Bar -->
         <%- include('../Components/navBar', {online}); %>
-        <!-- Carrousel -->
+        <!-- Import Carrousel -->
         <%- include('../Components/Carrousel', {online}); %>
     </header>
 
@@ -28,7 +28,7 @@
             <div class="container_app_Contact">
                 <form id="contact_form" action="/user/login" method="post">
                     <div class="structure-contact">
-                        <h3>Panel Admin</h3>
+                        <h3>Administrateur</h3>
                         <label>Identifiant</label><br/>
                         <input id="username" name="username" type="text" placeholder="Identifiant" size="30" /><br />
                         <span id="username_validation"></span>
@@ -45,6 +45,7 @@
               </div>
         </div>
     </section>
+    <!-- Import footer -->
     <%- include('../Components/footer', {online}); %>
 </body>
 </html>

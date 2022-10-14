@@ -45,3 +45,12 @@ body {
     text-align: center;
 
 }
+
+.container_tab {
+    margin: 25px;
+    flex-wrap: wrap;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 15px;
+    width: 70%;
+}

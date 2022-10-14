@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <!-- Import l'icon -->
+    <link rel="icon" href="./images/icon.png" />
+    <!-- Import du css de la navBar -->
+    <link rel="stylesheet" href="./stylesheets/navBar.css">
+    <!-- Import du css de container -->
+    <link rel="stylesheet" href="./stylesheets/container.css">
+    <!-- Import du css des from -->
+    <link rel="stylesheet" href="./stylesheets/from.css">
+    <!-- Import du css du footer -->
+    <link rel="stylesheet" href="./stylesheets/footer.css">
+    <!-- Titre de la page -->
+    <title><%= title %></title>
+</head>
+<body>
+    <header>
+        <!-- Import Nav Bar -->
+        <%- include('../Components/navBar', {online}); %>
+        <!-- Import Carrousel -->
+        <%- include('../Components/Carrousel', {online}); %>
+    </header>
+
+    <section>
+        <div class="container_app_Contact">
+            <form id="contact_form" action="/pannel-add-faq.html">
+                <div class="structure-contact">
+                    <label>Question</label><br />
+                    <input id="quest" name="quest" type="text" placeholder="Question à ajouté ?" size="30" /><br />
+                    <span id="quest_validation"></span>
+                </div>
+                <div class="structure-contact">
+                    <label>Réponse</label><br />
+                    <textarea id="answer" class="input" name="answer" placeholder="Réponse" rows="15" cols="30"></textarea><br />
+                    <span id="answer_validation"></span>
+                </div>
+                <div class="structure-button-contact">
+                    <input id="submit_button" class="button-contact" type="submit" value="Modifier"/>
+                </div>
+              </form>
+        </div>
+    </section>
+    <!-- Import -->
+    <%- include('../Components/footer', {online}); %>
+</body>
+</html>
