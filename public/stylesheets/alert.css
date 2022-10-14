@@ -5,6 +5,7 @@
     height: 35px;
     border-radius: 10px;
     display: table;
+    text-align: center;
 }
 
 .alertError span {

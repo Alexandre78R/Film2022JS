@@ -8,6 +8,8 @@
     <link rel="stylesheet" href="../../stylesheets/container.css">
     <!-- Import du css des FAQ -->
     <link rel="stylesheet" href="../../stylesheets/accordion.css">
+    <!-- Import alert -->
+    <link rel="stylesheet" href="../../stylesheets/alert.css">
     <!-- Titre de la page -->
     <title><%= title %></title>
 </head>
@@ -21,14 +23,19 @@
 
     <section>
         <div class="container_app_FAQ">
-            <% for (let i = 0; i < faqResponse.length; i++) { %>
-                <% console.log("faqResponse[i] -->", faqResponse[i].quest); %>
-                <div class="tab">
-                    <input id="tab-<%= faqResponse[i]%>" type="checkbox">
-                    <label for="tab-<%= faqResponse[i]%>"><%= faqResponse[i].quest %></label>
-                    <div class="content">
-                        <p> <%= faqResponse[i].response %> </p>
+            <% if (!reponseFAQView.status){ %>
+                <div class="alertError">
+                    <span> <%= reponseFAQView.text %> </span>
                 </div>
+            <% } else { %>
+                <% for (let i = 0; i < reponseFAQView.data.length; i++) { %>
+                    <div class="tab">
+                        <input id="tab-<%= i%>" type="checkbox">
+                        <label for="tab-<%= i%>"><%= reponseFAQView.data[i].quest %></label>
+                        <div class="content">
+                            <p> <%= reponseFAQView.data[i].response %> </p>
+                    </div>
+                <% } %>
             <% } %>
         </div>
     </section>

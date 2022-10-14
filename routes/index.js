@@ -20,6 +20,14 @@ var reponseUserLogin = {
     text : ""
 };
 
+// Param view faq
+var reponseFAQView = { 
+    status : false,
+    text : "",
+    data : ""
+};
+
+
 /* GET Acceuil page. */
 router.get('/', function(req, res, next) {
 //   console.log("LOG DE SESSION DANS LA HOME ===>", req.session.user);
@@ -34,13 +42,26 @@ router.get('/contact', function(req, res, next) {
 
 /* GET faq page. */
 router.get('/faq', function(req, res, next) {
-  FAQ.find().then(faq => { 
-    // console.log("FAQ", faq);
-    res.render('./pages/faq', { online: req.session.user, title: 'Film 2022 - Panel FAQ', faqResponse : faq});
-  }).catch(err => {
-    console.log("FAQ", err);
-    res.render('./pages/faq', { online: req.session.user, title: 'Film 2022 - Panel FAQ', faqResponse : err});
-});
+    FAQ.find().then(faq => {
+        if (faq.length == 0) {
+            // console.log("FAQ", faq);
+            reponseFAQView.status =  false;
+            reponseFAQView.text = "Aucune FAQ se trouve dans la base de données !";
+            reponseFAQView.data = faq;
+            res.render('./pages/faq', { online: req.session.user, title: 'Film 2022 - Panel FAQ', reponseFAQView});
+        } else {
+            // console.log("FAQ", faq);
+            reponseFAQView.status =  true;
+            reponseFAQView.text = "Listes FAQ trouver !";
+            reponseFAQView.data = faq;
+            res.render('./pages/faq', { online: req.session.user, title: 'Film 2022 - Panel FAQ', reponseFAQView});
+        }
+    }).catch(err => {
+        reponseFAQView.status =  false;
+        reponseFAQView.text = "Impossible de récupérer les faqs dans la base de données !";
+        reponseFAQView.data = err;
+        res.render('./pages/faq', { online: req.session.user, title: 'Film 2022 - Panel FAQ', reponseFAQView});
+    });
 });
 
 /* GET login */
@@ -94,12 +115,25 @@ router.get('/panel-faq', function(req, res, next) {
     if (!req.session.user) {
         res.redirect("/");
     }
-    FAQ.find().then(faq => { 
-        // console.log("FAQ", faq);
-        res.render('./pages/panel-faq', { online: req.session.user, title: 'Film 2022 - Panel FAQ', faqResponse : faq});
-      }).catch(err => {
-        console.log("FAQ", err);
-        res.render('./pages/panel-faq', { online: req.session.user, title: 'Film 2022 - Panel FAQ', faqResponse : err});
+    FAQ.find().then(faq => {
+        if (faq.length == 0) {
+            // console.log("FAQ", faq);
+            reponseFAQView.status =  false;
+            reponseFAQView.text = "Aucune FAQ se trouve dans la base de données !";
+            reponseFAQView.data = faq;
+            res.render('./pages/panel-faq', { online: req.session.user, title: 'Film 2022 - Panel FAQ', reponseFAQView});
+        } else {
+            // console.log("FAQ", faq);
+            reponseFAQView.status =  true;
+            reponseFAQView.text = "Listes FAQ trouver !";
+            reponseFAQView.data = faq;
+            res.render('./pages/panel-faq', { online: req.session.user, title: 'Film 2022 - Panel FAQ', reponseFAQView});
+        }
+    }).catch(err => {
+        reponseFAQView.status =  false;
+        reponseFAQView.text = "Impossible de récupérer les faqs dans la base de données !";
+        reponseFAQView.data = err;
+        res.render('./pages/panel-faq', { online: req.session.user, title: 'Film 2022 - Panel FAQ', reponseFAQView});
     });
 });
 
