@@ -38,7 +38,7 @@ router.get('/faq', function(req, res, next) {
 router.get('/login', function(req, res, next) {
     reponseUserLogin.status = true;
     reponseUserLogin.text = "";
-    res.render('./pages/login', { online: req.session.user, title: 'Film 2022 - Panel Admin', reponseUserLogin,});
+    res.render('./pages/login', { online: req.session.user, title: 'Film 2022 - Panel Admin', reponseUserLogin});
 });
 
 /* GET panel-contact page. */
@@ -187,11 +187,11 @@ router.post('/user/login', function(req, res, next) {
     if (req.body.username === "") {
         reponseUserLogin.status = false;
         reponseUserLogin.text = "Merci d'insérer votre identifiant !";
-        res.render('./pages/login', { online: req.session.user, title: 'Film 2022 - Panel Admin', reponseUserLogin,});
+        res.render('./pages/login', { online: req.session.user, title: 'Film 2022 - Panel Admin', reponseUserLogin});
     } else if (req.body.password === ""){
         reponseUserLogin.status = false;
         reponseUserLogin.text = "Merci d'insérer votre mot de passe !";
-        res.render('./pages/login', { online: req.session.user, title: 'Film 2022 - Panel Admin', reponseUserLogin,});
+        res.render('./pages/login', { online: req.session.user, title: 'Film 2022 - Panel Admin', reponseUserLogin});
     }else {
         console.log("req username", req.body);
         //On regarde dans la BDD si l'username existe bien.
@@ -202,7 +202,7 @@ router.post('/user/login', function(req, res, next) {
             if (!user) {
                 reponseUserLogin.status = false;
                 reponseUserLogin.text = "L'utilisateur " + req.body.username +  " n'existe pas !";
-                res.render('./pages/login', { online: req.session.user, title: 'Film 2022 - Panel Admin', reponseUserLogin,});
+                res.render('./pages/login', { online: req.session.user, title: 'Film 2022 - Panel Admin', reponseUserLogin});
                 //Si l'username est trouvé + le passwoard est correct on lui donne le token
             } else {
                 var bytes  = CryptoJS.AES.decrypt(user.password, user.salt);
@@ -219,7 +219,7 @@ router.post('/user/login', function(req, res, next) {
                 } else {
                     reponseUserLogin.status = false;
                     reponseUserLogin.text = "Mot de passe incorrect !";
-                    res.render('./pages/login', { online: req.session.user, title: 'Film 2022 - Panel Admin', reponseUserLogin,});
+                    res.render('./pages/login', { online: req.session.user, title: 'Film 2022 - Panel Admin', reponseUserLogin});
                 }
             }
         //En cas d'erreur on sort leport 500
@@ -227,7 +227,7 @@ router.post('/user/login', function(req, res, next) {
             console.log("/user/login ERR (Login (Interne))", err);
             reponseUserLogin.status = false;
             reponseUserLogin.text = "Erreur Interne !";
-            res.render('./pages/login', { online: req.session.user, title: 'Film 2022 - Panel Admin', reponseUserLogin,});
+            res.render('./pages/login', { online: req.session.user, title: 'Film 2022 - Panel Admin', reponseUserLogin});
         })
     }
 });
