@@ -28,6 +28,10 @@
     /* On retire la barre de kink de base (html) */
     text-decoration: none;
  }
+
+ .nav-link:hover {
+  background-color:  rgb(87, 167, 237);
+}
  
  #logo {
     /* Dimention du logo */
