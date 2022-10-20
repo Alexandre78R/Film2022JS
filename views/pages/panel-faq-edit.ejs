@@ -8,6 +8,8 @@
     <link rel="stylesheet" href="../../stylesheets/container.css">
     <!-- Import du css des from -->
     <link rel="stylesheet" href="../../stylesheets/from.css">
+    <!-- Import du css des Alert -->
+    <link rel="stylesheet" href="../../stylesheets/Alert.css">
     <!-- Titre de la page -->
     <title><%= title %></title>
 </head>
@@ -21,16 +23,21 @@
 
     <section>
         <div class="container_app_Contact">
-            <form id="contact_form" action="/pannel-add-faq.html">
+            <form id="contact_form" action="/faq/edit/<%=reponseFaqEdit.data._id%>" method="POST">
+                <% if(reponseFaqEdit.status == true){ %>
+                    <div class="alertError">
+                        <span> <%=reponseFaqEdit.text%> </span>
+                    </div>
+                <% } %>
                 <div class="structure-contact">
                     <label>Question</label><br />
-                    <input id="quest" name="quest" type="text" placeholder="Question à ajouté ?" size="30" /><br />
+                    <input id="quest" name="quest" type="text" value="<%=reponseFaqEdit.data.quest%>" size="30" /><br />
                     <span id="quest_validation"></span>
                 </div>
                 <div class="structure-contact">
                     <label>Réponse</label><br />
-                    <textarea id="answer" class="input" name="answer" placeholder="Réponse" rows="15" cols="30"></textarea><br />
-                    <span id="answer_validation"></span>
+                    <textarea id="response" class="input" name="response" rows="15" cols="30"><%=reponseFaqEdit.data.response%></textarea><br />
+                    <span id="response_validation"></span>
                 </div>
                 <div class="structure-button-contact">
                     <input id="submit_button" class="button-contact" type="submit" value="Modifier"/>

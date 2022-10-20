@@ -19,9 +19,14 @@ body {
 }
 
 .container_app {
-    margin: 25px;
     display: flex;
     flex-wrap: wrap;
+    align-items: center;
+    width: 68%;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 25px;
+    margin-bottom: 25px;
 }
 
 .container_app_FAQ {

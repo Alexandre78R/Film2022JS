@@ -25,44 +25,47 @@
 
     <section>
         <div class="container_tab">
-            <form action="panel-faq-add.html">
-                <input type="submit" id="submit_button_tab_add" class="tab-buton-add" value="Ajouter"/>
-            </form>
-            <table>
+            <!-- <form action="/panel-faq-add" method="get"></form> -->
+            <a href="/panel-faq-add">
+                <!-- <input type="submit" id="submit_button_tab_add" class="tab-buton-add" value="Ajouter" onclick="window.location='/panel-faq-add';" /> -->
+                <input type="submit" id="submit_button_tab_add" class="tab-buton-add" value="Ajouter" />
+            <a>
+            <!-- </form> -->
+            <% if (!reponseFAQView.status){ %>
+                <div class="alertError">
+                    <span> <%= reponseFAQView.text %> </span>
+                </div>
+            <% } else { %>
                 <table>
-                    <tr>
-                        <th>id</th>
-                        <th>Quesion</th>
-                        <th>Reponse</th>
-                        <th>Modifier</th>
-                        <th>Suprimer</th>
-                    </tr>
-                    <% if (!reponseFAQView.status){ %>
-                        <tr class="tab-ligne">
-                            <div class="alertError">
-                                <span> <%= reponseFAQView.text %> </span>
-                            </div>
-                    <% } else { %>
-                            <% for (let i = 0; i < reponseFAQView.data.length; i++) { %>
-                            <td><%= i %></td>
-                            <td class="tab-text-from"><%= reponseFAQView.data[i].quest %></td>
-                            <td class="tab-text-from">
-                                <%= reponseFAQView.data[i].response %>
-                            </td>
-                            
-                            <td>
-                                <form action="panel-faq-edit.html">
-                                    <input id="submit_button_tab_edit" class="tab-buton-edit" type="submit" value="Modifier"/>
-                                </form>
-                            </td>
-                            <td>
-                                <form  action="#delete">
-                                    <input id="submit_button_tab_delete"   class="tab-buton-delete" type="submit" value="Suprimer"/>
-                                </form>
-                            </td>
+                    <table>
+                        <tr>
+                            <th>id</th>
+                            <th>Quesion</th>
+                            <th>Reponse</th>
+                            <th>Modifier</th>
+                            <th>Suprimer</th>
                         </tr>
+                            <% for (let i = 0; i < reponseFAQView.data.length; i++) { %>
+                            <tr class="tab-ligne">
+                                <td><%= i %></td>
+                                <td class="tab-text-from"><%= reponseFAQView.data[i].quest %></td>
+                                <td class="tab-text-from">
+                                    <%= reponseFAQView.data[i].response %>
+                                </td>
+                                
+                                <td>
+                                    <form action="/panel-faq-edit/<%= reponseFAQView.data[i]._id%>">
+                                        <input id="submit_button_tab_edit" class="tab-buton-edit" type="submit" value="Modifier"/>
+                                    </form>
+                                </td>
+                                <td>
+                                    <form  action="/faq/del/<%= reponseFAQView.data[i]._id%>" method="POST">
+                                        <input id="submit_button_tab_delete"   class="tab-buton-delete" type="submit" value="Suprimer"/>
+                                    </form>
+                                </td>
+                            </tr>
+                        <% } %>
                     <% } %>
-                <% } %>
                 </table>
             </table>
         </div>

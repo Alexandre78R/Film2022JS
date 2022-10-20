@@ -16,6 +16,7 @@ var connectLiveReload = require("connect-livereload");
 
 var app = express();
 
+// Relance serveur
 const liveReloadServer = livereload.createServer();
 liveReloadServer.server.once("connection", () => {
   setTimeout(() => {
@@ -24,6 +25,7 @@ liveReloadServer.server.once("connection", () => {
 });
 
 app.use(connectLiveReload());
+
 app.use(
   session({
       secret: 'a4f8071f-c873-4447-8ee2',
@@ -31,6 +33,14 @@ app.use(
       saveUninitialized: false,
   })
 ); 
+
+// “secret” doit être une chaîne de caractères unique. Cette chaîne va servir à générer l’identifiant de session.
+
+// “resave” force la session à s’enregistrer à chaque requête même s’il n’y a pas eu de modification de session.
+// Il est recommandé de la mettre à false.
+
+// “saveUninitialized” force la session à s’enregistrer même si elle n’a pas encore été utilisée.
+// Il est recommandé de mettre cette option à false.
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
