@@ -21,31 +21,40 @@
         <%- include('../Components/Carrousel', {online}); %>
     </header>
 
-    <section>
+    <main>
         <div class="container_app_Contact">
             <form id="contact_form" action="/faq/add" method="POST">
-                <%  console.log("reponseFAQAdd", reponseFAQAdd); %>
-                <% if(reponseFAQAdd.status == true){ %>
+                <%  console.log("faqADD Dans fichier ejs", faqADD); %>
+          
+                <% if(faqADD.status == true){ %>
                     <div class="alertError">
-                        <span> <%=reponseFAQAdd.text%></span>
+                        <span> <%=faqADD.text%></span>
                     </div>
                 <% } %>
-                <div class="structure-contact">
-                    <label>Question</label><br />
-                    <input id="quest" name="quest" type="text" placeholder="Question à ajouté ?" size="30" /><br />
-                    <span id="quest_validation"></span>
-                </div>
-                <div class="structure-contact">
-                    <label>Réponse</label><br />
-                    <textarea id="response" name="response" class="input" placeholder="Réponse" rows="15" cols="30"></textarea><br />
-                    <span id="response_validation"></span>
-                </div>
-                <div class="structure-button-contact">
-                    <input id="submit_button" class="button-contact" type="submit" value="Ajouter"/>
-                </div>
+                    <div class="structure-contact">
+                        <label>Question</label><br />
+                        <% if(Object.keys(faqADD.data).length >= 1 && faqADD.data.quest.length >= 1) { %>
+                            <input id="quest" name="quest" type="text" value="<%=faqADD.data.quest%>" size="30" /><br />
+                        <% } else {%>
+                            <input id="quest" name="quest" type="text" placeholder="Question à ajouté ?" size="30" /><br />
+                        <% } %>
+                        <span id="quest_validation"></span>
+                    </div>
+                    <div class="structure-contact">
+                        <label>Réponse</label><br />
+                        <% if(Object.keys(faqADD.data).length >= 1 && faqADD.data.response.length >= 1) { %>
+                            <textarea id="response" name="response" class="input" rows="15" cols="30"><%=faqADD.data.response%></textarea><br />
+                        <% } else {%>
+                            <textarea id="response" name="response" class="input" placeholder="Réponse" rows="15" cols="30"></textarea><br />
+                            <% } %>
+                        <span id="response_validation"></span>
+                    </div>
+                    <div class="structure-button-contact">
+                        <input id="submit_button" class="button-contact" type="submit" value="Ajouter"/>
+                    </div>
               </form>
         </div>
-    </section>
+    </main>
     <!-- Import footer -->
     <%- include('../Components/footer', {online}); %>
 </body>

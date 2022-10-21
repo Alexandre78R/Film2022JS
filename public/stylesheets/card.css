@@ -1,31 +1,32 @@
 /* Format de la card  */
 .card {
-    height: 200px;
-    width: 320px;
+    height: 195px;
+    width: 25%;
     overflow: hidden;
+    margin-top: 25px;
+    /* background-color: red; */
     /* align-items: center; */
 }
 
 
 /* Format  card header */
 .card header {
-    padding: 1px;
     height: 195px;
-    width: 100%;
+    width: 90%;
+    /* border-color: red; */
 }
 
 /* Format header card img*/
 .card header img {
-    border: 5px solid #f1f1f1;
     height: 100%;
     width: 100%;
 }
 
 /*  Positionnement  de la card bio*/
 .card .card-bio {
-    padding: 25px;
+    /* padding: 25px; */
     position: sticky;
-    /* opacity: 0; */
+    /* background-color: RED; */
 }
 
 /* Format d'écriture dans card-bio pour les balise P */
@@ -76,6 +77,14 @@
     height: 100%;
     width: 25%;
     background-color: rgba(252, 252, 252, 0.863);
+    /* background-color: red; */
+    margin-right: 5px;
+    margin-left: -23px;
+
+}
+
+.card:hover img {
+    width: 120%;
 }
 
 /* Card Hover format écriture  */

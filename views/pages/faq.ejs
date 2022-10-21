@@ -21,7 +21,7 @@
         <%- include('../Components/Carrousel', {online}); %>
     </header>
 
-    <section>
+    <main>
         <div class="container_app_FAQ">
             <% if (!reponseFAQView.status){ %>
                 <div class="alertError">
@@ -38,7 +38,7 @@
                 <% } %>
             <% } %>
         </div>
-    </section>
+    </main>
     <!-- Import footer -->
     <%- include('../Components/footer', {online}); %>
 </body>

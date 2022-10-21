@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-// Schema Users de la BDD.
+// Schema faq de la BDD.
 var faqSchema = mongoose.Schema({
     quest: String,
 	response: String,

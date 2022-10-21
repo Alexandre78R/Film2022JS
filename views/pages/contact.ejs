@@ -8,6 +8,8 @@
     <link rel="stylesheet" href="../../stylesheets/container.css">
     <!-- Import du css des from -->
     <link rel="stylesheet" href="../../stylesheets/from.css">
+    <!-- Import du css des Alert -->
+    <link rel="stylesheet" href="../../stylesheets/alert.css">
     <!-- Titre de la page -->
     <title><%= title %></title>
 </head>
@@ -18,40 +20,80 @@
         <!-- Import Carrousel -->
         <%- include('../Components/Carrousel', {online}); %>
     </header>
-    <section>
+    
+    <main>
       <div class="container_app_Contact">
-        <form id="contact_form" action="/contact.html">
-            <div class="structure-contact">
-                <label>Nom</label><br />
-                <input id="lastname" name="lastname" type="text" placeholder="Nom" size="30" /><br />
-                <span id="lastname_validation"></span>
-            </div>
-            <div class="structure-contact">
-                <label>Prénom</label><br />
-                <input id="firstname" name="firstname" type="text" placeholder="Prénom" size="30" /><br />
-                <span id="firstname_validation"></span>
-            </div>
-            <div class="structure-contact">
-                <label>Adresse email</label><br />
-                <input id="email" class="input" name="email" type="text" placeholder="Email" size="30" /><br />
-                <span id="email_validation"></span>
-            </div>
-            <div class="structure-contact">
-                <label>Votre question ?</label><br />
-                <input id="object" class="input" name="object" type="text" placeholder="Votre question ?" size="30" /><br />
-                <span id="object_validation"></span>
-            </div>
-            <div class="structure-contact">
-                <label>Message</label><br />
-                <textarea id="message" class="input" name="message" placeholder="Message" rows="15" cols="30"></textarea><br />
-                <span id="message_validation"></span>
-            </div>
+        <form id="contact_form" action="/contact/add" method="POST">
+            <% if (reponseContactAdd.status) { %>
+                <div class="alertError">
+                    <span> <%= reponseContactAdd.text %> </span>
+                </div>
+            <% } %>
+            <% if (Object.keys(reponseContactAdd.data).length === 0) { %>
+                <div class="structure-contact">
+                    <label>Nom</label><br />
+                    <input id="lastname" name="lastname" type="text" placeholder="Nom" size="30" /><br />
+                    <span id="lastname_validation"></span>
+                </div>
+                <div class="structure-contact">
+                    <label>Prénom</label><br />
+                    <input id="firstname" name="firstname" type="text" placeholder="Prénom" size="30" /><br />
+                    <span id="firstname_validation"></span>
+                </div>
+                <div class="structure-contact">
+                    <label>Adresse email</label><br />
+                    <input id="email" class="input" name="email" type="text" placeholder="Email" size="30" /><br />
+                    <span id="email_validation"></span>
+                </div>
+                <div class="structure-contact">
+                    <label>Message</label><br />
+                    <textarea id="message" class="input" name="message" placeholder="Message" rows="15" cols="30"></textarea><br />
+                    <span id="message_validation"></span>
+                </div>
+            <% } else { %>
+                <div class="structure-contact">
+                    <label>Nom</label><br />
+                    <% if (reponseContactAdd.data.lastname === "") { %>
+                        <input id="lastname" name="lastname" type="text" placeholder="Nom" size="30" /><br />
+                    <% } else { %>
+                        <input id="lastname" name="lastname" type="text" value="<%=reponseContactAdd.data.lastname%>" size="30" /><br />
+                    <% } %>
+                    <span id="lastname_validation"></span>
+                </div>
+                <div class="structure-contact">
+                    <label>Prénom</label><br />
+                    <% if (reponseContactAdd.data.firstname === "") { %>
+                        <input id="firstname" name="firstname" type="text" placeholder="Prénom" size="30" /><br />
+                    <% } else { %>
+                        <input id="firstname" name="firstname" type="text" value="<%=reponseContactAdd.data.firstname%>" size="30" /><br />
+                    <% } %>
+                    <span id="firstname_validation"></span>
+                </div>
+                <div class="structure-contact">
+                    <label>Adresse email</label><br />
+                    <% if (reponseContactAdd.data.email === "") { %>
+                        <input id="email" class="input" name="email" type="text" placeholder="Email" size="30" /><br />
+                    <% } else { %>
+                        <input id="email" name="email" type="text" value="<%=reponseContactAdd.data.email%>" size="30" /><br />
+                    <% } %>
+                    <span id="email_validation"></span>
+                </div>
+                <div class="structure-contact">
+                    <label>Message</label><br />
+                    <% if (reponseContactAdd.data.message === "") { %>
+                        <textarea id="message" class="input" name="message" placeholder="Message" rows="15" cols="30"></textarea><br />
+                    <% } else { %>
+                        <textarea id="message" class="input" name="message" rows="15" cols="30"><%=reponseContactAdd.data.message%></textarea><br />
+                    <% } %>
+                    <span id="message_validation"></span>
+                </div>
+            <% } %>
             <div class="structure-button-contact">
                 <input id="submit_button" class="button-contact" type="submit" value="Envoyer"/>
             </div>
           </form>
       </div>
-    </section>
+    </main>
     <!-- Import footer -->
     <%- include('../Components/footer', {online}); %>
 </body>

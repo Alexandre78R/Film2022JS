@@ -23,7 +23,7 @@
         <%- include('../Components/Carrousel', {online}); %>
     </header>
 
-    <section>
+    <main>
         <div class="container_tab">
             <!-- <form action="/panel-faq-add" method="get"></form> -->
             <a href="/panel-faq-add">
@@ -54,9 +54,11 @@
                                 </td>
                                 
                                 <td>
-                                    <form action="/panel-faq-edit/<%= reponseFAQView.data[i]._id%>">
-                                        <input id="submit_button_tab_edit" class="tab-buton-edit" type="submit" value="Modifier"/>
-                                    </form>
+                                    <!-- <form action="/panel-faq-edit/<%= reponseFAQView.data[i]._id%>"> -->
+                                        <a href="/panel-faq-edit/<%= reponseFAQView.data[i]._id%>">
+                                            <input id="submit_button_tab_edit" class="tab-buton-edit" type="submit" value="Modifier"/>
+                                        </a>
+                                    <!-- </form> -->
                                 </td>
                                 <td>
                                     <form  action="/faq/del/<%= reponseFAQView.data[i]._id%>" method="POST">
@@ -69,7 +71,7 @@
                 </table>
             </table>
         </div>
-    </section>
+    </main>
     <!-- Import footer  -->
     <%- include('../Components/footer', {online}); %>
 </body>
