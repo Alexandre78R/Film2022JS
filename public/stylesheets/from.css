@@ -79,3 +79,53 @@ input[type="text"], [type="password"] {
 .structure-contact {
     margin : 4px;
 }
+.checkbox-structure {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    /* background-color: red; */
+    /* background-size: 200px; */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.checkbox-text {
+    margin-right: 2%;
+    margin-left: 2%;
+    /* color : red; */
+}
+
+input[type="checkbox"].radio {
+    display: none;
+    /* position: relative; */
+}
+
+input[type="checkbox"].radio + label {
+box-sizing: border-box;
+display: inline-block;
+width: 2.5rem;
+height: 1rem;
+border-radius: 1rem;
+padding:2px;
+background-color: #c0ceda ;
+transition: all 0.5s ;
+}
+
+input[type="checkbox"].radio + label::before {
+box-sizing: border-box;
+display: block;
+content: "";
+height: calc(0.9rem - 2.5px);
+width: calc(0.9rem - 2.5px);
+border-radius: 50%;
+background-color: #fff;
+transition: all 0.5s ;
+}
+
+input[type="checkbox"].radio:checked + label {
+background-color: rgb(87, 167, 237);
+}
+
+input[type="checkbox"].radio:checked + label::before {
+margin-left: 1.5rem ;
+}

@@ -8,14 +8,20 @@ const User = require('../models/users.js');
 var uid2 = require("uid2");
 var CryptoJS = require("crypto-js");
 
-//Module session
-var session = require('express-session');
-
 // Shéma FAQ 
 const FAQ = require('../models/faq.js');
 
 // Shéma Contact 
 const CONTACT = require('../models/contact.js');
+
+// les Function upload img
+var upload_img = require('../function/upload_img.js');
+
+//Shéma User
+const FILM = require('../models/film.js');
+
+// Import request regex
+var regex = require("../function/regex.js");
 
 // Param Reponse User login par défault 
 var reponseUserLogin = { 
@@ -44,8 +50,76 @@ var reponseFAQView = {
     data : []
 };
 
+// ------------------------------ Début ROUTE Film  ---------------------------
+
+// Séma bdd structure des fims ( si décourgament dans 10ùin ptdr)
+// Nom (unique) name
+// Image (Api sauvegarde image plus dépoyement) image url cloudinary
+// public_id (Pour cloudinary (folder/nomde l'image ) pour delete)
+// Allociné (Url Vérif Regex) url_allocine
+// Allociné note note_allocine
+// SensCritique (Url Vérif Regex) url_senscritique
+// SensCritique note note_senscritique
+// CinéSéries (Url Vérif Regex) url_cineseries
+// CinéSéries note note_cinéséries
+// Source (Url Vérif Regex) url_source
+// description du film descriptions
+
 /* GET Acceuil page. */
 router.get('/', function(req, res, next) {
+
+    // Param add faq
+    var reponseFAQAdd = { 
+        status : false,
+        text : "",
+        data : {}
+    };
+
+    // Param Edit faq;
+    var reponseFaqEdit = {
+        status : false,
+        text : "",
+        saveData : {},
+        data : {}
+    };
+
+    var reponseFilmAdd = {
+        status : false,
+        text : "",
+        data : {}
+    };
+    
+    var reponseFilmEdit = {
+        status : false,
+        text : "",
+        data : {}
+    };
+
+    // Session Pour ajout FAQ
+    if (!req.session.reponseFAQAdd) {
+        req.session.reponseFAQAdd = reponseFAQAdd;
+    }
+    
+    // Session Pour modifier FAQ
+    if (!req.session.reponseFaqEdit) {
+        req.session.reponseFaqEdit = reponseFaqEdit;
+    }
+
+    // Session Pour ajout d'un film
+    if (!req.session.reponseFilmAdd) {
+        req.session.reponseFilmAdd = reponseFilmAdd;
+    }
+
+    // Session Pour modifier un film
+    if (!req.session.reponseFilmEdit) {
+        req.session.reponseFilmEdit = reponseFilmEdit;
+    }
+    
+    console.log("req.session.reponseFAQAdd", req.session.reponseFAQAdd);
+    console.log("req.session.reponseFaqEdit", req.session.reponseFaqEdit);
+    console.log("req.session.reponseFilmAdd", req.session.reponseFilmAdd);
+    console.log("req.session.reponseFilmEdit", req.session.reponseFilmEdit);
+
   res.render('./pages/index', { online: req.session.user, title: 'Film 2022 - Acceuil'});
 });
 
@@ -58,6 +132,297 @@ router.get('/panel-film', function(req, res, next) {
     }
     res.render('./pages/panel-film', { online: req.session.user, title: 'Film 2022 - Panel Film' });
 });
+
+/* GET panel-film-add page. */
+router.get('/panel-film-add', function(req, res, next) {
+    // //Vérification si l'admin eest connecter
+    if (!req.session.user) {
+        res.redirect("/");
+    }
+    console.log("req.session.reponseFilmAdd", req.session.reponseFilmAdd);
+    res.render('./pages/panel-film-add', { online: req.session.user, title: 'Film 2022 - Panel Film Add', filmADD: req.session.reponseFilmAdd});
+});
+
+//Route pour enregistrer une nouvelle FAQ.
+router.post('/film/add', async function(req, res, next) {
+
+    // console.log("req.body", req.body);
+
+    //Stockage des données reçus du front
+    var filmDataAdd = {
+        name: req.body.name,
+        file : req.files,
+        url_alloCine : req.body.url_alloCine,
+        note_alloCine: req.body.note_alloCine,
+        url_senscritique : req.body.url_senscritique,
+        note_senscritique: req.body.note_senscritique,
+        url_cineserie : req.body.url_cineserie,
+        note_cineserie: req.body.note_cineserie,
+        url_source : req.body.url_source,
+        descriptions : req.body.descriptions
+    };
+    
+    // var filmDataAdd = req.body;
+    console.log("filmDataAdd", filmDataAdd);
+
+    if (req.body.name === ""){
+        req.session.reponseFilmAdd.status = true;
+        req.session.reponseFilmAdd.text = "Merci d'insérer un nom de film";
+        req.session.reponseFilmAdd.data = filmDataAdd;
+        console.log("Merci d'insérer un nom de film");
+        res.render('./pages/panel-film-add', { online: req.session.user, title: 'Film 2022 - Panel Film Add', filmADD: req.session.reponseFilmAdd});
+    } else if (req.files == null) {
+        req.session.reponseFilmAdd.status = true;
+        req.session.reponseFilmAdd.text = "Merci d'insérer une image";
+        req.session.reponseFilmAdd.data = filmDataAdd;
+        console.log("Merci d'insérer une image");
+        res.render('./pages/panel-film-add', { online: req.session.user, title: 'Film 2022 - Panel Film Add', filmADD: req.session.reponseFilmAdd});
+    } else if (req.body.url_alloCine === "") {
+        req.session.reponseFilmAdd.status = true;
+        req.session.reponseFilmAdd.text = "Merci d'insérer une url pour allocine";
+        req.session.reponseFilmAdd.data = filmDataAdd;
+        console.log("Merci d'insérer une url pour allocine");
+        res.render('./pages/panel-film-add', { online: req.session.user, title: 'Film 2022 - Panel Film Add', filmADD: req.session.reponseFilmAdd});
+    } else if (!req.body.url_alloCine == undefined && regex.url_verif(req.body.url_alloCine) == false) {
+        req.session.reponseFilmAdd.status = true;
+        req.session.reponseFilmAdd.text = "Merci d'insérer une url correct pour allocine";
+        req.session.reponseFilmAdd.data = filmDataAdd;
+        console.log("Merci d'insérer une url correct pour allocine");
+        res.render('./pages/panel-film-add', { online: req.session.user, title: 'Film 2022 - Panel Film Add', filmADD: req.session.reponseFilmAdd});
+    } else if (req.body.note_alloCine === "") {
+        req.session.reponseFilmAdd.status = true;
+        req.session.reponseFilmAdd.text = "Merci d'insérer une note pour allocine";
+        req.session.reponseFilmAdd.data = filmDataAdd;
+        console.log("Merci d'insérer une note pour allocine");
+        res.render('./pages/panel-film-add', { online: req.session.user, title: 'Film 2022 - Panel Film Add', filmADD: req.session.reponseFilmAdd});
+    } else if (req.body.url_senscritique === "") {
+        req.session.reponseFilmAdd.status = true;
+        req.session.reponseFilmAdd.text = "Merci d'insérer une url pour senscritique";
+        req.session.reponseFilmAdd.data = filmDataAdd;
+        console.log("Merci d'insérer une url pour senscritique");
+        res.render('./pages/panel-film-add', { online: req.session.user, title: 'Film 2022 - Panel Film Add', filmADD: req.session.reponseFilmAdd});
+    } else if (!req.body.url_senscritique == undefined && regex.url_verif(req.body.url_senscritique) == false) {
+        req.session.reponseFilmAdd.status = true;
+        req.session.reponseFilmAdd.text = "Merci d'insérer une url correct pour senscritique";
+        req.session.reponseFilmAdd.data = filmDataAdd;
+        console.log("Merci d'insérer une url correct pour senscritique");
+        res.render('./pages/panel-film-add', { online: req.session.user, title: 'Film 2022 - Panel Film Add', filmADD: req.session.reponseFilmAdd});
+    } else if (req.body.note_senscritique === "") {
+        req.session.reponseFilmAdd.status = true;
+        req.session.reponseFilmAdd.text = "Merci d'insérer une note pour senscritique";
+        req.session.reponseFilmAdd.data = filmDataAdd;
+        console.log("Merci d'insérer une note pour senscritique");
+        res.render('./pages/panel-film-add', { online: req.session.user, title: 'Film 2022 - Panel Film Add', filmADD: req.session.reponseFilmAdd});
+    } else if (req.body.url_cineserie === "") {
+        req.session.reponseFilmAdd.status = true;
+        req.session.reponseFilmAdd.text = "Merci d'insérer une url pour cineserie";
+        req.session.reponseFilmAdd.data = filmDataAdd;
+        console.log("Merci d'insérer une url pour cineserie");
+        res.render('./pages/panel-film-add', { online: req.session.user, title: 'Film 2022 - Panel Film Add', filmADD: req.session.reponseFilmAdd});
+    } else if (!req.body.url_cineserie == undefined && regex.url_verif(req.body.url_cineserie) == false) {
+        req.session.reponseFilmAdd.status = true;
+        req.session.reponseFilmAdd.text = "Merci d'insérer une url correct pour cineserie";
+        req.session.reponseFilmAdd.data = filmDataAdd;
+        console.log("Merci d'insérer une url correct pour cineserie");
+        res.render('./pages/panel-film-add', { online: req.session.user, title: 'Film 2022 - Panel Film Add', filmADD: req.session.reponseFilmAdd});
+    } else if (req.body.note_cineserie === "") {
+        req.session.reponseFilmAdd.status = true;
+        req.session.reponseFilmAdd.text = "Merci d'insérer une note pour cineserie";
+        req.session.reponseFilmAdd.data = filmDataAdd;
+        console.log("Merci d'insérer une note pour cineserie");
+        res.render('./pages/panel-film-add', { online: req.session.user, title: 'Film 2022 - Panel Film Add', filmADD: req.session.reponseFilmAdd});
+    } else if (req.body.url_source === "") {
+        req.session.reponseFilmAdd.status = true;
+        req.session.reponseFilmAdd.text = "Merci d'insérer une url pour la source";
+        req.session.reponseFilmAdd.data = filmDataAdd;
+        console.log("Merci d'insérer une url pour la source");
+        res.render('./pages/panel-film-add', { online: req.session.user, title: 'Film 2022 - Panel Film Add', filmADD: req.session.reponseFilmAdd});
+    } else if (regex.url_verif(req.body.url_source) == false) {
+        req.session.reponseFilmAdd.status = true;
+        req.session.reponseFilmAdd.text = "Merci d'insérer une url correct pour la source";
+        req.session.reponseFilmAdd.data = filmDataAdd;
+        console.log("Merci d'insérer une url correct pour la source");
+        res.render('./pages/panel-film-add', { online: req.session.user, title: 'Film 2022 - Panel Film Add', filmADD: req.session.reponseFilmAdd});
+    } else if (req.body.descriptions === "") {
+        req.session.reponseFilmAdd.status = true;
+        req.session.reponseFilmAdd.text = "Merci d'insérer une descriptions du film";
+        req.session.reponseFilmAdd.data = filmDataAdd;
+        console.log("Merci d'insérer une descriptions du film");
+        res.render('./pages/panel-film-add', { online: req.session.user, title: 'Film 2022 - Panel Film Add', filmADD: req.session.reponseFilmAdd});
+    } else {        
+        var result = await upload_img.upload_img_local(req.files.file);
+        if(result == false) {
+            req.session.reponseFilmAdd.status = true;
+            req.session.reponseFilmAdd.text = "Erreur interne impossible de sauvegarder l'image sur notre serveur.";
+            req.session.reponseFilmAdd.data = filmDataAdd;
+            console.log("Erreur interne impossible de sauvegarder l'image sur notre serveur.");
+            res.render('./pages/panel-film-add', { online: req.session.user, title: 'Film 2022 - Panel Film Add', filmADD: req.session.reponseFilmAdd});
+        } else {
+    
+            // console.log(imagePath);
+            var resultCloudinary = await upload_img.upload_img_cloudinary(result, "film2022");
+            console.log("resultCloudinary", resultCloudinary);
+    
+            if (resultCloudinary == false) {
+                req.session.reponseFilmAdd.status = true;
+                req.session.reponseFilmAdd.text = "Erreur interne impossible de sauvegarder l'image sur notre hébergeur.";
+                req.session.reponseFilmAdd.data = filmDataAdd;
+                console.log("Erreur interne impossible de sauvegarder l'image sur notre hébergeur.");
+                var resultLocalDel = await upload_img.upload_img_local_del(result);
+                if (resultLocalDel == false) {
+                    req.session.reponseFilmAdd.status = true;
+                    req.session.reponseFilmAdd.text = "Erreur interne impossible de supprimer l'image sur notre serveur.";
+                    req.session.reponseFilmAdd.data = filmDataAdd;
+                    console.log("Erreur interne impossible de supprimer l'image sur notre serveur.");
+                    res.render('./pages/panel-film-add', { online: req.session.user, title: 'Film 2022 - Panel Film Add', filmADD: req.session.reponseFilmAdd});
+                } 
+            } else {
+                var resultLocalDel = await upload_img.upload_img_local_del(result);
+                // console.log("resultLocalDel", resultLocalDel);
+                if (resultLocalDel == false) {
+                    req.session.reponseFilmAdd.status = true;
+                    req.session.reponseFilmAdd.text = "Erreur interne impossible de supprimer l'image sur notre serveur.";
+                    req.session.reponseFilmAdd.data = filmDataAdd;
+                    console.log("Erreur interne impossible de supprimer l'image sur notre serveur.");
+                    // On delete l'image sur l'hébergeur en cas d'erreur interne 
+                    var deleteCloudinaryImage = await upload_img.upload_img_cloudinary_del(resultCloudinary.public_id);
+                    console.log("deleteCloudinaryImage", deleteCloudinaryImage);
+                    res.render('./pages/panel-film-add', { online: req.session.user, title: 'Film 2022 - Panel Film Add', filmADD: req.session.reponseFilmAdd});
+                } else {
+                    console.log("req.body", req.body);
+                    console.log("resultCloudinary", resultCloudinary.public_id);
+                    // console.log("JE SUIS L0 §§§§§§§§§§§§§§§§§§");
+                    // res.render('./pages/panel-film', { online: req.session.user, title: 'Film 2022 - Panel Film Add'});
+                    
+                    //On regarde dans la BDD si el film existe déjà
+                    FILM.findOne({
+                        name: req.body.name
+                    }).then(async film => {
+                        //Si on le trouve on envoie un message d'erreur
+                        if (film) {
+                            req.session.reponseFilmAdd.status = true;
+                            req.session.reponseFilmAdd.text = "Le film" + req.body.name +  " existe déjà dans notre bdd !";
+                            req.session.reponseFilmAdd.data = filmDataAdd;
+                            res.render('./pages/panel-film-add', { online: req.session.user, title: 'Film 2022 - Panel Film Add', filmADD: req.session.reponseFilmAdd});
+                            //Sinon on ajoute dans la bdd
+                        } else {
+                            var FilmSave ={
+                                name: req.body.name,
+                                img : resultCloudinary.secure_url,
+                                public_id : resultCloudinary.public_id,
+                                url_alloCine : req.body.url_alloCine,
+                                note_alloCine: req.body.note_alloCine,
+                                url_senscritique : req.body.url_senscritique,
+                                note_senscritique: req.body.note_senscritique,
+                                url_cineserie : req.body.url_cineserie,
+                                note_cineserie: req.body.note_cineserie,
+                                url_source : req.body.url_source,
+                                descriptions : req.body.descriptions
+                            };
+
+                            console.log("FilmSave", FilmSave);
+                            
+                            //Création du document FAQ
+                            FILM.create(FilmSave)
+                            .then(film => {
+                                console.log("FILM", film);
+                                // return res.redirect("/panel-film");
+                            })
+                            //Si il y a une erreur
+                            .catch(async err => {
+                                console.log("err", err);
+                                req.session.reponseFilmAdd.status = true;
+                                req.session.reponseFilmAdd.text = "Le film" + req.body.name +  " existe déjà dans notre bdd !";
+                                req.session.reponseFilmAdd.data = filmDataAdd;
+                                // On delete l'image sur l'hébergeur en cas d'erreur interne 
+                                var deleteCloudinaryImage = await upload_img.upload_img_cloudinary_del(resultCloudinary.public_id);
+                                console.log("deleteCloudinaryImage", deleteCloudinaryImage);
+                                res.render('./pages/panel-film-add', { online: req.session.user, title: 'Film 2022 - Panel Film Add', filmADD: req.session.reponseFilmAdd});
+                            });
+                            res.redirect("/panel-film");
+                        }
+                    //En cas d'erreur
+                    }).catch(err => {
+                        console.log("err", err);
+                        console.log("Erreur interne impossible faire la recherche du film dans la bdd");
+                        req.session.reponseFilmAdd.status = true;
+                        req.session.reponseFilmAdd.text = "Erreur interne impossible faire la recherche du film dans la bdd";
+                        req.session.reponseFilmAdd.data = filmDataAdd;
+                        res.render('./pages/panel-film-add', { online: req.session.user, title: 'Film 2022 - Panel Admin', filmADD: req.session.reponseFilmAdd});
+                    });
+                }
+            }
+        }   
+    }
+    // console.log("url_alloCine", req.body.url_alloCine);
+
+
+    // var resultCloudinary = await cloudinary.cloudinary.uploader.upload("https://upload.wikimedia.org/wikipedia/commons/thumb/7/77/Google_Images_2015_logo.svg/1200px-Google_Images_2015_logo.svg.png", {folder: "Film2022",});
+    // res.json(resultCloudinary);
+    //Stockage des données reçus du front
+    // var faqDataAdd  = {
+    //     quest: req.body.quest,
+    //     response: req.body.response,
+    // };
+    // console.log("/faq/add Après ---> req.session.faq", req.session.reponseFAQAdd);
+    // if (req.body.quest === "") {
+        // req.session.reponseFAQAdd.status = true;
+        // req.session.reponseFAQAdd.text = "Merci d'insérer votre question !";
+    //     req.session.reponseFAQAdd.data.quest = req.body.quest;
+    //     req.session.reponseFAQAdd.data.response = req.body.response;
+    //     // reponseFAQAdd.data = faqDataAdd;
+    //     res.redirect("/panel-faq-add");
+    // } else if (req.body.response === "") {
+    //     req.session.reponseFAQAdd.status = true;
+    //     req.session.reponseFAQAdd.text = "Merci d'insérer votre réponse !";
+    //     req.session.reponseFAQAdd.data.quest = req.body.quest;
+    //     req.session.reponseFAQAdd.data.response = req.body.response;
+    //     // reponseFAQAdd.data = faqDataAdd;
+    //     res.redirect("/panel-faq-add");
+    // } else {
+
+    //     //Création du document FAQ
+    //     FAQ.create(faqDataAdd)
+    //         .then(faq => {
+    //             console.log("FAQ", faq);
+    //             return res.redirect('/panel-faq');
+    //         })
+    //         //Si il y a une erreur
+    //         .catch(err => {
+    //             console.log("err", err);
+    //             req.session.reponseFAQAdd.status = true;
+    //             req.session.reponseFAQAdd.text = "Erreur interne !";
+    //             req.session.reponseFAQAdd.data = faqDataAdd;
+    //             res.render('./pages/panel-faq-add ', { online: req.session.user, title: 'Film 2022 - Panel FAQ - Ajouter', faqADD: req.session.reponseFAQAdd});
+    //     });
+    // }
+});
+
+/* GET panel-film-edit page. */
+router.get('/panel-film-edit', function(req, res, next) {
+    //Vérification si l'admin eest connecter
+    if (!req.session.user) {
+        res.redirect("/");
+    }
+    res.render('./pages/panel-film-edit', { online: req.session.user, title: 'Film 2022 - Panel Film' });
+});
+
+
+//Route pour suprimer un messaage de contact.
+router.post('/film/del/:id', function(req, res, next) {
+    console.log("id", req.params.id);
+    CONTACT.findByIdAndRemove(req.params.id, (err, doc) => {
+        if (err) {
+            console.log("Impossible de suprimer le film: ", err);
+            res.redirect('/panel-film');
+        } else {
+            console.log('Le film à était suprimer à succès !', doc);
+            res.redirect('/panel-film');
+        }
+    });
+});
+
+// ------------------------------ FIN ROUTE Film  ---------------------------
 
 // ------------------------------ Début ROUTE Contact ---------------------------
 
@@ -148,10 +513,11 @@ router.post('/contact/add', function(req, res, next) {
                 //Si il y a une erreur
                 .catch(err => {
                     console.log("err", err);
+                    // console.log("err 2", err.errors.properties);
                     reponseContactAdd.status = true;
-                    reponseContactAdd.text = "Erreur interne !";
+                    reponseContactAdd.text = err;
                     reponseContactAdd.data = contactDataAdd;
-                    res.render('./pages/contact ', { online: req.session.user, title: 'Film 2022 - Panel FAQ - Ajouter', reponseContactAdd});
+                    res.render('./pages/contact', { online: req.session.user, title: 'Film 2022 - Panel FAQ - Ajouter', reponseContactAdd});
             });
         }
     }
@@ -203,28 +569,32 @@ router.get('/panel-faq', function(req, res, next) {
     if (!req.session.user) {
         res.redirect("/");
     }
-
-    // Param add faq
-    var reponseFAQAdd = { 
-        status : false,
-        text : "",
-        data : {}
-    };
-
-    // Param Edit faq;
-    var reponseFaqEdit = {
-        status : false,
-        text : "",
-        saveData : {},
-        data : {}
-    };
-
-    // Session Pour ajout FAQ
-    req.session.reponseFAQAdd = reponseFAQAdd;
-
-    // Session Pour modifier FAQ
-    req.session.reponseFaqEdit = reponseFaqEdit;
     
+    // // Param add faq
+    // var reponseFAQAdd = { 
+    //     status : false,
+    //     text : "",
+    //     data : {}
+    // };
+
+    // // Param Edit faq;
+    // var reponseFaqEdit = {
+    //     status : false,
+    //     text : "",
+    //     saveData : {},
+    //     data : {}
+    // };
+
+    // // Session Pour ajout FAQ
+    // if (!req.session.reponseFAQAdd) {
+    //     req.session.reponseFAQAdd = reponseFAQAdd;
+    // }
+    
+    // // Session Pour modifier FAQ
+    // if (!req.session.reponseFaqEdit) {
+    //     req.session.reponseFaqEdit = reponseFaqEdit;
+    // }
+        
     // On cherche dans la base de donnée
     FAQ.find().then(async faq => {
         if (faq.length == 0) {
@@ -259,6 +629,9 @@ router.get('/panel-faq-add', function(req, res, next) {
 
 //Route pour enregistrer une nouvelle FAQ.
 router.post('/faq/add', function(req, res, next) {
+
+    // // Session Pour ajout FAQ
+    // req.session.reponseFAQAdd = reponseFAQAdd;
     console.log("/faq/add Avant ---> req.session.faq", req.session.reponseFAQAdd);
     //Stockage des données reçus du front
     var faqDataAdd  = {
@@ -294,7 +667,7 @@ router.post('/faq/add', function(req, res, next) {
                 req.session.reponseFAQAdd.status = true;
                 req.session.reponseFAQAdd.text = "Erreur interne !";
                 req.session.reponseFAQAdd.data = faqDataAdd;
-                res.render('./pages/panel-faq-add ', { online: req.session.user, title: 'Film 2022 - Panel FAQ - Ajouter', faqADD: req.session.reponseFAQAdd});
+                res.render('./pages/panel-faq-add', { online: req.session.user, title: 'Film 2022 - Panel FAQ - Ajouter', faqADD: req.session.reponseFAQAdd});
         });
     }
 });
@@ -390,7 +763,7 @@ router.post('/faq/edit/:id', function(req, res, next) {
                 req.session.reponseFaqEdit.status = true;
                 req.session.reponseFaqEdit.text = "Erreur interne !";
                 req.session.reponseFaqEdit.saveData = faqDataEdit;
-                res.render('./pages/panel-faq-add ', { online: req.session.user, title: 'Film 2022 - Panel FAQ - Ajouter', faqEdit: req.session.reponseFaqEdit});
+                res.render('./pages/panel-faq-add', { online: req.session.user, title: 'Film 2022 - Panel FAQ - Ajouter', faqEdit: req.session.reponseFaqEdit});
         });
     }
 });

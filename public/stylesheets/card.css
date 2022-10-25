@@ -59,14 +59,17 @@
     color: rgb(87, 167, 237);
     font-family :'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif ;
 }
+
+
 .card .card-social-links li {
     display: block;
-    float: left;
+    /* float: left; */
+    text-align: right;
 }
 
 /* Format d'écriture dans card-social-links pour les balise li a */
 .card .card-social-links li a {
-    display: block;
+    /* display: block; */
     text-decoration: none;
     color: rgb(87, 167, 237);
 }

@@ -19,4 +19,4 @@ mongoose.connect(dbUrl, options, error => {
 
 module.exports = {
   mongoose: mongoose,
-}
+};
