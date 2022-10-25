@@ -6,7 +6,10 @@ function url_verif (url) {
 }
 
 function email_verif(email) {
-    var regex = /\+|\*|\$|^[a-zA-Z0-9_-]+@[a-zA-Z0-9-]{2,}[.][a-zA-Z]{2,3}$/gi;
+    // ^[a-zA-Z-]+@[a-zA-Z-]+\.[a-zA-Z]{2,6}$#
+    // var regex = /^[a-zA-Z-]+@[a-zA-Z-]+\.[a-zA-Z]{2,6}$#;
+    var regex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+    // var regex = /\+|\*|\$|^[a-zA-Z0-9_-]+@[a-zA-Z0-9-]{2,}[.][a-zA-Z]{2,3}$/gi;
     var isExisting = regex.test(email);
     return isExisting;
 }

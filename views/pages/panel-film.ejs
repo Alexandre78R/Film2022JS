@@ -10,6 +10,8 @@
     <link rel="stylesheet" href="../../stylesheets/from.css">
     <!-- Import du css des Tab -->
     <link rel="stylesheet" href="../../stylesheets/tab.css">
+    <!-- Import du css des Alert -->
+    <link rel="stylesheet" href="../../stylesheets/Alert.css">
     <!-- Titre de la page -->
     <title><%= title %></title>
 </head>
@@ -28,10 +30,15 @@
                 <input type="submit" id="submit_button_tab_add" class="tab-buton-add" value="Ajouter"/>
             </a>
             <!-- </form> -->
+            <% if (!reponseFilmView.status){ %>
+                <div class="alertError">
+                    <span> <%= reponseFilmView.text %> </span>
+                </div>
+            <% } else { %>
             <table>
                 <table>
                     <tr>
-                        <th>id</th>
+                        <th>Nom</th>
                         <th>Image</th>
                         <th>Texte</th>
                         <th>AlloCiné</th>
@@ -41,33 +48,32 @@
                         <th>Modifier</th>
                         <th>Suprimer</th>
                     </tr>
-                    <tr class="tab-ligne">
-                        <td>0</td>
-                        <td class="tab-text-from"><a class="tab-text-from tab-text-a" href="#">Image</a></td>
-                        <td class="tab-text-from">
-                            Nisi mihi Phaedrum, inquam, tu mentitum aut Zenonem putas, quorum utrumque audivi, cum mihi nihil sane praeter sedulitatem probarent,
-                            omnes mihi Epicuri sententiae satis notae sunt. atque eos, quos nominavi, cum Attico nostro frequenter audivi, cum miraretur ille quidem utrumque, Phaedrum autem etiam amaret, cotidieque inter nos ea,
-                            quae audiebamus, conferebamus, neque erat umquam controversia, quid ego intellegerem, sed quid probarem.
-                        </td>
-                        <td class="tab-text-from"><a class="tab-text-from tab-text-a" href="#">AlloCiné</a></td>
-                        <td class="tab-text-from"><a class="tab-text-from tab-text-a" href="#">SensCritique</a></td>
-                        <td class="tab-text-from"><a class="tab-text-from tab-text-a" href="#">CinéSérie</a></td>
-                        <td class="tab-text-from"><a class="tab-text-from tab-text-a" href="#">Source</a></td>
-                        <td>
-                            <!-- <form action="panel-film-edit.html"> -->
-                            <a href="/panel-film-edit">
-                                <input id="submit_button_tab_edit" class="tab-buton-edit" type="submit" value="Modifier"/>
-                            </a>
-                            <!-- </form> -->
-                        </td>
-                        <td>
-                            <form  action="/film/del/id" method="POST">
-                                <input id="submit_button_tab_delete"   class="tab-buton-delete" type="submit" value="Suprimer"/>
-                            </form>
-                        </td>
-                    </tr>
+                    <% for (let i = 0; i < reponseFilmView.data.length; i++) { %>
+                        <tr class="tab-ligne">
+                            <td><%=reponseFilmView.data[i].name%></td>
+                            <td class="tab-text-from"><a class="tab-text-from tab-text-a" href="<%=reponseFilmView.data[i].img%>" target="_blank">Image</a></td>
+                            <td class="tab-text-from">
+                                <%=reponseFilmView.data[i].descriptions%>
+                            </td>
+                            <td class="tab-text-from"><a class="tab-text-from tab-text-a" href="<%=reponseFilmView.data[i].url_alloCine%>" target="_blank">AlloCiné</a><p><%=reponseFilmView.data[i].note_alloCine%>/10</p></td>
+                            <td class="tab-text-from"><a class="tab-text-from tab-text-a" href="<%=reponseFilmView.data[i].url_senscritique%>" target="_blank">SensCritique</a><p><%=reponseFilmView.data[i].note_senscritique%>/10</p></td>
+                            <td class="tab-text-from"><a class="tab-text-from tab-text-a" href="<%=reponseFilmView.data[i].url_cineserie%>" target="_blank">CinéSérie</a><p><%=reponseFilmView.data[i].note_cineserie%>/10</p></td>
+                            <td class="tab-text-from"><a class="tab-text-from tab-text-a" href="<%=reponseFilmView.data[i].url_source%>" target="_blank">Source</a></td>
+                            <td>
+                                <a href="/panel-film-edit/<%=reponseFilmView.data[i]._id%>">
+                                    <input id="submit_button_tab_edit" class="tab-buton-edit" type="submit" value="Modifier"/>
+                                </a>
+                            </td>
+                            <td>
+                                <form  action="/film/del/<%=reponseFilmView.data[i]._id%>" method="POST">
+                                    <input id="submit_button_tab_delete"   class="tab-buton-delete" type="submit" value="Suprimer"/>
+                                </form>
+                            </td>
+                        </tr>
+                    <% } %>
                 </table>
             </table>
+            <% } %>
         </div>
     </main>
     <!-- Import footer -->

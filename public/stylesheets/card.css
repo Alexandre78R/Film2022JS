@@ -45,6 +45,14 @@
     font-family :'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif ;
 }
 
+/* Format d'écriture dans card-bio pour les balise ul */
+.card .card-bio ul {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-left: -15%;
+}
+
 /* Format d'écriture dans card-bio pour les balise li */
 .card .card-bio li {
     text-align: center;

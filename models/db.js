@@ -13,7 +13,7 @@ mongoose.connect(dbUrl, options, error => {
   if (error) {
     console.error("Error :", error);
   } else {
-    console.log('Connexion à la BDD')
+    console.log('Connexion à la BDD');
   }
 });
 

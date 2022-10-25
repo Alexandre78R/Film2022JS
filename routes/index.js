@@ -50,20 +50,14 @@ var reponseFAQView = {
     data : []
 };
 
-// ------------------------------ Début ROUTE Film  ---------------------------
+// Param view faq
+var reponseFilmView = { 
+    status : true,
+    text : "",
+    data : []
+};
 
-// Séma bdd structure des fims ( si décourgament dans 10ùin ptdr)
-// Nom (unique) name
-// Image (Api sauvegarde image plus dépoyement) image url cloudinary
-// public_id (Pour cloudinary (folder/nomde l'image ) pour delete)
-// Allociné (Url Vérif Regex) url_allocine
-// Allociné note note_allocine
-// SensCritique (Url Vérif Regex) url_senscritique
-// SensCritique note note_senscritique
-// CinéSéries (Url Vérif Regex) url_cineseries
-// CinéSéries note note_cinéséries
-// Source (Url Vérif Regex) url_source
-// description du film descriptions
+// ------------------------------ Début ROUTE Film  ---------------------------
 
 /* GET Acceuil page. */
 router.get('/', function(req, res, next) {
@@ -120,7 +114,29 @@ router.get('/', function(req, res, next) {
     console.log("req.session.reponseFilmAdd", req.session.reponseFilmAdd);
     console.log("req.session.reponseFilmEdit", req.session.reponseFilmEdit);
 
-  res.render('./pages/index', { online: req.session.user, title: 'Film 2022 - Acceuil'});
+    // On cherche dans la base de donnée
+    FILM.find().then(async film => {
+        if (film.length == 0) {
+            reponseFilmView.status =  false;
+            reponseFilmView.text = "Aucun film se trouve dans la base de données !";
+            reponseFilmView.data = film;
+            res.render('./pages/index', { online: req.session.user, title: 'Film 2022 - Panel Film', reponseFilmView});
+        } else {
+            reponseFilmView.status =  true;
+            reponseFilmView.text = "Listes de film trouver !";
+            reponseFilmView.data = film;
+            // console.log("list films", film);
+            res.render('./pages/index', { online: req.session.user, title: 'Film 2022 - Panel Film', reponseFilmView});
+        }
+    }).catch(err => {
+        console.log('panel-film err', err);
+        reponseFilmView.status =  false;
+        reponseFilmView.text = "Impossible de récupérer les films dans la base de données !";
+        reponseFilmView.data = {};
+        res.render('./pages/index', { online: req.session.user, title: 'Film 2022 - Panel Film', reponseFilmView});
+    });
+
+//   res.render('./pages/index', { online: req.session.user, title: 'Film 2022 - Acceuil'});
 });
 
 
@@ -130,7 +146,28 @@ router.get('/panel-film', function(req, res, next) {
     if (!req.session.user) {
         res.redirect("/");
     }
-    res.render('./pages/panel-film', { online: req.session.user, title: 'Film 2022 - Panel Film' });
+    // On cherche dans la base de donnée
+    FILM.find().then(async film => {
+        if (film.length == 0) {
+            reponseFilmView.status =  false;
+            reponseFilmView.text = "Aucun film se trouve dans la base de données !";
+            reponseFilmView.data = film;
+            res.render('./pages/panel-film', { online: req.session.user, title: 'Film 2022 - Panel Film', reponseFilmView});
+        } else {
+            reponseFilmView.status =  true;
+            reponseFilmView.text = "Listes de film trouver !";
+            reponseFilmView.data = film;
+            // console.log("list films", film);
+            res.render('./pages/panel-film', { online: req.session.user, title: 'Film 2022 - Panel Film', reponseFilmView});
+        }
+    }).catch(err => {
+        console.log('panel-film err', err);
+        reponseFilmView.status =  false;
+        reponseFilmView.text = "Impossible de récupérer les films dans la base de données !";
+        reponseFilmView.data = {};
+        res.render('./pages/panel-film', { online: req.session.user, title: 'Film 2022 - Panel Film', reponseFilmView});
+    });
+    // res.render('./pages/panel-film', { online: req.session.user, title: 'Film 2022 - Panel Film' });
 });
 
 /* GET panel-film-add page. */
@@ -267,9 +304,9 @@ router.post('/film/add', async function(req, res, next) {
                 req.session.reponseFilmAdd.status = true;
                 req.session.reponseFilmAdd.text = "Erreur interne impossible de sauvegarder l'image sur notre hébergeur.";
                 req.session.reponseFilmAdd.data = filmDataAdd;
-                console.log("Erreur interne impossible de sauvegarder l'image sur notre hébergeur.");
+                // console.log("Erreur interne impossible de sauvegarder l'image sur notre hébergeur.");
                 var resultLocalDel = await upload_img.upload_img_local_del(result);
-                if (resultLocalDel == false) {
+                if (resultLocalDel) {
                     req.session.reponseFilmAdd.status = true;
                     req.session.reponseFilmAdd.text = "Erreur interne impossible de supprimer l'image sur notre serveur.";
                     req.session.reponseFilmAdd.data = filmDataAdd;
@@ -279,14 +316,14 @@ router.post('/film/add', async function(req, res, next) {
             } else {
                 var resultLocalDel = await upload_img.upload_img_local_del(result);
                 // console.log("resultLocalDel", resultLocalDel);
-                if (resultLocalDel == false) {
+                if (resultLocalDel) {
                     req.session.reponseFilmAdd.status = true;
                     req.session.reponseFilmAdd.text = "Erreur interne impossible de supprimer l'image sur notre serveur.";
                     req.session.reponseFilmAdd.data = filmDataAdd;
                     console.log("Erreur interne impossible de supprimer l'image sur notre serveur.");
                     // On delete l'image sur l'hébergeur en cas d'erreur interne 
-                    var deleteCloudinaryImage = await upload_img.upload_img_cloudinary_del(resultCloudinary.public_id);
-                    console.log("deleteCloudinaryImage", deleteCloudinaryImage);
+                    // var deleteCloudinaryImage = await upload_img.upload_img_cloudinary_del(resultCloudinary.public_id);
+                    // console.log("deleteCloudinaryImage", deleteCloudinaryImage);
                     res.render('./pages/panel-film-add', { online: req.session.user, title: 'Film 2022 - Panel Film Add', filmADD: req.session.reponseFilmAdd});
                 } else {
                     console.log("req.body", req.body);
@@ -335,8 +372,8 @@ router.post('/film/add', async function(req, res, next) {
                                 req.session.reponseFilmAdd.text = "Le film" + req.body.name +  " existe déjà dans notre bdd !";
                                 req.session.reponseFilmAdd.data = filmDataAdd;
                                 // On delete l'image sur l'hébergeur en cas d'erreur interne 
-                                var deleteCloudinaryImage = await upload_img.upload_img_cloudinary_del(resultCloudinary.public_id);
-                                console.log("deleteCloudinaryImage", deleteCloudinaryImage);
+                                // var deleteCloudinaryImage = await upload_img.upload_img_cloudinary_del(resultCloudinary.public_id);
+                                // console.log("deleteCloudinaryImage", deleteCloudinaryImage);
                                 res.render('./pages/panel-film-add', { online: req.session.user, title: 'Film 2022 - Panel Film Add', filmADD: req.session.reponseFilmAdd});
                             });
                             res.redirect("/panel-film");
@@ -354,49 +391,42 @@ router.post('/film/add', async function(req, res, next) {
             }
         }   
     }
-    // console.log("url_alloCine", req.body.url_alloCine);
-
-
-    // var resultCloudinary = await cloudinary.cloudinary.uploader.upload("https://upload.wikimedia.org/wikipedia/commons/thumb/7/77/Google_Images_2015_logo.svg/1200px-Google_Images_2015_logo.svg.png", {folder: "Film2022",});
-    // res.json(resultCloudinary);
-    //Stockage des données reçus du front
-    // var faqDataAdd  = {
-    //     quest: req.body.quest,
-    //     response: req.body.response,
-    // };
-    // console.log("/faq/add Après ---> req.session.faq", req.session.reponseFAQAdd);
-    // if (req.body.quest === "") {
-        // req.session.reponseFAQAdd.status = true;
-        // req.session.reponseFAQAdd.text = "Merci d'insérer votre question !";
-    //     req.session.reponseFAQAdd.data.quest = req.body.quest;
-    //     req.session.reponseFAQAdd.data.response = req.body.response;
-    //     // reponseFAQAdd.data = faqDataAdd;
-    //     res.redirect("/panel-faq-add");
-    // } else if (req.body.response === "") {
-    //     req.session.reponseFAQAdd.status = true;
-    //     req.session.reponseFAQAdd.text = "Merci d'insérer votre réponse !";
-    //     req.session.reponseFAQAdd.data.quest = req.body.quest;
-    //     req.session.reponseFAQAdd.data.response = req.body.response;
-    //     // reponseFAQAdd.data = faqDataAdd;
-    //     res.redirect("/panel-faq-add");
-    // } else {
-
-    //     //Création du document FAQ
-    //     FAQ.create(faqDataAdd)
-    //         .then(faq => {
-    //             console.log("FAQ", faq);
-    //             return res.redirect('/panel-faq');
-    //         })
-    //         //Si il y a une erreur
-    //         .catch(err => {
-    //             console.log("err", err);
-    //             req.session.reponseFAQAdd.status = true;
-    //             req.session.reponseFAQAdd.text = "Erreur interne !";
-    //             req.session.reponseFAQAdd.data = faqDataAdd;
-    //             res.render('./pages/panel-faq-add ', { online: req.session.user, title: 'Film 2022 - Panel FAQ - Ajouter', faqADD: req.session.reponseFAQAdd});
-    //     });
-    // }
 });
+
+// /* GET panel-film-edit page. */
+// router.get('/panel-film-edit/:id', function(req, res, next) {
+
+//     console.log("id", req.params.id);
+
+//     //Vérification si l'admin eest connecter
+//     if (!req.session.user) {
+//         res.redirect("/");
+//     }
+
+//     FILM.findById({
+//         _id: req.params.id,
+//     }).then(film => {
+
+//         // On met la data dans un objet 
+//         req.session.reponseFilmEdit.data = film;
+
+//         // Condition de check pour savoir c'est le bon edit de l'id qu'on fait 
+//         if (req.session.reponseFilmEdit.data._id == req.session.reponseFilmEdit.saveData._id) {
+//             res.render('./pages/panel-film-edit', { online: req.session.user, title: 'Film 2022 - Panel Film - Modifier', filmEdit: req.session.reponseFilmEdit});
+//         } else {
+//             // On met par défault les param edit
+//             req.session.reponseFilmEdit.status = false;
+//             req.session.reponseFilmEdit.text = "";
+//             req.session.reponseFilmEdit.saveData = {};
+//             res.render('./pages/panel-film-edit', { online: req.session.user, title: 'Film 2022 - Panel Film - Modifier', filmEdit: req.session.reponseFilmEdit});
+//         }
+//     //En cas d'erreur on sort leport 500
+//     }).catch(err => {
+//         console.log("/film/edit err", err);
+//         res.render('./pages/panel-film', { online: req.session.user, title: 'Film 2022 - Panel Film - Modifier', filmEdit: req.session.reponseFilmEdit});
+//     });
+    
+// });
 
 /* GET panel-film-edit page. */
 router.get('/panel-film-edit', function(req, res, next) {
@@ -409,16 +439,27 @@ router.get('/panel-film-edit', function(req, res, next) {
 
 
 //Route pour suprimer un messaage de contact.
-router.post('/film/del/:id', function(req, res, next) {
-    console.log("id", req.params.id);
-    CONTACT.findByIdAndRemove(req.params.id, (err, doc) => {
-        if (err) {
-            console.log("Impossible de suprimer le film: ", err);
-            res.redirect('/panel-film');
-        } else {
-            console.log('Le film à était suprimer à succès !', doc);
-            res.redirect('/panel-film');
+router.post('/film/del/:id', async function(req, res, next) {
+    console.log("req.param", req.params);
+    FILM.findById({
+        _id: req.params.id,
+    }).then(async film => {
+        console.log("film", film);
+        var deleteUploadImgCloudifary = await upload_img.upload_img_cloudinary_del(film.public_id);
+        if (deleteUploadImgCloudifary){
+            FILM.findByIdAndRemove(req.params.id, (err, doc) => {
+                if (err) {
+                    console.log("Impossible de suprimer le film: ", err);
+                    res.redirect('/panel-film');
+                } else {
+                    console.log('Le film à était suprimer à succès !', doc);
+                    res.redirect('/panel-film');
+                }
+            });
         }
+    }).catch(err => {
+        console.log("/film/del/:id err", err);
+        res.render('./pages/panel-film', { online: req.session.user, title: 'Film 2022 - Panel Film - del', reponseFilmView});
     });
 });
 
@@ -494,10 +535,7 @@ router.post('/contact/add', function(req, res, next) {
         reponseContactAdd.data = contactDataAdd;
         res.render('./pages/contact', { online: req.session.user, title: 'Film 2022 - Panel Contact', reponseContactAdd });
     } else {
-        // ^[a-zA-Z-]+@[a-zA-Z-]+\.[a-zA-Z]{2,6}$#
-        // var regex = /^[a-zA-Z-]+@[a-zA-Z-]+\.[a-zA-Z]{2,6}$#;
-        var regex = /\+|\*|\$|^[a-zA-Z0-9_-]+@[a-zA-Z0-9-]{2,}[.][a-zA-Z]{2,3}$/gi;
-        var isExisting = regex.test(req.body.email);
+        var isExisting = regex.email_verif(req.body.email );
         if (!isExisting) {
             reponseContactAdd.status = true;
             reponseContactAdd.text = "Merci d'insérer un email correct !";
@@ -569,31 +607,6 @@ router.get('/panel-faq', function(req, res, next) {
     if (!req.session.user) {
         res.redirect("/");
     }
-    
-    // // Param add faq
-    // var reponseFAQAdd = { 
-    //     status : false,
-    //     text : "",
-    //     data : {}
-    // };
-
-    // // Param Edit faq;
-    // var reponseFaqEdit = {
-    //     status : false,
-    //     text : "",
-    //     saveData : {},
-    //     data : {}
-    // };
-
-    // // Session Pour ajout FAQ
-    // if (!req.session.reponseFAQAdd) {
-    //     req.session.reponseFAQAdd = reponseFAQAdd;
-    // }
-    
-    // // Session Pour modifier FAQ
-    // if (!req.session.reponseFaqEdit) {
-    //     req.session.reponseFaqEdit = reponseFaqEdit;
-    // }
         
     // On cherche dans la base de donnée
     FAQ.find().then(async faq => {
