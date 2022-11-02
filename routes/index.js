@@ -20,6 +20,13 @@ const validation_user = require("../function/validation/user.js");
 //Query User 
 const query_user = require("../query/user.js");
 
+// Validation Faq
+const validation_faq = require("../function/validation/faq.js");
+
+//Query Faq 
+const query_faq = require("../query/faq.js");
+
+
 // // Import request regex
 // var regex = require("../function/regex.js");
 
@@ -64,14 +71,14 @@ router.get('/', function(req, res, next) {
 
     // Param add faq
     var reponseFAQAdd = { 
-        status : false,
+        status : true,
         text : "",
         data : {}
     };
 
     // Param Edit faq;
     var reponseFaqEdit = {
-        status : false,
+        status : true,
         text : "",
         saveData : {},
         data : {}
@@ -135,17 +142,15 @@ router.get('/', function(req, res, next) {
         reponseFilmView.data = {};
         res.render('./pages/index', { online: req.session.user, title: 'Film 2022 - Panel Film', reponseFilmView});
     });
-
-//   res.render('./pages/index', { online: req.session.user, title: 'Film 2022 - Acceuil'});
 });
 
 
 /* GET panel-film page. */
 router.get('/panel-film', function(req, res, next) {
-    //Vérification si l'admin eest connecter
-    if (!req.session.user) {
-        res.redirect("/");
-    }
+
+    //Vérification si l'admin est connecter
+    if (!req.session.user) return res.redirect("/");
+
     // On cherche dans la base de donnée
     FILM.find().then(async film => {
         if (film.length == 0) {
@@ -172,20 +177,14 @@ router.get('/panel-film', function(req, res, next) {
 
 /* GET panel-film-add page. */
 router.get('/panel-film-add', function(req, res, next) {
-    // //Vérification si l'admin eest connecter
-    if (!req.session.user) {
-        res.redirect("/");
-    }
+    //Vérification si l'admin est connecter
+    if (!req.session.user) return res.redirect("/");
     console.log("req.session.reponseFilmAdd", req.session.reponseFilmAdd);
     res.render('./pages/panel-film-add', { online: req.session.user, title: 'Film 2022 - Panel Film Add', filmADD: req.session.reponseFilmAdd});
 });
 
 //Route pour enregistrer une nouvelle FAQ.
 router.post('/film/add', async function(req, res, next) {
-
-    if (!req.session.user) {
-        res.redirect("/");
-    }
 
     //Stockage des données reçus du front
     var filmDataAdd = {
@@ -443,10 +442,8 @@ router.post('/film/add', async function(req, res, next) {
 
 /* GET panel-film-edit page. */
 router.get('/panel-film-edit', function(req, res, next) {
-    //Vérification si l'admin eest connecter
-    if (!req.session.user) {
-        res.redirect("/");
-    }
+    //Vérification si l'admin est connecter
+    if (!req.session.user) return res.redirect("/");
     res.render('./pages/panel-film-edit', { online: req.session.user, title: 'Film 2022 - Panel Film' });
 });
 
@@ -490,10 +487,9 @@ router.get('/contact', function(req, res, next) {
   
 /* GET panel-contact page. */
 router.get('/panel-contact', function(req, res, next) {
-    //Vérification si l'admin eest connecter
-    if (!req.session.user) {
-        res.redirect("/");
-    }
+    //Vérification si l'admin est connecter
+    if (!req.session.user) return res.redirect("/");
+
     // On cherche dans la base de donnée
     CONTACT.find().then(async contact => {
         if (contact.length == 0) {
@@ -576,7 +572,6 @@ router.post('/contact/add', function(req, res, next) {
 
 //Route pour suprimer un messaage de contact.
 router.post('/contact/del/:id', function(req, res, next) {
-    console.log("id", req.params.id);
     CONTACT.findByIdAndRemove(req.params.id, (err, doc) => {
         if (err) {
             console.log("Impossible de suprimer le message de contact : ", err);
@@ -593,152 +588,110 @@ router.post('/contact/del/:id', function(req, res, next) {
 // ------------------------------ Début ROUTE FAQ ---------------------------
 
 /* GET faq page. */
-router.get('/faq', function(req, res, next) {
-    FAQ.find().then(faq => {
-        if (faq.length == 0) {
-            reponseFAQView.status =  false;
-            reponseFAQView.text = "Aucune FAQ se trouve dans la base de données !";
-            reponseFAQView.data = faq;
-            res.render('./pages/faq', { online: req.session.user, title: 'Film 2022 - Panel FAQ', reponseFAQView});
-        } else {
-            reponseFAQView.status =  true;
-            reponseFAQView.text = "Listes FAQ trouver !";
-            reponseFAQView.data = faq;
-            res.render('./pages/faq', { online: req.session.user, title: 'Film 2022 - Panel FAQ', reponseFAQView});
-        }
-    }).catch(err => {
-        reponseFAQView.status =  false;
-        reponseFAQView.text = "Impossible de récupérer les faqs dans la base de données !";
-        reponseFAQView.data = err;
-        res.render('./pages/faq', { online: req.session.user, title: 'Film 2022 - Panel FAQ', reponseFAQView});
-    });
+router.get('/faq', async function(req, res, next) {
+    // Response de la base de donnée
+    var reponseFAQ = await query_faq.viewFAQ();
+    res.render('./pages/faq', { online: req.session.user, title: 'Film 2022 - FAQ', reponseFAQView : reponseFAQ});
 });
 
 /* GET panel-faq page. */
-router.get('/panel-faq', function(req, res, next) {
-    //Vérification si l'admin eest connecter
-    if (!req.session.user) {
-        res.redirect("/");
-    }
-        
-    // On cherche dans la base de donnée
-    FAQ.find().then(async faq => {
-        if (faq.length == 0) {
-            reponseFAQView.status =  false;
-            reponseFAQView.text = "Aucune FAQ se trouve dans la base de données !";
-            reponseFAQView.data = faq;
-            res.render('./pages/panel-faq', { online: req.session.user, title: 'Film 2022 - Panel FAQ', reponseFAQView});
-        } else {
-            reponseFAQView.status =  true;
-            reponseFAQView.text = "Listes FAQ trouver !";
-            reponseFAQView.data = faq;
-            res.render('./pages/panel-faq', { online: req.session.user, title: 'Film 2022 - Panel FAQ', reponseFAQView});
-        }
-    }).catch(err => {
-        console.log('/panel-faq err', err);
-        reponseFAQView.status =  false;
-        reponseFAQView.text = "Impossible de récupérer les faqs dans la base de données !";
-        reponseFAQView.data = {};
-        res.render('./pages/panel-faq', { online: req.session.user, title: 'Film 2022 - Panel FAQ', reponseFAQView});
-    });
+router.get('/panel-faq', async function(req, res, next) {
+    //Vérification si l'admin est connecter
+    if (!req.session.user) return res.redirect("/");
+    // Response de la base de donnée
+    var reponseFAQ = await query_faq.viewFAQ();
+    res.render('./pages/panel-faq', { online: req.session.user, title: 'Film 2022 - Panel FAQ', reponseFAQView : reponseFAQ});
 });
 
 /* GET panel-faq-add page. */
 router.get('/panel-faq-add', function(req, res, next) {
-    //Vérification si l'admin eest connecter
-    if (!req.session.user) {
-        res.redirect("/");
-    }
-
+    //Vérification si l'admin est connecter
+    if (!req.session.user) return res.redirect("/");
     res.render('./pages/panel-faq-add', { online: req.session.user, title: 'Film 2022 - Panel FAQ - Ajouter', faqADD: req.session.reponseFAQAdd});
 });
 
-//Route pour enregistrer une nouvelle FAQ.
-router.post('/faq/add', function(req, res, next) {
+/* GET /faq/add page. */
+router.get('/faq/add', function(req, res, next) {
+    if (!req.session.user) {
+        return res.redirect('/');
+    } else {
+        return res.redirect('/panel-faq-add');
+    }
+});
 
-    // // Session Pour ajout FAQ
-    // req.session.reponseFAQAdd = reponseFAQAdd;
-    console.log("/faq/add Avant ---> req.session.faq", req.session.reponseFAQAdd);
-    //Stockage des données reçus du front
-    var faqDataAdd  = {
-        quest: req.body.quest,
-        response: req.body.response,
-    };
-    console.log("/faq/add Après ---> req.session.faq", req.session.reponseFAQAdd);
-    if (req.body.quest === "") {
-        req.session.reponseFAQAdd.status = true;
-        req.session.reponseFAQAdd.text = "Merci d'insérer votre question !";
-        req.session.reponseFAQAdd.data.quest = req.body.quest;
-        req.session.reponseFAQAdd.data.response = req.body.response;
-        // reponseFAQAdd.data = faqDataAdd;
-        res.redirect("/panel-faq-add");
-    } else if (req.body.response === "") {
-        req.session.reponseFAQAdd.status = true;
-        req.session.reponseFAQAdd.text = "Merci d'insérer votre réponse !";
-        req.session.reponseFAQAdd.data.quest = req.body.quest;
-        req.session.reponseFAQAdd.data.response = req.body.response;
-        // reponseFAQAdd.data = faqDataAdd;
+//Route pour enregistrer une nouvelle FAQ.
+router.post('/faq/add', async function(req, res, next) {
+
+    // Vérification des informations de la requête 
+    var validationFAQADD = await validation_faq.valdationFAQAdd(req);
+
+    if (!validationFAQADD.status) {
+        // Mise a jour de la session
+        req.session.reponseFAQAdd = validationFAQADD;
         res.redirect("/panel-faq-add");
     } else {
+        // Mise a jour de la session
+        req.session.reponseFAQAdd = validationFAQADD;
 
-        //Création du document FAQ
-        FAQ.create(faqDataAdd)
-            .then(faq => {
-                console.log("FAQ", faq);
-                return res.redirect('/panel-faq');
-            })
-            //Si il y a une erreur
-            .catch(err => {
-                console.log("err", err);
-                req.session.reponseFAQAdd.status = true;
-                req.session.reponseFAQAdd.text = "Erreur interne !";
-                req.session.reponseFAQAdd.data = faqDataAdd;
-                res.render('./pages/panel-faq-add', { online: req.session.user, title: 'Film 2022 - Panel FAQ - Ajouter', faqADD: req.session.reponseFAQAdd});
-        });
+        //Reponse de la base de donné
+        var reponseFAQADD = await query_faq.addFAQ(req);
+        
+        if (!reponseFAQADD) {
+            // Mise a jour de la session
+            req.session.reponseFAQAdd = reponseFAQADD;
+            // Redirection route
+            return res.redirect("/panel-faq-add");
+        } else {
+            // Mise a jour de la session
+            req.session.reponseFAQAdd = {
+                status : true,
+                text : "",
+                // saveData : {},
+                data : {}
+            };
+
+            // Redirection route
+            return res.redirect('/panel-faq');
+        }
     }
 });
 
 /* GET panel-faq-edit page. */
-router.get('/panel-faq-edit/:id', function(req, res, next) {
+router.get('/panel-faq-edit/:id', async function(req, res, next) {
 
-    console.log("id", req.params.id);
+    //Vérification si l'admin est connecter
+    if (!req.session.user) return res.redirect("/");
 
-    //Vérification si l'admin eest connecter
-    if (!req.session.user) {
-        res.redirect("/");
-    }
+    // Réponse de la base donné
+    var reponseFaqEdit = await query_faq.viewFAQID(req);
 
-    FAQ.findById({
-        _id: req.params.id,
-    }).then(async faq => {
+    if (!reponseFaqEdit.status) {
+        req.session.reponseFaqEdit.status = reponseFaqEdit.status;
+        req.session.reponseFaqEdit.text = reponseFaqEdit.text;
+        req.session.reponseFaqEdit.saveData = reponseFaqEdit.data;
+        return res.render('./pages/panel-faq-edit', { online: req.session.user, title: 'Film 2022 - Panel FAQ - Modifier', faqEdit: req.session.reponseFaqEdit});
+    } else {
 
         // On met la data dans un objet 
-        req.session.reponseFaqEdit.data = faq;
+        req.session.reponseFaqEdit.data = reponseFaqEdit.data;
 
         // Condition de check pour savoir c'est le bon edit de l'id qu'on fait 
         if (req.session.reponseFaqEdit.data._id == req.session.reponseFaqEdit.saveData._id) {
-            res.render('./pages/panel-faq-edit', { online: req.session.user, title: 'Film 2022 - Panel FAQ - Modifier', faqEdit: req.session.reponseFaqEdit});
+            return res.render('./pages/panel-faq-edit', { online: req.session.user, title: 'Film 2022 - Panel FAQ - Modifier', faqEdit: req.session.reponseFaqEdit});
         } else {
             // On met par défault les param edit
-            req.session.reponseFaqEdit.status = false;
+            req.session.reponseFaqEdit.status = true;
             req.session.reponseFaqEdit.text = "";
             req.session.reponseFaqEdit.saveData = {};
-            res.render('./pages/panel-faq-edit', { online: req.session.user, title: 'Film 2022 - Panel FAQ - Modifier', faqEdit: req.session.reponseFaqEdit});
+            return res.render('./pages/panel-faq-edit', { online: req.session.user, title: 'Film 2022 - Panel FAQ - Modifier', faqEdit: req.session.reponseFaqEdit});
         }
-    //En cas d'erreur on sort leport 500
-    }).catch(err => {
-        console.log("/faq/edit err", err);
-        res.render('./pages/panel-faq', { online: req.session.user, title: 'Film 2022 - Panel FAQ - Modifier', faqEdit: req.session.reponseFaqEdit});
-    });
-    
+    }  
 });
 
 // Route redirection si l'utilisateur est en cours d'une modification de faq
 router.get('/panel-faq-edit', function(req, res, next) {
-    //Vérification si l'admin eest connecter
-    if (!req.session.user) {
-        res.redirect("/");
-    }
+    //Vérification si l'admin est connecter
+    if (!req.session.user) return res.redirect("/");
 
     // Redirection  à la modification en cours ou sinon au panel faq
     // Object.key vérifier si l'objet est vide ou pas
@@ -751,61 +704,61 @@ router.get('/panel-faq-edit', function(req, res, next) {
         req.session.reponseFaqEdit.saveData = {};
         res.redirect(`/panel-faq-edit/${req.session.reponseFaqEdit.data._id}`);
     }
-
 });
 
+/* GET /faq/del/id page. */
+router.get('/faq/edit/:id', function(req, res, next) {
+    if (!req.session.user) {
+        return res.redirect('/');
+    } else {
+        return res.redirect(`/panel-faq-edit/${req.session.reponseFaqEdit.data._id}`);
+    }
+});
 
 //Route pour modifier une FAQ.
-router.post('/faq/edit/:id', function(req, res, next) {
-
-    //Stockage des données reçus du front
-    var faqDataEdit = {
-        _id : req.params.id,
-        quest: req.body.quest,
-        response: req.body.response,
-    };
-
-    if (req.body.quest === "") {
-        req.session.reponseFaqEdit.status = true;
-        req.session.reponseFaqEdit.text = "Merci d'insérer votre question !";
-        req.session.reponseFaqEdit.saveData = faqDataEdit;
-        res.redirect(`/panel-faq-edit/${req.session.reponseFaqEdit.data._id}`);
-    } else if (req.body.response === "") {
-        req.session.reponseFaqEdit.status = true;
-        req.session. reponseFaqEdit.text = "Merci d'insérer votre réponse !";
-        req.session.reponseFaqEdit.saveData = faqDataEdit;
+router.post('/faq/edit/:id', async function(req, res, next) {
+    // Vérification des informations de la requête
+    var validationFAQEdit = await validation_faq.valdationFAQEdit(req);
+    if (!validationFAQEdit.status) {
+        // Mise a jour de la session
+        req.session.reponseFaqEdit.status = validationFAQEdit.status;
+        req.session.reponseFaqEdit.text = validationFAQEdit.text;
+        req.session.reponseFaqEdit.saveData = validationFAQEdit.data;
         res.redirect(`/panel-faq-edit/${req.session.reponseFaqEdit.data._id}`);
     } else {
 
-        //Création du document FAQ
-        FAQ.update({ _id : req.params.id}, faqDataEdit)
-            .then(faq => {
-                console.log("FAQ", faq);
-                return res.redirect('/panel-faq');
-            })
-            //Si il y a une erreur
-            .catch(err => {
-                console.log("err", err);
-                req.session.reponseFaqEdit.status = true;
-                req.session.reponseFaqEdit.text = "Erreur interne !";
-                req.session.reponseFaqEdit.saveData = faqDataEdit;
-                res.render('./pages/panel-faq-add', { online: req.session.user, title: 'Film 2022 - Panel FAQ - Ajouter', faqEdit: req.session.reponseFaqEdit});
-        });
+        // Response de la base de donnée
+        var reponseFAQEdit = await query_faq.editFAQ(req);
+        
+        if (!reponseFAQEdit.status) {
+            // Mise a jour de la session
+            req.session.reponseFaqEdit.status = validationFAQEdit.status;
+            req.session.reponseFaqEdit.text = validationFAQEdit.text;
+            req.session.reponseFaqEdit.saveData = validationFAQEdit.data;
+            return res.render('./pages/panel-faq-add', { online: req.session.user, title: 'Film 2022 - Panel FAQ - Ajouter', faqEdit: req.session.reponseFaqEdit});
+        } else {
+            return res.redirect('/panel-faq');
+        }
+    }
+});
+
+/* GET /faq/del/id page. */
+router.get('/faq/del/:id', function(req, res, next) {
+    if (!req.session.user) {
+        return res.redirect('/');
+    } else {
+        return res.redirect('/panel-faq');
     }
 });
 
 //Route pour suprimer une faq.
-router.post('/faq/del/:id', function(req, res, next) {
-    console.log("id", req.params.id);
-    FAQ.findByIdAndRemove(req.params.id, (err, doc) => {
-        if (err) {
-            console.log("Impossible de suprimer la faq : ", err);
-            res.redirect('/panel-faq');
-        } else {
-            console.log('La faq à était suprimer à succès!', doc);
-            res.redirect('/panel-faq');
-        }
-    });
+router.post('/faq/del/:id', async function(req, res, next) {
+    var delFAQ = await query_faq.delFAQ(req);
+    if (!delFAQ.status) {
+        res.redirect('/panel-faq');
+    } else {
+        res.redirect('/panel-faq');
+    }
 });
 
 // ------------------------------ FIN ROUTE FAQ ---------------------------
@@ -827,7 +780,7 @@ router.get('/user/signup', function(req, res, next) {
 
 //Route pour enregistrer un nouveau compte.
 router.post('/user/signup', async function(req, res, next) {
-    // Vérification de ifnormations de la reqête 
+    // Vérification des informations de la requête 
     var validationSignup = await validation_user.validationSignup(req);
     if (!validationSignup.status) {
         res.json({
@@ -835,7 +788,7 @@ router.post('/user/signup', async function(req, res, next) {
             "status" : validationSignup.status
         });
     } else {
-        // Reponse de la base de donnée
+        // Response de la base de donnée
         var reponseSignup = await query_user.signup(req);
         console.log("reponseSignup", reponseSignup);
         if (!reponseSignup.status)  {
@@ -860,17 +813,21 @@ router.get('/user/login', function(req, res, next) {
 
 //Route pour la connexion.
 router.post('/user/login', async function(req, res, next) {
-    // Vérification de ifnormations de la reqête 
+    // Vérification des informations de la requête 
     var validationLogin = await validation_user.validationLogin(req);
     if (!validationLogin.status) {
         res.render('./pages/login', { online: req.session.user, title: 'Film 2022 - Panel Admin', reponseUserLogin : validationLogin});
     } else {
         // Request a la base donnée
-        var resultLogin = await query_user.login(req);
-        // Reponse de la base de donné
-        if (!resultLogin.status) {
-            return res.render('./pages/login', { online: req.session.user, title: 'Film 2022 - Panel Admin', reponseUserLogin : resultLogin});
+        var reponseLogin = await query_user.login(req);
+        // Response de la base de donnée
+        if (!reponseLogin.status) {
+            return res.render('./pages/login', { online: req.session.user, title: 'Film 2022 - Panel Admin', reponseUserLogin : reponseLogin});
         } else {
+            // On Sauvegarde les informations de connexion en session et on met l'etat true 
+            req.session.user = reponseLogin.user;
+            req.session.user.online = true;
+            // Redirection à la racine du site
             return res.redirect('/');
         }
     }

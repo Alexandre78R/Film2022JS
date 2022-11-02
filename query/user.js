@@ -46,8 +46,6 @@ async function signup (req) {
             reponseUser.status = true;
             reponseUser.text = "Bienvenue " + createUser.username + " !";
             // reponseUser.token = user.getToken();
-            // req.session.user = user;
-            // req.session.user.online = true;
             reponseUser.user = createUser; 
             return reponseUser;
         }
@@ -71,10 +69,9 @@ async function login (req) {
         var bytes = CryptoJS.AES.decrypt(searchUser.password, searchUser.salt);
         var hash = bytes.toString(CryptoJS.enc.Utf8);
         if (hash === req.body.password) {
-            req.session.user = searchUser;
-            req.session.user.online = true;
             reponseUser.status = true;
             reponseUser.text = "";
+            reponseUser.user = searchUser;
             return reponseUser;
             //Si l'username est trouvé mais le password
         } else {

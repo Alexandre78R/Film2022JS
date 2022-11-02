@@ -26,7 +26,7 @@
             <form id="contact_form" action="/faq/add" method="POST">
                 <%  console.log("faqADD Dans fichier ejs", faqADD); %>
           
-                <% if(faqADD.status == true){ %>
+                <% if(!faqADD.status){ %>
                     <div class="alertError">
                         <span> <%=faqADD.text%></span>
                     </div>
