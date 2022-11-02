@@ -1,13 +1,6 @@
 var express = require('express');
 var router = express.Router();
 
-//Shéma User
-const User = require('../models/users.js');
-
-//Import des modules pour le password
-var uid2 = require("uid2");
-var CryptoJS = require("crypto-js");
-
 // Shéma FAQ 
 const FAQ = require('../models/faq.js');
 
@@ -20,13 +13,20 @@ var upload_img = require('../function/upload_img.js');
 //Shéma User
 const FILM = require('../models/film.js');
 
-// Import request regex
-var regex = require("../function/regex.js");
 
-// Param Reponse User login par défault 
-var reponseUserLogin = { 
+// Validation User
+const validation_user = require("../function/validation/user.js");
+
+//Query User 
+const query_user = require("../query/user.js");
+
+// // Import request regex
+// var regex = require("../function/regex.js");
+
+// Param view login default  
+var reponseUserLogin = {
     status : true,
-    text : ""
+    text : "",
 };
 
 // Param view conact
@@ -183,7 +183,9 @@ router.get('/panel-film-add', function(req, res, next) {
 //Route pour enregistrer une nouvelle FAQ.
 router.post('/film/add', async function(req, res, next) {
 
-    // console.log("req.body", req.body);
+    if (!req.session.user) {
+        res.redirect("/");
+    }
 
     //Stockage des données reçus du front
     var filmDataAdd = {
@@ -337,10 +339,21 @@ router.post('/film/add', async function(req, res, next) {
                     }).then(async film => {
                         //Si on le trouve on envoie un message d'erreur
                         if (film) {
-                            req.session.reponseFilmAdd.status = true;
-                            req.session.reponseFilmAdd.text = "Le film" + req.body.name +  " existe déjà dans notre bdd !";
-                            req.session.reponseFilmAdd.data = filmDataAdd;
-                            res.render('./pages/panel-film-add', { online: req.session.user, title: 'Film 2022 - Panel Film Add', filmADD: req.session.reponseFilmAdd});
+                            console.log("resultCloudinary dans cherche name ", resultCloudinary.public_id);
+                            var errDelImageUpdateCloud = await upload_img.upload_img_cloudinary_del(resultCloudinary.public_id);
+                            if (errDelImageUpdateCloud) {
+                                console.log("errDelImageUpdateCloud Dans if ", errDelImageUpdateCloud); 
+                                req.session.reponseFilmAdd.status = true;
+                                req.session.reponseFilmAdd.text = "Le film " + req.body.name +  " existe déjà dans notre bdd !";
+                                req.session.reponseFilmAdd.data = filmDataAdd;
+                                return res.render('./pages/panel-film-add', { online: req.session.user, title: 'Film 2022 - Panel Film Add', filmADD: req.session.reponseFilmAdd});
+                            } else {
+                                console.log(" Else 2 : Impossiblle de supprimer l'image sur l'hébergeur on redirie l'image"); 
+                                req.session.reponseFilmAdd.status = true;
+                                req.session.reponseFilmAdd.text = "Le film " + req.body.name +  " existe déjà dans notre bdd !";
+                                req.session.reponseFilmAdd.data = filmDataAdd;
+                                return res.render('./pages/panel-film-add', { online: req.session.user, title: 'Film 2022 - Panel Film Add', filmADD: req.session.reponseFilmAdd});
+                            }
                             //Sinon on ajoute dans la bdd
                         } else {
                             var FilmSave ={
@@ -801,162 +814,65 @@ router.post('/faq/del/:id', function(req, res, next) {
 
 /* GET login */
 router.get('/login', function(req, res, next) {
-    reponseUserLogin.status = true;
-    reponseUserLogin.text = "";
     res.render('./pages/login', { online: req.session.user, title: 'Film 2022 - Panel Admin', reponseUserLogin});
 });
 
-//Route pour enregistrer un nouveau compte.
-router.post('/user/signup', function(req, res, next) {
+//Route redirection route signup
+router.get('/user/signup', function(req, res, next) {
+    res.json({
+        "text" : "Accès Refusé ! Merci d'utilisé une requête POST !",
+        "status" : false
+    });
+});
 
-    console.log("req.body.username",req.body);
-    //Vérification de tous les informations sois là à la request
-    if (req.body.username == "" || req.body.username == undefined) {
+//Route pour enregistrer un nouveau compte.
+router.post('/user/signup', async function(req, res, next) {
+    // Vérification de ifnormations de la reqête 
+    var validationSignup = await validation_user.validationSignup(req);
+    if (!validationSignup.status) {
         res.json({
-            "text" : "Merci d'indiquer un username !",
-            "code" : 403
-        });
-    }else if (req.body.email === "" || req.body.username == undefined){
-        res.json({
-            "text" : "Merci d'indiquer un email !",
-            "code" : 403
-        });
-    }else if (req.body.password === "" || req.body.username == undefined) {
-        res.json({
-            "text" : "Merci d'indiquer un mot de passe !",
-            "code" : 403
+            "text" : validationSignup.text,
+            "status" : validationSignup.status
         });
     } else {
-    //Création du sel
-    var salt = uid2(32);
-
-    //Stockage des données reçus du front
-    var userData  = {
-        username: req.body.username, // Username
-        salt: salt,//Pour le déchiffrage mdp
-        email: req.body.email, // email
-        password : CryptoJS.AES.encrypt(req.body.password, salt).toString(),//MDP crypté
-    };
-
-    //Recherche dans la BDD 
-    User.findOne({
-        //Précision de la recherche pour l'email.
-        email: req.body.email,
-    })
-        .then(email => {
-            //Si l'email n'existe pas on le créer sinon on le créer pas et on r'envois un message d'erreur.
-            if (!email) {
-                //Recherche dans la BDD 
-                User.findOne({
-                    //Précision de la recherche pour l'username.
-                    username: req.body.username,
-                })
-                    .then(user => {
-                        console.log("User", user)
-                        //Si l'username n'existe pas on le créer sinon on le créer pas et on r'envois un message d'erreur.
-                        if (!user) {
-                                //Création du document de l'user
-                                User.create(userData)
-                                    .then(user => {
-                                        res.json({
-                                            "text" : "Bienvenue " + user.username + " !",
-                                            "token" : user.getToken(),
-                                            "user": user,
-                                        })
-                                    })
-                                    //Si il y a une erreur
-                                    .catch(err => {
-                                        console.log("/user/signup ERR (Create User)", err)
-                                        res.status(500).json({
-                                            "text" : "Erreur Interne !",
-                                            "code" : 500
-                                        });
-                                    })
-                        //Si l'utilisateur existe déjà
-                        } else {
-                            res.json({
-                                "text" : "L'utilisateur " + user.username + " existe déjà !",
-                                "code" : 403
-                        });
-                        }
-                    })
-                    //En cas d'erreur
-                    .catch(err => {
-                        console.log("/user/signup ERR (Interne)", err);
-                        res.status(500).json({
-                            "text" : "Erreur Interne !",
-                            "code" : 500
-                        });
-                    })
-            //Si l'adresse email existe déjà
-            } else {
-                res.json({
-                    "text" : "L'email " + email.email + " existe déjà !",
-                    "code" : 404
-                })
-            }
-        //En cas d'erreur
-        })
-    .catch(err => {
-        console.log("/user/signup ERR (Interne)", err);
-        res.status(500).json({
-            "text" : "Erreur Interne !",
-            "code" : 500
-        });
-    })
+        // Reponse de la base de donnée
+        var reponseSignup = await query_user.signup(req);
+        console.log("reponseSignup", reponseSignup);
+        if (!reponseSignup.status)  {
+            res.json({
+                "rep" : reponseSignup.text,
+                "status" : reponseSignup.status
+            });
+        } else {
+            res.json({
+                "rep" : reponseSignup.text,
+                "user" : reponseSignup.user,
+                "status" : reponseSignup.status
+            });
+        }
     }
+});
 
+//Route redirection route login
+router.get('/user/login', function(req, res, next) {
+    res.redirect('/login');
 });
 
 //Route pour la connexion.
-router.post('/user/login', function(req, res, next) {
-
-    if (req.body.username === "") {
-        reponseUserLogin.status = false;
-        reponseUserLogin.text = "Merci d'insérer votre identifiant !";
-        res.render('./pages/login', { online: req.session.user, title: 'Film 2022 - Panel Admin', reponseUserLogin});
-    } else if (req.body.password === ""){
-        reponseUserLogin.status = false;
-        reponseUserLogin.text = "Merci d'insérer votre mot de passe !";
-        res.render('./pages/login', { online: req.session.user, title: 'Film 2022 - Panel Admin', reponseUserLogin});
-    }else {
-        console.log("req username", req.body);
-        //On regarde dans la BDD si l'username existe bien.
-        User.findOne({
-            username: req.body.username
-        }).then(async user => {
-            console.log("Doonée de l'utilisateur à la connexion :", user);
-            //Si on ne touve pas l'username on r'envois erreur 401
-            if (!user) {
-                reponseUserLogin.status = false;
-                reponseUserLogin.text = "L'utilisateur " + req.body.username +  " n'existe pas !";
-                res.render('./pages/login', { online: req.session.user, title: 'Film 2022 - Panel Admin', reponseUserLogin});
-                //Si l'username est trouvé + le passwoard est correct on lui donne le token
-            } else {
-                var bytes  = CryptoJS.AES.decrypt(user.password, user.salt);
-                var hash = bytes.toString(CryptoJS.enc.Utf8);
-                if (hash === req.body.password) {
-                    console.log("Hello " + user.email + " !");
-                    req.session.user = user;
-                    console.log('MON LOG REQ.SESSION USER', user);
-                    console.log("req.session.user.online avant", req.session.user.online);
-                    req.session.user.online = true;
-                    console.log("req.session.user.online après", req.session.user.online);
-                    return res.redirect('/');
-                    //Si l'username est trouvé mais le password est incorrect on lui envois l'erreur 402.
-                } else {
-                    reponseUserLogin.status = false;
-                    reponseUserLogin.text = "Mot de passe incorrect !";
-                    res.render('./pages/login', { online: req.session.user, title: 'Film 2022 - Panel Admin', reponseUserLogin});
-                }
-            }
-        //En cas d'erreur
-        }).catch(err => {
-            console.log("/user/login ERR (Login (Interne))", err);
-            reponseUserLogin.status = false;
-            reponseUserLogin.text = "Erreur Interne !";
-            res.render('./pages/login', { online: req.session.user, title: 'Film 2022 - Panel Admin', reponseUserLogin});
-        })
+router.post('/user/login', async function(req, res, next) {
+    // Vérification de ifnormations de la reqête 
+    var validationLogin = await validation_user.validationLogin(req);
+    if (!validationLogin.status) {
+        res.render('./pages/login', { online: req.session.user, title: 'Film 2022 - Panel Admin', reponseUserLogin : validationLogin});
+    } else {
+        // Request a la base donnée
+        var resultLogin = await query_user.login(req);
+        // Reponse de la base de donné
+        if (!resultLogin.status) {
+            return res.render('./pages/login', { online: req.session.user, title: 'Film 2022 - Panel Admin', reponseUserLogin : resultLogin});
+        } else {
+            return res.redirect('/');
+        }
     }
 });
 
@@ -966,10 +882,8 @@ router.get('/logout', function(req, res, next) {
         // delete session object
         req.session.destroy(function(err) {
             if (err) {
-                console.log("TON LOG DE ERREUR !!! ====>");
                 return next(err);
             } else {
-                console.log("C EST TOUT BON !!! ===>");
                 return res.redirect('/');
             }
         });
