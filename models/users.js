@@ -18,6 +18,8 @@ var userSchema = mongoose.Schema({
         required: true
     },
 	password: String,
+	role : Number,
+	ban : Boolean,
 },{ timestamps: { createdAt: 'created_at' }})
 
 //Methode après le Schema.

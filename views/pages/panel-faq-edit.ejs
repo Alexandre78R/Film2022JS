@@ -23,7 +23,7 @@
 
     <main>
         <div class="container_app_Contact">
-            <form id="contact_form" action="/faq/edit/<%=faqEdit.data._id%>" method="POST">
+            <form id="contact_form" action="/admin/faq-edit/<%=faqEdit.data._id%>" method="POST">
                 <% console.log("faqEdit --->", faqEdit) %>
                 <% if(!faqEdit.status){ %>
                     <div class="alertError">

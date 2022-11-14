@@ -43,7 +43,7 @@
  }
 
  /* The dropdown container */
-.dropdown-nav {
+.dropdown-nav,  .dropdown-nav-admin {
    /* Permet de définir une largeur et une hauteur sur l'élément */
    display: inline-block;
  }
@@ -61,12 +61,30 @@
    /* inheritpour téléphone */
    font-family :'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif, inherit ; 
  }
+
+  /* Dropdown button admin */
+  .dropdown-nav-admin .dropbtn-nav {
+    font-size: 16px;
+    border: none;
+    outline: none;
+    color: white;
+    padding: 14px 20px;
+    flex-wrap: wrap;
+    background-color: inherit;
+    margin: 0; /* Important for vertical align on mobile phones */
+    /* inheritpour téléphone */
+    font-family :'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif, inherit ; 
+  }
  
  /* Ajout font rouge  navbar links  hover */
  .navbar a:hover, .dropdown-nav:hover .dropbtn-nav {
-   background-color: red;
+   background-color: rgb(87, 167, 237);
  }
  
+ .navbar a:hover, .dropdown-nav-admin:hover .dropbtn-nav {
+  background-color: red;
+}
+
  /* Dropdown content */
  .dropdown-content-nav {
    display: none;
@@ -96,3 +114,7 @@
  .dropdown-nav:hover .dropdown-content-nav {
    display: block;
  }
+
+ .dropdown-nav-admin:hover .dropdown-content-nav {
+  display: block;
+}

@@ -7,56 +7,90 @@ var cloudinary = require('../api/cloudinary.js');
 // Import Fs
 var fs = require('fs');
 
+var reponse = {};
+
 // Function pour upload l'image dans la backend
 async function upload_img_local (data) {
+
     var nameFile = await uniqid();
+
     var resultCopy = await data.mv(`./${nameFile}.jpg`);
+
     if(!resultCopy) {
-        console.log("File uploaded", resultCopy);
-        return nameFile;
-        } else {
-            console.log('error');
-            return false;
-        }
+        reponse.status = true;
+        reponse.text = "L'image à était télécharger sur notre serveur !";
+        reponse.data = nameFile;
+        return reponse;
+    } else {
+        reponse.status = false;
+        reponse.text = "Impossible de télécharger l'image sur notre serveur !";
+        reponse.data = nameFile;
+        return reponse;
+    }
 }
 
 // Function pour upload l'image sur l'hébergeur cloudinary
 async function upload_img_cloudinary (imgName, folder) {
+
     var imagePath = './'+imgName+'.jpg';
+
     var resultCloudinary =  await cloudinary.cloudinary.uploader.upload(imagePath, {folder: folder});
-    console.log("resultCloudinary",resultCloudinary);
+
     if (!resultCloudinary){
-        return false;
+        reponse.status = false;
+        reponse.text = "Impossible de télécharger l'image sur notre hébergeur !";
+        reponse.data = resultCloudinary;
+        return reponse;
     } else {
-        return resultCloudinary;
+        reponse.status = true;
+        reponse.text = "L'image à était télécharger sur notre hébergeur !";
+        reponse.data = resultCloudinary;
+        return reponse;
     } 
 }
 
 // Function pour supprimer l'image sur l'hébergeur cloudinary
-async function upload_img_cloudinary_del (public_id) {
-    //  public_id dans resultCloudinary film2022/gbg0estcrfed7p1od7hl
+async function del_img_cloudinary (public_id) {
+    //  public_id dans resultCloudinary film2022/xxxxxxxxxxxx
+
     var resultCloudinarydel =  await cloudinary.cloudinary.uploader.destroy(public_id);
     console.log("resultCloudinarydel", resultCloudinarydel);
-    if (!resultCloudinarydel) {
-        return false;
+
+    if (resultCloudinarydel.result === "not found"){
+        reponse.status = false;
+        reponse.text = "Impossible de suprimmer l'image sur notre hébergeur !";
+        reponse.data = resultCloudinarydel;
+        return reponse;
     } else {
-        return resultCloudinarydel;
+        reponse.status = true;
+        reponse.text = "L'image à était suprimmer sur notre hébergeur !";
+        reponse.data = resultCloudinarydel;
+        return reponse;
     } 
 }
 
 // Function pour supprimer l'image du backend 
-async function upload_img_local_del (image) {
+async function del_img_local (image) {
+
+    console.log("upload_img_local_del ---> image", image);
     var filedel = await fs.unlinkSync(`./${image}.jpg`);
-    if (filedel) {
-        return false;
+
+    if(!filedel) {
+        reponse.status = true;
+        reponse.text = "L'image à était suprimmer sur notre serveur !";
+        reponse.data = filedel;
+        return reponse;
     } else {
-        return filedel;
-    } 
+        reponse.status = false;
+        reponse.text = "Impossible de suprimmer l'image sur notre serveur !";
+        reponse.data = filedel;
+        return reponse;
+    }
 }
 
 module.exports = { 
     upload_img_local : upload_img_local,
     upload_img_cloudinary : upload_img_cloudinary,
-    upload_img_cloudinary_del : upload_img_cloudinary_del,
-    upload_img_local_del : upload_img_local_del,
+    del_img_cloudinary : del_img_cloudinary,
+    del_img_local : del_img_local,
 };

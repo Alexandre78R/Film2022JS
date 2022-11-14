@@ -9,10 +9,11 @@ const options = {
   useUnifiedTopology : true
 };
 
-mongoose.connect(dbUrl, options, error => {
+mongoose.connect(dbUrl, options, (error, client) => {
   if (error) {
     console.error("Error :", error);
   } else {
+    // console.log('client BDD', client); 
     console.log('Connexion à la BDD');
   }
 });

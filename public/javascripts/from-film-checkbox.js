@@ -97,14 +97,8 @@ if (selectElement_allocine.checked == true) {
     containerAllocine.appendChild(align_allocine);
     containerAllocine.appendChild(newInput_allocine);
     containerAllocine.appendChild(newInput_allocine_number);
-    // containerAllocine.appendChild(align_allocine);
     countAllocine++;
     
-    // console.log("selectElement_allocine.value", selectElement_allocine.value);
-    // console.log("selectElement_allocine_hidden", selectElement_allocine_hidden);
-
-    // console.log("selectElement_allocine.value.url_alloCine", selectElement_allocine.value.url_alloCine);
-    // console.log("selectElement_allocine.value.note_alloCine", selectElement_allocine.value.note_alloCine);
     if (selectElement_allocine.value === "on") {
         newInput_allocine.value = "";
         newInput_allocine_number.value = "";
@@ -112,8 +106,6 @@ if (selectElement_allocine.checked == true) {
         newInput_allocine.value = selectElement_allocine.value;
         newInput_allocine_number.value = selectElement_allocine_hidden.value;
     }
-    // selectElement_allocine.value = countAllocine;
-    // console.log("selectElement_allocine", selectElement_allocine);
 }
 
 // Event quand on sélectionne le buttom allocine
@@ -123,10 +115,7 @@ selectElement_allocine.addEventListener('change', (event) => {
         containerAllocine.appendChild(align_allocine);
         containerAllocine.appendChild(newInput_allocine);
         containerAllocine.appendChild(newInput_allocine_number);
-        // containerAllocine.appendChild(align_allocine);
         countAllocine++;
-        // selectElement_allocine.value = countAllocine;
-        // console.log("selectElement_allocine", selectElement_allocine);
         if (selectElement_allocine.value === "on") {
             newInput_allocine.value = "";
             newInput_allocine_number.value = "";
@@ -134,16 +123,13 @@ selectElement_allocine.addEventListener('change', (event) => {
             newInput_allocine.value = selectElement_allocine.value;
             newInput_allocine_number.value = selectElement_allocine_hidden.value;
         }
-    } else {
+        } else {
         containerAllocine.removeChild(newText_allocine);
         containerAllocine.removeChild(align_allocine);
         containerAllocine.removeChild(newInput_allocine);
         containerAllocine.removeChild(newInput_allocine_number);
         newInput_allocine.value = "";
-        // containerAllocine.removeChild(align_allocine);
         countAllocine--;
-        // selectElement_allocine.value = countAllocine;
-        // console.log("selectElement_allocine", selectElement_allocine);
         if (selectElement_allocine.value === "on") {
             newInput_allocine.value = "";
             newInput_allocine_number.value = "";
@@ -163,10 +149,7 @@ if (selectElement_senscritique.checked == true) {
     containerSenscritique.appendChild(align_senscritique);
     containerSenscritique.appendChild(newInput_senscritique);
     containerSenscritique.appendChild(newInput_senscritique_number);
-    // containerSenscritique.appendChild(align_senscritique);
     countSenscritique++;
-    // selectElement_senscritique.value = countSenscritique;
-    // console.log("selectElement_senscritique", selectElement_senscritique);
     if (selectElement_senscritique.value === "on") {
         newInput_senscritique.value = "";
         newInput_senscritique_number.value = "";
@@ -184,10 +167,7 @@ selectElement_senscritique.addEventListener('change', (event) => {
         containerSenscritique.appendChild(align_senscritique);
         containerSenscritique.appendChild(newInput_senscritique);
         containerSenscritique.appendChild(newInput_senscritique_number);
-        // containerSenscritique.appendChild(align_senscritique);
         countSenscritique++;
-        // selectElement_senscritique.value = countSenscritique;
-        // console.log("selectElement_senscritique", selectElement_senscritique);
         if (selectElement_senscritique.value === "on") {
             newInput_senscritique.value = "";
             newInput_senscritique_number.value = "";
@@ -201,10 +181,7 @@ selectElement_senscritique.addEventListener('change', (event) => {
         containerSenscritique.removeChild(newInput_senscritique);
         containerSenscritique.removeChild(newInput_senscritique_number);
         newInput_senscritique.value = "";
-        // containerSenscritique.removeChild(align_senscritique);
         countSenscritique--;
-        // selectElement_senscritique.value = countSenscritique;
-        // console.log("selectElement_senscritique", selectElement_senscritique);
         if (selectElement_senscritique.value === "on") {
             newInput_senscritique.value = "";
             newInput_senscritique_number.value = "";
@@ -224,10 +201,7 @@ if (selectElement_cineserie.checked == true) {
     containerCineserie.appendChild(align_cineserie);
     containerCineserie.appendChild(newInput_cineserie);
     containerCineserie.appendChild(newInput_cineserie_number);
-    // container.appendChild(align_cineserie);
     countCineserie++;
-    // selectElement_cineserie.value = countCineserie;
-    // console.log("selectElement_cineserie", selectElement_cineserie);
     if (selectElement_cineserie.value === "on") {
         newInput_cineserie.value = "";
         newInput_cineserie_number.value = "";
@@ -244,10 +218,7 @@ selectElement_cineserie.addEventListener('change', (event) => {
         containerCineserie.appendChild(align_cineserie);
         containerCineserie.appendChild(newInput_cineserie);
         containerCineserie.appendChild(newInput_cineserie_number);
-        // container.appendChild(align_cineserie);
         countCineserie++;
-        // selectElement_cineserie.value = countCineserie;
-        // console.log("selectElement_cineserie", selectElement_cineserie);
         if (selectElement_cineserie.value === "on") {
             newInput_cineserie.value = "";
             newInput_cineserie_number.value = "";
@@ -261,10 +232,7 @@ selectElement_cineserie.addEventListener('change', (event) => {
         containerCineserie.removeChild(newInput_cineserie);
         containerCineserie.removeChild(newInput_cineserie_number);
         newInput_cineserie.value = "";
-        // container.removeChild(align_cineserie);
         countCineserie--;
-        // selectElement_cineserie.value = countCineserie;
-        // console.log("selectElement_cineserie", selectElement_cineserie);
         if (selectElement_cineserie.value === "on") {
             newInput_cineserie.value = "";
             newInput_cineserie_number.value = "";

@@ -8,6 +8,8 @@
     <link rel="stylesheet" href="../../stylesheets/container.css">
     <!-- Import du css des from -->
     <link rel="stylesheet" href="../../stylesheets/from.css">
+    <!-- Import du css des Alert -->
+    <link rel="stylesheet" href="../../stylesheets/alert.css">
     <!-- Titre de la page -->
     <title><%= title %></title>
 </head>
@@ -21,36 +23,94 @@
 
     <main>
         <div class="container_app_Contact">
-            <form id="contact_form" action="/pannel-add-faq.html">
+            <form id="contact_form" method="POST" enctype="multipart/form-data" action="/admin/film-edit/<%=filmEdit.data._id%>">
+                <% if(!filmEdit.status){ %>
+                    <div class="alertError">
+                        <span> <%=filmEdit.text%> </span>
+                    </div>
+                <% } %>
                 <div class="structure-contact">
-                    <label>Image</label><br />
-                    <input id="img" name="img" type="text" placeholder="https://exemple.com" size="30" /><br />
-                    <span id="img_validation"></span>
+                    <label>Nom</label><br />
+                    <% if(Object.keys(filmEdit.data).length >= 1 && filmEdit.data.name.length >= 1) { %>
+                        <input id="name" name="name" type="text" value="<%=filmEdit.data.name%>" size="30" /><br />
+                    <% } else {%>
+                        <input id="name" name="name" type="text" placeholder="Nom" size="30" /><br />
+                    <% } %>
+                    <span id="name_validation"></span>
+                </div>
+                <label class="checkbox-text">Image</label>
+                <input type="checkbox" class="radio" id="checkbox_img">
+                <label for="checkbox_img"></label>
+                <input id="checkbox_img_hidden" type="hidden" value="<%=filmEdit.data.note_alloCine%>">
+                <div id="active_img" onchange="return valid_image()" class="structure-contact"></div>
+                <div class="checkbox-structure">
+                    <% if(Object.keys(filmEdit.data).length >= 1) { %>
+                        <% if(filmEdit.data.url_alloCine == undefined) { %>
+                            <label class="checkbox-text">AlloCiné</label>
+                            <input type="checkbox" class="radio" id="checkbox_allocine">
+                            <label for="checkbox_allocine"></label>
+                        <% } else { %>
+                            <label class="checkbox-text">AlloCiné</label>
+                            <input type="checkbox" class="radio" id="checkbox_allocine" value="<%=filmEdit.data.url_alloCine%>" checked>
+                            <label for="checkbox_allocine"></label>
+                            <input id="checkbox_allocine_hidden" type="hidden" value="<%=filmEdit.data.note_alloCine%>">
+                        <% } %>
+                        <% if(filmEdit.data.url_senscritique == undefined) { %>
+                            <label class="checkbox-text">SensCritique</label>
+                            <input type="checkbox" class="radio" id="checkbox_sensCritique">
+                            <label for="checkbox_sensCritique"></label>
+                        <% } else { %>
+                            <label class="checkbox-text">SensCritique</label>
+                            <input type="checkbox" class="radio" id="checkbox_sensCritique" value="<%=filmEdit.data.url_senscritique%>" checked>
+                            <label for="checkbox_sensCritique"></label>
+                            <input id="checkbox_senscritique_hidden" type="hidden" value="<%=filmEdit.data.note_senscritique%>">
+                        <% } %>
+                    <% } else {%>
+                        <label class="checkbox-text">AlloCiné</label>
+                        <input type="checkbox" class="radio" id="checkbox_allocine">
+                        <label for="checkbox_allocine"></label>
+                        <label class="checkbox-text">SensCritique</label>
+                        <input type="checkbox" class="radio" id="checkbox_sensCritique">
+                        <label for="checkbox_sensCritique"></label>
+                    <% } %>
+                </div>
+                <div class="checkbox-structure">
+                    <label class="checkbox-text">CinéSéries</label>
+                    <% if(Object.keys(filmEdit.data).length >= 1) { %>
+                        <% if(filmEdit.data.url_cineserie == undefined) { %>
+                            <input type="checkbox" class="radio" id="checkbox_cineSeries">
+                            <label for="checkbox_cineSeries"></label>
+                        <% } else { %>
+                            <input type="checkbox" class="radio" id="checkbox_cineSeries" value="<%=filmEdit.data.url_cineserie%>" checked>
+                            <label for="checkbox_cineSeries"></label>
+                            <input id="checkbox_cineSeries_hidden" type="hidden" value="<%=filmEdit.data.note_cineserie%>">
+                        <% } %>
+                    <% } else { %>
+                        <input type="checkbox" class="radio" id="checkbox_cineSeries">
+                        <label for="checkbox_cineSeries"></label>
+                    <% } %>
+                    <!-- <label for="checkbox_cineSeries"></label> -->
+                </div>
+                <div id="url_active_allocine" class="structure-contact"></div>
+                <div id="url_active_sensCritique" class="structure-contact"></div>
+                <div id="url_active_cineSeries" class="structure-contact"></div>
+                <div class="structure-contact">
+                    <label>Source</label><br />
+                    <% if(Object.keys(filmEdit.data).length >= 1 && filmEdit.data.url_source.length >= 1) { %>
+                        <input id="url_source" name="url_source" type="text" value="<%=filmEdit.data.url_source%>" size="30" /><br />
+                    <% } else {%>
+                        <input id="url_source" name="url_source" type="text" placeholder="https://exemple.com" size="30" /><br />
+                    <% } %>
+                    <span id="url_source_validation"></span>
                 </div>
                 <div class="structure-contact">
-                    <label>AlloCiné</label><br />
-                    <input id="alloCine" name="alloCine" type="text" placeholder="https://exemple.com" size="30" /><br />
-                    <span id="alloCine_validation"></span>
-                </div>
-                <div class="structure-contact">
-                    <label>SensCritique</label><br />
-                    <input id="senscritique" name="senscritique" type="text" placeholder="https://exemple.com" size="30" /><br />
-                    <span id="senscritique_validation"></span>
-                </div>
-                <div class="structure-contact">
-                    <label>Image</label><br />
-                    <input id="img" name="quest" type="text" placeholder="https://exemple.com" size="30" /><br />
-                    <span id="img_validation"></span>
-                </div>
-                <div class="structure-contact">
-                    <label>Question</label><br />
-                    <input id="quest" name="quest" type="text" placeholder="Question à ajouté ?" size="30" /><br />
-                    <span id="quest_validation"></span>
-                </div>
-                <div class="structure-contact">
-                    <label>Texte</label><br />
-                    <textarea id="text" class="input" name="text" placeholder="Texte" rows="15" cols="30"></textarea><br />
-                    <span id="text_validation"></span>
+                    <label>Description</label><br />
+                    <% if(Object.keys(filmEdit.data).length >= 1 && filmEdit.data.descriptions.length >= 1) { %>
+                        <textarea id="descriptions" name="descriptions" class="input" placeholder="descriptions" rows="15" cols="30"><%=filmEdit.data.descriptions%></textarea><br />
+                    <% } else {%>
+                        <textarea id="descriptions" name="descriptions" class="input" placeholder="descriptions" rows="15" cols="30"></textarea><br />
+                    <% } %>
+                    <span id="descriptions_validation"></span>
                 </div>
                 <div class="structure-button-contact">
                     <input id="submit_button" class="button-contact" type="submit" value="Modifier"/>
@@ -61,4 +121,10 @@
     <!-- Import footer  -->
     <%- include('../Components/footer', {online}); %>
 </body>
+    <!-- Import script from-film-checkbox -->
+    <script src="../../javascripts/from-film-checkbox.js"></script>
+    <!-- Import script from-film-checkbox-edit -->
+    <script src="../../javascripts/from-film-checkbox-edit.js"></script>
+    <!-- Import script vérification image -->
+    <script src="../../javascripts/valid-image.js"></script>
 </html>

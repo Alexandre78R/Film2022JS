@@ -3,6 +3,10 @@ function valid_image() {
     var valeur = fichier.value; 
     var extensions = /(\.jpg|\.jpeg|\.png)$/i; 
 
+    // console.log("fichier", fichier);
+    // console.log('valeur', valeur);
+    // console.log("extensions.exec(valeur)", extensions.exec(valeur)[0]);
+
     if (!extensions.exec(valeur)) { 
         console.log('Format de fichier non valide');
         alert('Format de fichier non valide');
@@ -15,3 +19,7 @@ function valid_image() {
         } 
     } 
 }
+
+// module.exports = {
+//     valid_image : valid_image
+// };

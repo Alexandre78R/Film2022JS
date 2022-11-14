@@ -1,5 +1,5 @@
 <!-- Import du css de la navBar -->
-<link rel="stylesheet" href="../../stylesheets/navBar.css">
+    <link rel="stylesheet" href="../../stylesheets/navBar.css">
 
 <!-- Nav Bar -->
 <nav id="navBar">
@@ -8,18 +8,27 @@
     <a class="nav-link" href="/contact">Contact</a>
     <a class="nav-link" href="/faq">FAQ</a>
     <% if(!online) { %>
-        <a id="about" class="nav-link" href="/login">Connexion</a>
+        <a id="about" class="nav-link" href="/user/login">Connexion</a>
     <% } else { %>
         <% console.log("Online dans navBar --->", online)%>
         <div class="dropdown-nav">
-            <button class="dropbtn-nav">Administrateur
+            <button class="dropbtn-nav"><%= online.username %>
             </button>
             <div class="dropdown-content-nav">
-                <a href="/panel-film">Gestion - Flims</a>
-                <a href="/panel-contact">Gestion - Contacts</a>
-                <a href="/panel-faq">Gestion- FAQ</a>
-                <a href="/logout">Déconnexion</a>
+                <a href="#">Paramètre</a>
+                <a href="/user/logout">Déconnexion</a>
             </div>
         </div>
+        <% if (online.role == 1) { %>
+            <div class="dropdown-nav-admin">
+                <button class="dropbtn-nav">Administrateur
+                </button>
+                <div class="dropdown-content-nav">
+                    <a href="/admin/film">Gestion - Flims</a>
+                    <a href="/admin/contact">Gestion - Contacts</a>
+                    <a href="/admin/faq">Gestion- FAQ</a>
+                </div>
+            </div>
+        <% } %>
     <% } %>
 </nav>

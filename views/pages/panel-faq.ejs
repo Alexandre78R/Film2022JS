@@ -26,7 +26,7 @@
     <main>
         <div class="container_tab">
             <!-- <form action="/panel-faq-add" method="get"></form> -->
-            <a href="/panel-faq-add">
+            <a href="/admin/faq-add">
                 <!-- <input type="submit" id="submit_button_tab_add" class="tab-buton-add" value="Ajouter" onclick="window.location='/panel-faq-add';" /> -->
                 <input type="submit" id="submit_button_tab_add" class="tab-buton-add" value="Ajouter" />
             </a>
@@ -55,13 +55,13 @@
                                 
                                 <td>
                                     <!-- <form action="/panel-faq-edit/<%= reponseFAQView.data[i]._id%>"> -->
-                                        <a href="/panel-faq-edit/<%= reponseFAQView.data[i]._id%>">
+                                        <a href="/admin/faq-edit/<%= reponseFAQView.data[i]._id%>">
                                             <input id="submit_button_tab_edit" class="tab-buton-edit" type="submit" value="Modifier"/>
                                         </a>
                                     <!-- </form> -->
                                 </td>
                                 <td>
-                                    <form  action="/faq/del/<%= reponseFAQView.data[i]._id%>" method="POST">
+                                    <form  action="/admin/faq-del/<%= reponseFAQView.data[i]._id%>" method="POST">
                                         <input id="submit_button_tab_delete"   class="tab-buton-delete" type="submit" value="Suprimer"/>
                                     </form>
                                 </td>

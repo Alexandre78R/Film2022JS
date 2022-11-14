@@ -7,7 +7,7 @@ var reponse = {};
 async function viewFAQ () {
 
     var searchListFAQ = await search_list_faq();
-
+    // console.log("searchListFAQ", searchListFAQ);
     if (searchListFAQ.length == 0) {
         reponse.status = false;
         reponse.text = "Aucune FAQ se trouve dans la base de données !";
@@ -79,7 +79,7 @@ async function delFAQ (req) {
         return reponse;
     } else {
         reponse.status = true;
-        reponse.text = "";
+        reponse.text = "FAQ suprrimer !";
         reponse.data = delFAQ;
         return reponse;
     }
@@ -100,7 +100,7 @@ async function editFAQ (req) {
 
     if (!editFAQ) {
         reponse.status = false;
-        reponse.text = "Erreur interne : Impossible de suprimer la FAQ !";
+        reponse.text = "Erreur interne : Impossible de modifier la FAQ !";
         reponse.data = editFAQ;
         return reponse;
     } else {

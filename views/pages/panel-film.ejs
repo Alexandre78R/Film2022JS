@@ -26,7 +26,7 @@
     <main>
         <div class="container_tab">
             <!-- <form action="panel-film-add.html"> -->
-            <a href="/panel-film-add">
+            <a href="/admin/film-add">
                 <input type="submit" id="submit_button_tab_add" class="tab-buton-add" value="Ajouter"/>
             </a>
             <!-- </form> -->
@@ -60,12 +60,12 @@
                             <td class="tab-text-from"><a class="tab-text-from tab-text-a" href="<%=reponseFilmView.data[i].url_cineserie%>" target="_blank">CinéSérie</a><p><%=reponseFilmView.data[i].note_cineserie%>/10</p></td>
                             <td class="tab-text-from"><a class="tab-text-from tab-text-a" href="<%=reponseFilmView.data[i].url_source%>" target="_blank">Source</a></td>
                             <td>
-                                <a href="/panel-film-edit/<%=reponseFilmView.data[i]._id%>">
+                                <a href="/admin/film-edit/<%=reponseFilmView.data[i]._id%>">
                                     <input id="submit_button_tab_edit" class="tab-buton-edit" type="submit" value="Modifier"/>
                                 </a>
                             </td>
                             <td>
-                                <form  action="/film/del/<%=reponseFilmView.data[i]._id%>" method="POST">
+                                <form  action="/admin/film-del/<%=reponseFilmView.data[i]._id%>" method="POST">
                                     <input id="submit_button_tab_delete"   class="tab-buton-delete" type="submit" value="Suprimer"/>
                                 </form>
                             </td>

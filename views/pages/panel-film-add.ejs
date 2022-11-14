@@ -23,14 +23,14 @@
 
     <main>
         <div class="container_app_Contact">
-            <form id="contact_form" method="POST" enctype="multipart/form-data" action="/film/add">
-                <% if(filmADD.status == true){ %>
+            <form id="contact_form" method="POST" enctype="multipart/form-data" action="/admin/film-add">
+                <% if(!filmADD.status){ %>
                     <div class="alertError">
                         <span> <%=filmADD.text%> </span>
                     </div>
                 <% } %>
                 <div class="structure-contact">
-                    <label id="testJS">Nom</label><br />
+                    <label>Nom</label><br />
                     <% if(Object.keys(filmADD.data).length >= 1 && filmADD.data.name.length >= 1) { %>
                         <input id="name" name="name" type="text" value="<%=filmADD.data.name%>" size="30" /><br />
                     <% } else {%>
@@ -121,8 +121,8 @@
     <%- include('../Components/footer', {online}); %>
     <!-- Import script from-panel-add -->
 </body>
-    <!-- Import script from-panel-add -->
-<script src="../../javascripts/from-panel-add.js"></script>
+    <!-- Import script from-panel-film -->
+    <script src="../../javascripts/from-film-checkbox.js"></script>
     <!-- Import script vérification image -->
     <script src="../../javascripts/valid-image.js"></script>
 </html>

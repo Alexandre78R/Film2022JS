@@ -23,8 +23,8 @@
     
     <main>
       <div class="container_app_Contact">
-        <form id="contact_form" action="/contact/add" method="POST">
-            <% if (reponseContactAdd.status) { %>
+        <form id="contact_form" action="/contact" method="POST">
+            <% if (!reponseContactAdd.status) { %>
                 <div class="alertError">
                     <span> <%= reponseContactAdd.text %> </span>
                 </div>

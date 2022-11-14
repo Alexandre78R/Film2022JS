@@ -1,4 +1,3 @@
-
 function url_verif (url) {
     var regex = /^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+$/gm;
     var isExisting = regex.test(url);
@@ -14,7 +13,14 @@ function email_verif(email) {
     return isExisting;
 }
 
+function name_verif (name) {
+    var regex = /\b([a-zA-ZÀ-ÿ][-,a-z. ']+[ ]*)+$/gm;
+    var isExisting = regex.test(name);
+    return isExisting;
+}
+
 module.exports = {
     url_verif : url_verif,
     email_verif : email_verif,
+    name_verif : name_verif,
 };

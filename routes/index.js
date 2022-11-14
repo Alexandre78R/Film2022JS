@@ -1,476 +1,86 @@
 var express = require('express');
 var router = express.Router();
 
-// Shéma FAQ 
-const FAQ = require('../models/faq.js');
-
-// Shéma Contact 
-const CONTACT = require('../models/contact.js');
-
-// les Function upload img
-var upload_img = require('../function/upload_img.js');
-
-//Shéma User
-const FILM = require('../models/film.js');
-
-
-// Validation User
-const validation_user = require("../function/validation/user.js");
-
-//Query User 
-const query_user = require("../query/user.js");
-
-// Validation Faq
-const validation_faq = require("../function/validation/faq.js");
-
 //Query Faq 
 const query_faq = require("../query/faq.js");
 
+// Validation Contact
+const validation_contact = require("../function/validation/contact.js");
 
-// // Import request regex
-// var regex = require("../function/regex.js");
+//Query Contact
+const query_contact = require("../query/contact.js");
 
-// Param view login default  
-var reponseUserLogin = {
-    status : true,
-    text : "",
-};
+//Query Film
+const query_film = require("../query/film.js");
 
-// Param view conact
-var reponseContactView = { 
-    status : true,
-    text : "",
-    data : ""
-};
+// const db = require("../models/db.js");
 
 // Param add Contact
 var reponseContactAdd = { 
-    status : false,
+    status : true,
     text : "",
     data :  {}
 };
 
-// Param view faq
-var reponseFAQView = { 
+// Param add faq
+var reponseFAQAdd = { 
     status : true,
     text : "",
-    data : []
+    data : {}
 };
 
-// Param view faq
-var reponseFilmView = { 
+// Param Edit faq;
+var reponseFaqEdit = {
     status : true,
     text : "",
-    data : []
+    saveData : {},
+    data : {}
+};
+
+// Param add Film
+var reponseFilmAdd = {
+    status : true,
+    text : "",
+    data : {}
+};
+
+// Param Edit fimm;
+var reponseFilmEdit = {
+    status : true,
+    text : "",
+    saveData : {},
+    data : {}
 };
 
 // ------------------------------ Début ROUTE Film  ---------------------------
 
+
 /* GET Acceuil page. */
-router.get('/', function(req, res, next) {
-
-    // Param add faq
-    var reponseFAQAdd = { 
-        status : true,
-        text : "",
-        data : {}
-    };
-
-    // Param Edit faq;
-    var reponseFaqEdit = {
-        status : true,
-        text : "",
-        saveData : {},
-        data : {}
-    };
-
-    var reponseFilmAdd = {
-        status : false,
-        text : "",
-        data : {}
-    };
-    
-    var reponseFilmEdit = {
-        status : false,
-        text : "",
-        data : {}
-    };
+router.get('/', async function(req, res, next) {
 
     // Session Pour ajout FAQ
-    if (!req.session.reponseFAQAdd) {
-        req.session.reponseFAQAdd = reponseFAQAdd;
-    }
+    if (!req.session.reponseFAQAdd) req.session.reponseFAQAdd = reponseFAQAdd;
     
     // Session Pour modifier FAQ
-    if (!req.session.reponseFaqEdit) {
-        req.session.reponseFaqEdit = reponseFaqEdit;
-    }
+    if (!req.session.reponseFaqEdit) req.session.reponseFaqEdit = reponseFaqEdit;
 
     // Session Pour ajout d'un film
-    if (!req.session.reponseFilmAdd) {
-        req.session.reponseFilmAdd = reponseFilmAdd;
-    }
+    if (!req.session.reponseFilmAdd) req.session.reponseFilmAdd = reponseFilmAdd;
 
     // Session Pour modifier un film
-    if (!req.session.reponseFilmEdit) {
-        req.session.reponseFilmEdit = reponseFilmEdit;
-    }
-    
-    console.log("req.session.reponseFAQAdd", req.session.reponseFAQAdd);
-    console.log("req.session.reponseFaqEdit", req.session.reponseFaqEdit);
-    console.log("req.session.reponseFilmAdd", req.session.reponseFilmAdd);
-    console.log("req.session.reponseFilmEdit", req.session.reponseFilmEdit);
+    if (!req.session.reponseFilmEdit) req.session.reponseFilmEdit = reponseFilmEdit;
 
-    // On cherche dans la base de donnée
-    FILM.find().then(async film => {
-        if (film.length == 0) {
-            reponseFilmView.status =  false;
-            reponseFilmView.text = "Aucun film se trouve dans la base de données !";
-            reponseFilmView.data = film;
-            res.render('./pages/index', { online: req.session.user, title: 'Film 2022 - Panel Film', reponseFilmView});
-        } else {
-            reponseFilmView.status =  true;
-            reponseFilmView.text = "Listes de film trouver !";
-            reponseFilmView.data = film;
-            // console.log("list films", film);
-            res.render('./pages/index', { online: req.session.user, title: 'Film 2022 - Panel Film', reponseFilmView});
-        }
-    }).catch(err => {
-        console.log('panel-film err', err);
-        reponseFilmView.status =  false;
-        reponseFilmView.text = "Impossible de récupérer les films dans la base de données !";
-        reponseFilmView.data = {};
-        res.render('./pages/index', { online: req.session.user, title: 'Film 2022 - Panel Film', reponseFilmView});
-    });
-});
+    // var perPage = 2;
+    // var pages = Math.ceil(total / perPage);
+    // var pageNumber = (res.query.page == null) ? 1 : req.query.page;
+    // var startFrom = (pageNumber - 1) * perPage;
+    var reponseFimviewBDD = await query_film.viewFilm();
+    // .sort({ "id": -1})
+    // .skip(startFrom)
+    // .limit(perPage)
+    // .toAray();
 
-
-/* GET panel-film page. */
-router.get('/panel-film', function(req, res, next) {
-
-    //Vérification si l'admin est connecter
-    if (!req.session.user) return res.redirect("/");
-
-    // On cherche dans la base de donnée
-    FILM.find().then(async film => {
-        if (film.length == 0) {
-            reponseFilmView.status =  false;
-            reponseFilmView.text = "Aucun film se trouve dans la base de données !";
-            reponseFilmView.data = film;
-            res.render('./pages/panel-film', { online: req.session.user, title: 'Film 2022 - Panel Film', reponseFilmView});
-        } else {
-            reponseFilmView.status =  true;
-            reponseFilmView.text = "Listes de film trouver !";
-            reponseFilmView.data = film;
-            // console.log("list films", film);
-            res.render('./pages/panel-film', { online: req.session.user, title: 'Film 2022 - Panel Film', reponseFilmView});
-        }
-    }).catch(err => {
-        console.log('panel-film err', err);
-        reponseFilmView.status =  false;
-        reponseFilmView.text = "Impossible de récupérer les films dans la base de données !";
-        reponseFilmView.data = {};
-        res.render('./pages/panel-film', { online: req.session.user, title: 'Film 2022 - Panel Film', reponseFilmView});
-    });
-    // res.render('./pages/panel-film', { online: req.session.user, title: 'Film 2022 - Panel Film' });
-});
-
-/* GET panel-film-add page. */
-router.get('/panel-film-add', function(req, res, next) {
-    //Vérification si l'admin est connecter
-    if (!req.session.user) return res.redirect("/");
-    console.log("req.session.reponseFilmAdd", req.session.reponseFilmAdd);
-    res.render('./pages/panel-film-add', { online: req.session.user, title: 'Film 2022 - Panel Film Add', filmADD: req.session.reponseFilmAdd});
-});
-
-//Route pour enregistrer une nouvelle FAQ.
-router.post('/film/add', async function(req, res, next) {
-
-    //Stockage des données reçus du front
-    var filmDataAdd = {
-        name: req.body.name,
-        file : req.files,
-        url_alloCine : req.body.url_alloCine,
-        note_alloCine: req.body.note_alloCine,
-        url_senscritique : req.body.url_senscritique,
-        note_senscritique: req.body.note_senscritique,
-        url_cineserie : req.body.url_cineserie,
-        note_cineserie: req.body.note_cineserie,
-        url_source : req.body.url_source,
-        descriptions : req.body.descriptions
-    };
-    
-    // var filmDataAdd = req.body;
-    console.log("filmDataAdd", filmDataAdd);
-
-    if (req.body.name === ""){
-        req.session.reponseFilmAdd.status = true;
-        req.session.reponseFilmAdd.text = "Merci d'insérer un nom de film";
-        req.session.reponseFilmAdd.data = filmDataAdd;
-        console.log("Merci d'insérer un nom de film");
-        res.render('./pages/panel-film-add', { online: req.session.user, title: 'Film 2022 - Panel Film Add', filmADD: req.session.reponseFilmAdd});
-    } else if (req.files == null) {
-        req.session.reponseFilmAdd.status = true;
-        req.session.reponseFilmAdd.text = "Merci d'insérer une image";
-        req.session.reponseFilmAdd.data = filmDataAdd;
-        console.log("Merci d'insérer une image");
-        res.render('./pages/panel-film-add', { online: req.session.user, title: 'Film 2022 - Panel Film Add', filmADD: req.session.reponseFilmAdd});
-    } else if (req.body.url_alloCine === "") {
-        req.session.reponseFilmAdd.status = true;
-        req.session.reponseFilmAdd.text = "Merci d'insérer une url pour allocine";
-        req.session.reponseFilmAdd.data = filmDataAdd;
-        console.log("Merci d'insérer une url pour allocine");
-        res.render('./pages/panel-film-add', { online: req.session.user, title: 'Film 2022 - Panel Film Add', filmADD: req.session.reponseFilmAdd});
-    } else if (!req.body.url_alloCine == undefined && regex.url_verif(req.body.url_alloCine) == false) {
-        req.session.reponseFilmAdd.status = true;
-        req.session.reponseFilmAdd.text = "Merci d'insérer une url correct pour allocine";
-        req.session.reponseFilmAdd.data = filmDataAdd;
-        console.log("Merci d'insérer une url correct pour allocine");
-        res.render('./pages/panel-film-add', { online: req.session.user, title: 'Film 2022 - Panel Film Add', filmADD: req.session.reponseFilmAdd});
-    } else if (req.body.note_alloCine === "") {
-        req.session.reponseFilmAdd.status = true;
-        req.session.reponseFilmAdd.text = "Merci d'insérer une note pour allocine";
-        req.session.reponseFilmAdd.data = filmDataAdd;
-        console.log("Merci d'insérer une note pour allocine");
-        res.render('./pages/panel-film-add', { online: req.session.user, title: 'Film 2022 - Panel Film Add', filmADD: req.session.reponseFilmAdd});
-    } else if (req.body.url_senscritique === "") {
-        req.session.reponseFilmAdd.status = true;
-        req.session.reponseFilmAdd.text = "Merci d'insérer une url pour senscritique";
-        req.session.reponseFilmAdd.data = filmDataAdd;
-        console.log("Merci d'insérer une url pour senscritique");
-        res.render('./pages/panel-film-add', { online: req.session.user, title: 'Film 2022 - Panel Film Add', filmADD: req.session.reponseFilmAdd});
-    } else if (!req.body.url_senscritique == undefined && regex.url_verif(req.body.url_senscritique) == false) {
-        req.session.reponseFilmAdd.status = true;
-        req.session.reponseFilmAdd.text = "Merci d'insérer une url correct pour senscritique";
-        req.session.reponseFilmAdd.data = filmDataAdd;
-        console.log("Merci d'insérer une url correct pour senscritique");
-        res.render('./pages/panel-film-add', { online: req.session.user, title: 'Film 2022 - Panel Film Add', filmADD: req.session.reponseFilmAdd});
-    } else if (req.body.note_senscritique === "") {
-        req.session.reponseFilmAdd.status = true;
-        req.session.reponseFilmAdd.text = "Merci d'insérer une note pour senscritique";
-        req.session.reponseFilmAdd.data = filmDataAdd;
-        console.log("Merci d'insérer une note pour senscritique");
-        res.render('./pages/panel-film-add', { online: req.session.user, title: 'Film 2022 - Panel Film Add', filmADD: req.session.reponseFilmAdd});
-    } else if (req.body.url_cineserie === "") {
-        req.session.reponseFilmAdd.status = true;
-        req.session.reponseFilmAdd.text = "Merci d'insérer une url pour cineserie";
-        req.session.reponseFilmAdd.data = filmDataAdd;
-        console.log("Merci d'insérer une url pour cineserie");
-        res.render('./pages/panel-film-add', { online: req.session.user, title: 'Film 2022 - Panel Film Add', filmADD: req.session.reponseFilmAdd});
-    } else if (!req.body.url_cineserie == undefined && regex.url_verif(req.body.url_cineserie) == false) {
-        req.session.reponseFilmAdd.status = true;
-        req.session.reponseFilmAdd.text = "Merci d'insérer une url correct pour cineserie";
-        req.session.reponseFilmAdd.data = filmDataAdd;
-        console.log("Merci d'insérer une url correct pour cineserie");
-        res.render('./pages/panel-film-add', { online: req.session.user, title: 'Film 2022 - Panel Film Add', filmADD: req.session.reponseFilmAdd});
-    } else if (req.body.note_cineserie === "") {
-        req.session.reponseFilmAdd.status = true;
-        req.session.reponseFilmAdd.text = "Merci d'insérer une note pour cineserie";
-        req.session.reponseFilmAdd.data = filmDataAdd;
-        console.log("Merci d'insérer une note pour cineserie");
-        res.render('./pages/panel-film-add', { online: req.session.user, title: 'Film 2022 - Panel Film Add', filmADD: req.session.reponseFilmAdd});
-    } else if (req.body.url_source === "") {
-        req.session.reponseFilmAdd.status = true;
-        req.session.reponseFilmAdd.text = "Merci d'insérer une url pour la source";
-        req.session.reponseFilmAdd.data = filmDataAdd;
-        console.log("Merci d'insérer une url pour la source");
-        res.render('./pages/panel-film-add', { online: req.session.user, title: 'Film 2022 - Panel Film Add', filmADD: req.session.reponseFilmAdd});
-    } else if (regex.url_verif(req.body.url_source) == false) {
-        req.session.reponseFilmAdd.status = true;
-        req.session.reponseFilmAdd.text = "Merci d'insérer une url correct pour la source";
-        req.session.reponseFilmAdd.data = filmDataAdd;
-        console.log("Merci d'insérer une url correct pour la source");
-        res.render('./pages/panel-film-add', { online: req.session.user, title: 'Film 2022 - Panel Film Add', filmADD: req.session.reponseFilmAdd});
-    } else if (req.body.descriptions === "") {
-        req.session.reponseFilmAdd.status = true;
-        req.session.reponseFilmAdd.text = "Merci d'insérer une descriptions du film";
-        req.session.reponseFilmAdd.data = filmDataAdd;
-        console.log("Merci d'insérer une descriptions du film");
-        res.render('./pages/panel-film-add', { online: req.session.user, title: 'Film 2022 - Panel Film Add', filmADD: req.session.reponseFilmAdd});
-    } else {        
-        var result = await upload_img.upload_img_local(req.files.file);
-        if(result == false) {
-            req.session.reponseFilmAdd.status = true;
-            req.session.reponseFilmAdd.text = "Erreur interne impossible de sauvegarder l'image sur notre serveur.";
-            req.session.reponseFilmAdd.data = filmDataAdd;
-            console.log("Erreur interne impossible de sauvegarder l'image sur notre serveur.");
-            res.render('./pages/panel-film-add', { online: req.session.user, title: 'Film 2022 - Panel Film Add', filmADD: req.session.reponseFilmAdd});
-        } else {
-    
-            // console.log(imagePath);
-            var resultCloudinary = await upload_img.upload_img_cloudinary(result, "film2022");
-            console.log("resultCloudinary", resultCloudinary);
-    
-            if (resultCloudinary == false) {
-                req.session.reponseFilmAdd.status = true;
-                req.session.reponseFilmAdd.text = "Erreur interne impossible de sauvegarder l'image sur notre hébergeur.";
-                req.session.reponseFilmAdd.data = filmDataAdd;
-                // console.log("Erreur interne impossible de sauvegarder l'image sur notre hébergeur.");
-                var resultLocalDel = await upload_img.upload_img_local_del(result);
-                if (resultLocalDel) {
-                    req.session.reponseFilmAdd.status = true;
-                    req.session.reponseFilmAdd.text = "Erreur interne impossible de supprimer l'image sur notre serveur.";
-                    req.session.reponseFilmAdd.data = filmDataAdd;
-                    console.log("Erreur interne impossible de supprimer l'image sur notre serveur.");
-                    res.render('./pages/panel-film-add', { online: req.session.user, title: 'Film 2022 - Panel Film Add', filmADD: req.session.reponseFilmAdd});
-                } 
-            } else {
-                var resultLocalDel = await upload_img.upload_img_local_del(result);
-                // console.log("resultLocalDel", resultLocalDel);
-                if (resultLocalDel) {
-                    req.session.reponseFilmAdd.status = true;
-                    req.session.reponseFilmAdd.text = "Erreur interne impossible de supprimer l'image sur notre serveur.";
-                    req.session.reponseFilmAdd.data = filmDataAdd;
-                    console.log("Erreur interne impossible de supprimer l'image sur notre serveur.");
-                    // On delete l'image sur l'hébergeur en cas d'erreur interne 
-                    // var deleteCloudinaryImage = await upload_img.upload_img_cloudinary_del(resultCloudinary.public_id);
-                    // console.log("deleteCloudinaryImage", deleteCloudinaryImage);
-                    res.render('./pages/panel-film-add', { online: req.session.user, title: 'Film 2022 - Panel Film Add', filmADD: req.session.reponseFilmAdd});
-                } else {
-                    console.log("req.body", req.body);
-                    console.log("resultCloudinary", resultCloudinary.public_id);
-                    // console.log("JE SUIS L0 §§§§§§§§§§§§§§§§§§");
-                    // res.render('./pages/panel-film', { online: req.session.user, title: 'Film 2022 - Panel Film Add'});
-                    
-                    //On regarde dans la BDD si el film existe déjà
-                    FILM.findOne({
-                        name: req.body.name
-                    }).then(async film => {
-                        //Si on le trouve on envoie un message d'erreur
-                        if (film) {
-                            console.log("resultCloudinary dans cherche name ", resultCloudinary.public_id);
-                            var errDelImageUpdateCloud = await upload_img.upload_img_cloudinary_del(resultCloudinary.public_id);
-                            if (errDelImageUpdateCloud) {
-                                console.log("errDelImageUpdateCloud Dans if ", errDelImageUpdateCloud); 
-                                req.session.reponseFilmAdd.status = true;
-                                req.session.reponseFilmAdd.text = "Le film " + req.body.name +  " existe déjà dans notre bdd !";
-                                req.session.reponseFilmAdd.data = filmDataAdd;
-                                return res.render('./pages/panel-film-add', { online: req.session.user, title: 'Film 2022 - Panel Film Add', filmADD: req.session.reponseFilmAdd});
-                            } else {
-                                console.log(" Else 2 : Impossiblle de supprimer l'image sur l'hébergeur on redirie l'image"); 
-                                req.session.reponseFilmAdd.status = true;
-                                req.session.reponseFilmAdd.text = "Le film " + req.body.name +  " existe déjà dans notre bdd !";
-                                req.session.reponseFilmAdd.data = filmDataAdd;
-                                return res.render('./pages/panel-film-add', { online: req.session.user, title: 'Film 2022 - Panel Film Add', filmADD: req.session.reponseFilmAdd});
-                            }
-                            //Sinon on ajoute dans la bdd
-                        } else {
-                            var FilmSave ={
-                                name: req.body.name,
-                                img : resultCloudinary.secure_url,
-                                public_id : resultCloudinary.public_id,
-                                url_alloCine : req.body.url_alloCine,
-                                note_alloCine: req.body.note_alloCine,
-                                url_senscritique : req.body.url_senscritique,
-                                note_senscritique: req.body.note_senscritique,
-                                url_cineserie : req.body.url_cineserie,
-                                note_cineserie: req.body.note_cineserie,
-                                url_source : req.body.url_source,
-                                descriptions : req.body.descriptions
-                            };
-
-                            console.log("FilmSave", FilmSave);
-                            
-                            //Création du document FAQ
-                            FILM.create(FilmSave)
-                            .then(film => {
-                                console.log("FILM", film);
-                                // return res.redirect("/panel-film");
-                            })
-                            //Si il y a une erreur
-                            .catch(async err => {
-                                console.log("err", err);
-                                req.session.reponseFilmAdd.status = true;
-                                req.session.reponseFilmAdd.text = "Le film" + req.body.name +  " existe déjà dans notre bdd !";
-                                req.session.reponseFilmAdd.data = filmDataAdd;
-                                // On delete l'image sur l'hébergeur en cas d'erreur interne 
-                                // var deleteCloudinaryImage = await upload_img.upload_img_cloudinary_del(resultCloudinary.public_id);
-                                // console.log("deleteCloudinaryImage", deleteCloudinaryImage);
-                                res.render('./pages/panel-film-add', { online: req.session.user, title: 'Film 2022 - Panel Film Add', filmADD: req.session.reponseFilmAdd});
-                            });
-                            res.redirect("/panel-film");
-                        }
-                    //En cas d'erreur
-                    }).catch(err => {
-                        console.log("err", err);
-                        console.log("Erreur interne impossible faire la recherche du film dans la bdd");
-                        req.session.reponseFilmAdd.status = true;
-                        req.session.reponseFilmAdd.text = "Erreur interne impossible faire la recherche du film dans la bdd";
-                        req.session.reponseFilmAdd.data = filmDataAdd;
-                        res.render('./pages/panel-film-add', { online: req.session.user, title: 'Film 2022 - Panel Admin', filmADD: req.session.reponseFilmAdd});
-                    });
-                }
-            }
-        }   
-    }
-});
-
-// /* GET panel-film-edit page. */
-// router.get('/panel-film-edit/:id', function(req, res, next) {
-
-//     console.log("id", req.params.id);
-
-//     //Vérification si l'admin eest connecter
-//     if (!req.session.user) {
-//         res.redirect("/");
-//     }
-
-//     FILM.findById({
-//         _id: req.params.id,
-//     }).then(film => {
-
-//         // On met la data dans un objet 
-//         req.session.reponseFilmEdit.data = film;
-
-//         // Condition de check pour savoir c'est le bon edit de l'id qu'on fait 
-//         if (req.session.reponseFilmEdit.data._id == req.session.reponseFilmEdit.saveData._id) {
-//             res.render('./pages/panel-film-edit', { online: req.session.user, title: 'Film 2022 - Panel Film - Modifier', filmEdit: req.session.reponseFilmEdit});
-//         } else {
-//             // On met par défault les param edit
-//             req.session.reponseFilmEdit.status = false;
-//             req.session.reponseFilmEdit.text = "";
-//             req.session.reponseFilmEdit.saveData = {};
-//             res.render('./pages/panel-film-edit', { online: req.session.user, title: 'Film 2022 - Panel Film - Modifier', filmEdit: req.session.reponseFilmEdit});
-//         }
-//     //En cas d'erreur on sort leport 500
-//     }).catch(err => {
-//         console.log("/film/edit err", err);
-//         res.render('./pages/panel-film', { online: req.session.user, title: 'Film 2022 - Panel Film - Modifier', filmEdit: req.session.reponseFilmEdit});
-//     });
-    
-// });
-
-/* GET panel-film-edit page. */
-router.get('/panel-film-edit', function(req, res, next) {
-    //Vérification si l'admin est connecter
-    if (!req.session.user) return res.redirect("/");
-    res.render('./pages/panel-film-edit', { online: req.session.user, title: 'Film 2022 - Panel Film' });
-});
-
-
-//Route pour suprimer un messaage de contact.
-router.post('/film/del/:id', async function(req, res, next) {
-    console.log("req.param", req.params);
-    FILM.findById({
-        _id: req.params.id,
-    }).then(async film => {
-        console.log("film", film);
-        var deleteUploadImgCloudifary = await upload_img.upload_img_cloudinary_del(film.public_id);
-        if (deleteUploadImgCloudifary){
-            FILM.findByIdAndRemove(req.params.id, (err, doc) => {
-                if (err) {
-                    console.log("Impossible de suprimer le film: ", err);
-                    res.redirect('/panel-film');
-                } else {
-                    console.log('Le film à était suprimer à succès !', doc);
-                    res.redirect('/panel-film');
-                }
-            });
-        }
-    }).catch(err => {
-        console.log("/film/del/:id err", err);
-        res.render('./pages/panel-film', { online: req.session.user, title: 'Film 2022 - Panel Film - del', reponseFilmView});
-    });
+    res.render('./pages/index', { online: req.session.user, title: 'Film 2022 - Panel Film', reponseFilmView : reponseFimviewBDD});
 });
 
 // ------------------------------ FIN ROUTE Film  ---------------------------
@@ -479,108 +89,33 @@ router.post('/film/del/:id', async function(req, res, next) {
 
 /* GET contact page. */
 router.get('/contact', function(req, res, next) {
-    reponseContactAdd.status = false;
+    reponseContactAdd.status = true;
     reponseContactAdd.text = "";
     reponseContactAdd.data = {};
-    res.render('./pages/contact', { online: req.session.user, title: 'Film 2022 - contact' , reponseContactAdd });
-});
-  
-/* GET panel-contact page. */
-router.get('/panel-contact', function(req, res, next) {
-    //Vérification si l'admin est connecter
-    if (!req.session.user) return res.redirect("/");
-
-    // On cherche dans la base de donnée
-    CONTACT.find().then(async contact => {
-        if (contact.length == 0) {
-            reponseContactView.status =  false;
-            reponseContactView.text = "Aucun message de contact se trouve dans la base de données !";
-            reponseContactView.data = contact;
-            res.render('./pages/panel-contact', { online: req.session.user, title: 'Film 2022 - Panel Contact', reponseContactView});
-        } else {
-            reponseContactView.status =  true;
-            reponseContactView.text = "Listes contact trouver !";
-            reponseContactView.data = contact;
-            res.render('./pages/panel-contact', { online: req.session.user, title: 'Film 2022 - Panel Contact', reponseContactView});
-        }
-    }).catch(err => {
-        console.log('/panel-contact err', err);
-        reponseContactView.status =  false;
-        reponseContactView.text = "Impossible de récupérer les messages de contact dans la base de données !";
-        reponseContactView.data = {};
-        res.render('./pages/panel-contact', { online: req.session.user, title: 'Film 2022 - Panel FAQ', reponseContactView});
-    });
+    return res.render('./pages/contact', { online: req.session.user, title: 'Film 2022 - Contact' , reponseContactAdd });
 });
 
 //Route création d'un contact.
-router.post('/contact/add', function(req, res, next) {
-
-    //Stockage des données reçus du front
-    var contactDataAdd = {
-        lastname: req.body.lastname,
-        firstname: req.body.firstname,
-        email : req.body.email,
-        message : req.body.message,
-    };
-
-    if (req.body.lastname === "") {
-        reponseContactAdd.status = true;
-        reponseContactAdd.text = "Merci d'insérer votre Nom !";
-        reponseContactAdd.data = contactDataAdd;
-        res.render('./pages/contact', { online: req.session.user, title: 'Film 2022 - Panel Contact', reponseContactAdd });
-    } else if (req.body.firstname === "") {
-        reponseContactAdd.status = true;
-        reponseContactAdd.text = "Merci d'insérer votre prénom !";
-        reponseContactAdd.data = contactDataAdd;
-        res.render('./pages/contact', { online: req.session.user, title: 'Film 2022 - Panel Contact', reponseContactAdd });
-    } else if (req.body.email === "") {
-        reponseContactAdd.status = true;
-        reponseContactAdd.text = "Merci d'insérer votre email !";
-        reponseContactAdd.data = contactDataAdd;
-        res.render('./pages/contact', { online: req.session.user, title: 'Film 2022 - Panel Contact', reponseContactAdd });
-    } else if (req.body.message === "") {
-        reponseContactAdd.status = true;
-        reponseContactAdd.text = "Merci d'insérer votre message !";
-        reponseContactAdd.data = contactDataAdd;
-        res.render('./pages/contact', { online: req.session.user, title: 'Film 2022 - Panel Contact', reponseContactAdd });
+router.post('/contact', async function(req, res, next) {
+    //Vérification du formulaire  
+    var validationContactADD = await validation_contact.valdationContactAdd(req); 
+    if (!validationContactADD.status) {
+        reponseContactAdd.status = validationContactADD.status;
+        reponseContactAdd.text = validationContactADD.text;
+        reponseContactAdd.data = validationContactADD.data;
+        return res.render('./pages/contact', { online: req.session.user, title: 'Film 2022 - Contact', reponseContactAdd });
     } else {
-        var isExisting = regex.email_verif(req.body.email );
-        if (!isExisting) {
-            reponseContactAdd.status = true;
-            reponseContactAdd.text = "Merci d'insérer un email correct !";
-            reponseContactAdd.data = contactDataAdd;
-            res.render('./pages/contact', { online: req.session.user, title: 'Film 2022 - Panel Contact', reponseContactAdd });
+        // Reponse de la base donné
+        var addContact = await query_contact.addContact(req);
+        if (!addContact.status) {
+            reponseContactAdd.status = addContact.status;
+            reponseContactAdd.text = addContact.text;
+            reponseContactAdd.data = addContact.data;
+            return res.render('./pages/contact', { online: req.session.user, title: 'Film 2022 - Contact', reponseContactAdd });
         } else {
-            //Création du document FAQ
-            CONTACT.create(contactDataAdd)
-                .then(contact => {
-                    console.log("CONTACT", contact);
-                    return res.redirect('/');
-                })
-                //Si il y a une erreur
-                .catch(err => {
-                    console.log("err", err);
-                    // console.log("err 2", err.errors.properties);
-                    reponseContactAdd.status = true;
-                    reponseContactAdd.text = err;
-                    reponseContactAdd.data = contactDataAdd;
-                    res.render('./pages/contact', { online: req.session.user, title: 'Film 2022 - Panel FAQ - Ajouter', reponseContactAdd});
-            });
+            return res.redirect("/");
         }
     }
-});
-
-//Route pour suprimer un messaage de contact.
-router.post('/contact/del/:id', function(req, res, next) {
-    CONTACT.findByIdAndRemove(req.params.id, (err, doc) => {
-        if (err) {
-            console.log("Impossible de suprimer le message de contact : ", err);
-            res.redirect('/panel-contact');
-        } else {
-            console.log('La message de contact à était suprimer à succès !', doc);
-            res.redirect('/panel-contact');
-        }
-    });
 });
 
 // ------------------------------ Fin ROUTE Contact ---------------------------
@@ -591,262 +126,9 @@ router.post('/contact/del/:id', function(req, res, next) {
 router.get('/faq', async function(req, res, next) {
     // Response de la base de donnée
     var reponseFAQ = await query_faq.viewFAQ();
-    res.render('./pages/faq', { online: req.session.user, title: 'Film 2022 - FAQ', reponseFAQView : reponseFAQ});
-});
-
-/* GET panel-faq page. */
-router.get('/panel-faq', async function(req, res, next) {
-    //Vérification si l'admin est connecter
-    if (!req.session.user) return res.redirect("/");
-    // Response de la base de donnée
-    var reponseFAQ = await query_faq.viewFAQ();
-    res.render('./pages/panel-faq', { online: req.session.user, title: 'Film 2022 - Panel FAQ', reponseFAQView : reponseFAQ});
-});
-
-/* GET panel-faq-add page. */
-router.get('/panel-faq-add', function(req, res, next) {
-    //Vérification si l'admin est connecter
-    if (!req.session.user) return res.redirect("/");
-    res.render('./pages/panel-faq-add', { online: req.session.user, title: 'Film 2022 - Panel FAQ - Ajouter', faqADD: req.session.reponseFAQAdd});
-});
-
-/* GET /faq/add page. */
-router.get('/faq/add', function(req, res, next) {
-    if (!req.session.user) {
-        return res.redirect('/');
-    } else {
-        return res.redirect('/panel-faq-add');
-    }
-});
-
-//Route pour enregistrer une nouvelle FAQ.
-router.post('/faq/add', async function(req, res, next) {
-
-    // Vérification des informations de la requête 
-    var validationFAQADD = await validation_faq.valdationFAQAdd(req);
-
-    if (!validationFAQADD.status) {
-        // Mise a jour de la session
-        req.session.reponseFAQAdd = validationFAQADD;
-        res.redirect("/panel-faq-add");
-    } else {
-        // Mise a jour de la session
-        req.session.reponseFAQAdd = validationFAQADD;
-
-        //Reponse de la base de donné
-        var reponseFAQADD = await query_faq.addFAQ(req);
-        
-        if (!reponseFAQADD) {
-            // Mise a jour de la session
-            req.session.reponseFAQAdd = reponseFAQADD;
-            // Redirection route
-            return res.redirect("/panel-faq-add");
-        } else {
-            // Mise a jour de la session
-            req.session.reponseFAQAdd = {
-                status : true,
-                text : "",
-                // saveData : {},
-                data : {}
-            };
-
-            // Redirection route
-            return res.redirect('/panel-faq');
-        }
-    }
-});
-
-/* GET panel-faq-edit page. */
-router.get('/panel-faq-edit/:id', async function(req, res, next) {
-
-    //Vérification si l'admin est connecter
-    if (!req.session.user) return res.redirect("/");
-
-    // Réponse de la base donné
-    var reponseFaqEdit = await query_faq.viewFAQID(req);
-
-    if (!reponseFaqEdit.status) {
-        req.session.reponseFaqEdit.status = reponseFaqEdit.status;
-        req.session.reponseFaqEdit.text = reponseFaqEdit.text;
-        req.session.reponseFaqEdit.saveData = reponseFaqEdit.data;
-        return res.render('./pages/panel-faq-edit', { online: req.session.user, title: 'Film 2022 - Panel FAQ - Modifier', faqEdit: req.session.reponseFaqEdit});
-    } else {
-
-        // On met la data dans un objet 
-        req.session.reponseFaqEdit.data = reponseFaqEdit.data;
-
-        // Condition de check pour savoir c'est le bon edit de l'id qu'on fait 
-        if (req.session.reponseFaqEdit.data._id == req.session.reponseFaqEdit.saveData._id) {
-            return res.render('./pages/panel-faq-edit', { online: req.session.user, title: 'Film 2022 - Panel FAQ - Modifier', faqEdit: req.session.reponseFaqEdit});
-        } else {
-            // On met par défault les param edit
-            req.session.reponseFaqEdit.status = true;
-            req.session.reponseFaqEdit.text = "";
-            req.session.reponseFaqEdit.saveData = {};
-            return res.render('./pages/panel-faq-edit', { online: req.session.user, title: 'Film 2022 - Panel FAQ - Modifier', faqEdit: req.session.reponseFaqEdit});
-        }
-    }  
-});
-
-// Route redirection si l'utilisateur est en cours d'une modification de faq
-router.get('/panel-faq-edit', function(req, res, next) {
-    //Vérification si l'admin est connecter
-    if (!req.session.user) return res.redirect("/");
-
-    // Redirection  à la modification en cours ou sinon au panel faq
-    // Object.key vérifier si l'objet est vide ou pas
-    if (Object.keys(req.session.reponseFaqEdit.data).length === 0) {
-        res.redirect("/panel-faq");
-    } else {
-        // On met par défault les param edit
-        req.session.reponseFaqEdit.status = false;
-        req.session.reponseFaqEdit.text = "";
-        req.session.reponseFaqEdit.saveData = {};
-        res.redirect(`/panel-faq-edit/${req.session.reponseFaqEdit.data._id}`);
-    }
-});
-
-/* GET /faq/del/id page. */
-router.get('/faq/edit/:id', function(req, res, next) {
-    if (!req.session.user) {
-        return res.redirect('/');
-    } else {
-        return res.redirect(`/panel-faq-edit/${req.session.reponseFaqEdit.data._id}`);
-    }
-});
-
-//Route pour modifier une FAQ.
-router.post('/faq/edit/:id', async function(req, res, next) {
-    // Vérification des informations de la requête
-    var validationFAQEdit = await validation_faq.valdationFAQEdit(req);
-    if (!validationFAQEdit.status) {
-        // Mise a jour de la session
-        req.session.reponseFaqEdit.status = validationFAQEdit.status;
-        req.session.reponseFaqEdit.text = validationFAQEdit.text;
-        req.session.reponseFaqEdit.saveData = validationFAQEdit.data;
-        res.redirect(`/panel-faq-edit/${req.session.reponseFaqEdit.data._id}`);
-    } else {
-
-        // Response de la base de donnée
-        var reponseFAQEdit = await query_faq.editFAQ(req);
-        
-        if (!reponseFAQEdit.status) {
-            // Mise a jour de la session
-            req.session.reponseFaqEdit.status = validationFAQEdit.status;
-            req.session.reponseFaqEdit.text = validationFAQEdit.text;
-            req.session.reponseFaqEdit.saveData = validationFAQEdit.data;
-            return res.render('./pages/panel-faq-add', { online: req.session.user, title: 'Film 2022 - Panel FAQ - Ajouter', faqEdit: req.session.reponseFaqEdit});
-        } else {
-            return res.redirect('/panel-faq');
-        }
-    }
-});
-
-/* GET /faq/del/id page. */
-router.get('/faq/del/:id', function(req, res, next) {
-    if (!req.session.user) {
-        return res.redirect('/');
-    } else {
-        return res.redirect('/panel-faq');
-    }
-});
-
-//Route pour suprimer une faq.
-router.post('/faq/del/:id', async function(req, res, next) {
-    var delFAQ = await query_faq.delFAQ(req);
-    if (!delFAQ.status) {
-        res.redirect('/panel-faq');
-    } else {
-        res.redirect('/panel-faq');
-    }
+    return res.render('./pages/faq', { online: req.session.user, title: 'Film 2022 - FAQ', reponseFAQView : reponseFAQ});
 });
 
 // ------------------------------ FIN ROUTE FAQ ---------------------------
-
-// ------------------------------ Début ROUTE Système connexion ---------------------------
-
-/* GET login */
-router.get('/login', function(req, res, next) {
-    res.render('./pages/login', { online: req.session.user, title: 'Film 2022 - Panel Admin', reponseUserLogin});
-});
-
-//Route redirection route signup
-router.get('/user/signup', function(req, res, next) {
-    res.json({
-        "text" : "Accès Refusé ! Merci d'utilisé une requête POST !",
-        "status" : false
-    });
-});
-
-//Route pour enregistrer un nouveau compte.
-router.post('/user/signup', async function(req, res, next) {
-    // Vérification des informations de la requête 
-    var validationSignup = await validation_user.validationSignup(req);
-    if (!validationSignup.status) {
-        res.json({
-            "text" : validationSignup.text,
-            "status" : validationSignup.status
-        });
-    } else {
-        // Response de la base de donnée
-        var reponseSignup = await query_user.signup(req);
-        console.log("reponseSignup", reponseSignup);
-        if (!reponseSignup.status)  {
-            res.json({
-                "rep" : reponseSignup.text,
-                "status" : reponseSignup.status
-            });
-        } else {
-            res.json({
-                "rep" : reponseSignup.text,
-                "user" : reponseSignup.user,
-                "status" : reponseSignup.status
-            });
-        }
-    }
-});
-
-//Route redirection route login
-router.get('/user/login', function(req, res, next) {
-    res.redirect('/login');
-});
-
-//Route pour la connexion.
-router.post('/user/login', async function(req, res, next) {
-    // Vérification des informations de la requête 
-    var validationLogin = await validation_user.validationLogin(req);
-    if (!validationLogin.status) {
-        res.render('./pages/login', { online: req.session.user, title: 'Film 2022 - Panel Admin', reponseUserLogin : validationLogin});
-    } else {
-        // Request a la base donnée
-        var reponseLogin = await query_user.login(req);
-        // Response de la base de donnée
-        if (!reponseLogin.status) {
-            return res.render('./pages/login', { online: req.session.user, title: 'Film 2022 - Panel Admin', reponseUserLogin : reponseLogin});
-        } else {
-            // On Sauvegarde les informations de connexion en session et on met l'etat true 
-            req.session.user = reponseLogin.user;
-            req.session.user.online = true;
-            // Redirection à la racine du site
-            return res.redirect('/');
-        }
-    }
-});
-
-// GET Syntax Logout
-router.get('/logout', function(req, res, next) {
-    if (req.session) {
-        // delete session object
-        req.session.destroy(function(err) {
-            if (err) {
-                return next(err);
-            } else {
-                return res.redirect('/');
-            }
-        });
-    }
-});
-
-// ------------------------------ FIN ROUTE Système connexion ---------------------------
 
 module.exports = router;
