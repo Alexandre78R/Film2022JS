@@ -62,13 +62,17 @@
                                 </td>
                                 <td>
                                     <form  action="/admin/faq-del/<%= reponseFAQView.data[i]._id%>" method="POST">
-                                        <input id="submit_button_tab_delete"   class="tab-buton-delete" type="submit" value="Suprimer"/>
+                                        <input id="submit_button_tab_delete" class="tab-buton-delete" type="submit" value="Suprimer"/>
                                     </form>
                                 </td>
                             </tr>
                         <% } %>
                     </table>
                 </table>
+            <% } %>
+            <% if (reponseFAQView.status) { %>
+                <!-- Import Pagination -->
+                <%- include('../Components/pagination', {reponse: reponseFAQView}); %>
             <% } %>
         </div>
     </main>

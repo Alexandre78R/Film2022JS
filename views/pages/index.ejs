@@ -8,6 +8,10 @@
     <link rel="stylesheet" href="../../stylesheets/container.css">
     <!-- Import du css des cartes -->
     <link rel="stylesheet" href="../../stylesheets/card.css">
+    <!-- Import du css des Alert -->
+    <link rel="stylesheet" href="../../stylesheets/alert.css">
+    <!-- Import du css Pagination -->
+    <link rel="stylesheet" href="../../stylesheets/pagination.css">
     <!-- Titre de la page -->
     <title><%= title %></title>
 </head>
@@ -60,6 +64,12 @@
                <% } %>
             <% } %>
           </div>
+          <div>
+        <% if (reponseFilmView.status){ %>
+            <!-- Import footer -->
+            <%- include('../Components/pagination', {reponse: reponseFilmView}); %>
+        <% } %>
+        </div>
     </main>
     <!-- Import footer -->
     <%- include('../Components/footer', {online}); %>

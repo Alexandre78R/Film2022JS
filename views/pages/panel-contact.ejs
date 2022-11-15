@@ -59,6 +59,10 @@
                     </table>
                 </table>
             <% } %>
+            <% if (reponseContactView.status) { %>
+                <!-- Import Pagination -->
+                <%- include('../Components/pagination', {reponse: reponseContactView}); %>
+            <% } %>
         </div>
     </main>
     <!-- Import footer -->

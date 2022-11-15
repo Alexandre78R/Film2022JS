@@ -1,23 +1,44 @@
+// Import model FILM BDD
 var FILM = require("../models/film.js");
+
+// Import function Pagination 
+var pagination = require("../function/pagination.js");
 
 var reponse = {};
 
 // Function pour gerer la view des film
-async function viewFilm () {
-    
-    var searchListFilm = await search_list_film ();
-    console.log("searchListFilm", searchListFilm);
-    if (searchListFilm.length == 0) {
+async function viewFilm (req) {
+
+    var paginationResult = await pagination.pagination(req, FILM, 4);
+    // console.log("paginationResult", paginationResult);
+    // paginationResult.results = [];
+    if (paginationResult.results.length == 0) {
         reponse.status =  false;
         reponse.text = "Aucun film se trouve dans la base de données !";
-        reponse.data = searchListFilm;
+        reponse.page = paginationResult.param;
+        reponse.url = paginationResult.path;
         return reponse;
     } else {
-        reponse.status =  true;
+        reponse.status = true;
         reponse.text = "Listes de film trouver !";
-        reponse.data = searchListFilm;
+        reponse.page = paginationResult.param;
+        reponse.data = paginationResult.results;
+        reponse.url = paginationResult.path;
         return reponse;
     }
+//     var searchListFilm = await search_list_film ();
+//     console.log("searchListFilm", searchListFilm);
+//     if (searchListFilm.length == 0) {
+        // reponse.status =  false;
+        // reponse.text = "Aucun film se trouve dans la base de données !";
+        // reponse.data = searchListFilm;
+        // return reponse;
+//     } else {
+        // reponse.status =  true;
+        // reponse.text = "Listes de film trouver !";
+        // reponse.data = searchListFilm;
+        // return reponse;
+//     }
 }
 
 //Function pour gerer la view d'un film avec son id

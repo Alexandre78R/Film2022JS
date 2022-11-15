@@ -28,10 +28,25 @@ router.get('/film', async function(req, res, next) {
     if (!req.session.user) return res.redirect("/");
     //Vérification si l'user à la permission
     if (!req.session.user.role == 1) return res.redirect("/");
+
     // Reponse la bdd
-    var reponseFimviewBDD = await query_film.viewFilm();
+    var reponseFimviewBDD = await query_film.viewFilm(req);
     return res.render('./pages/panel-film', { online: req.session.user, title: 'Film 2022 - Panel Film', reponseFilmView : reponseFimviewBDD});
 });
+
+/* GET panel-film page. */
+router.get('/film/:page', async function(req, res, next) {
+
+    //Vérification si l'admin est connecter
+    if (!req.session.user) return res.redirect("/");
+    //Vérification si l'user à la permission
+    if (!req.session.user.role == 1) return res.redirect("/");
+    // Reponse la bdd
+    var reponseFimviewBDD = await query_film.viewFilm(req);
+    if (req.params.page > reponseFimviewBDD.page.pageFinish) return res.redirect(reponseFimviewBDD.url);
+    return res.render('./pages/panel-film', { online: req.session.user, title: 'Film 2022 - Panel Film', reponseFilmView : reponseFimviewBDD});
+});
+
 
 /* GET panel-film-add page. */
 router.get('/film-add', function(req, res, next) {
@@ -361,12 +376,26 @@ router.get('/film-del/:id', async function(req, res, next) {
 
 /* GET panel-contact page. */
 router.get('/contact', async function(req, res, next) {
-    //Vérification si l'admin est connecter
-    if (!req.session.user) return res.redirect("/");
-    //Vérification si l'user à la permission
-    if (!req.session.user.role == 1) return res.redirect("/");
+    // //Vérification si l'admin est connecter
+    // if (!req.session.user) return res.redirect("/");
+    // //Vérification si l'user à la permission
+    // if (!req.session.user.role == 1) return res.redirect("/");
     // Réponse de a BDD
     var reponseContactView = await query_contact.viewContact(req);
+    // console.log('reponseContactView', reponseContactView);
+    return res.render('./pages/panel-contact', { online: req.session.user, title: 'Film 2022 - Panel Contact', reponseContactView});
+});
+
+/* GET panel-contact page. */
+router.get('/contact/:page', async function(req, res, next) {
+    // //Vérification si l'admin est connecter
+    // if (!req.session.user) return res.redirect("/");
+    // //Vérification si l'user à la permission
+    // if (!req.session.user.role == 1) return res.redirect("/");
+    // Réponse de a BDD
+    var reponseContactView = await query_contact.viewContact(req);
+    if (req.params.page > reponseContactView.page.pageFinish) return res.redirect(reponseContactView.url);
+    // console.log('reponseContactView', reponseContactView);
     return res.render('./pages/panel-contact', { online: req.session.user, title: 'Film 2022 - Panel Contact', reponseContactView});
 });
 
@@ -391,12 +420,24 @@ router.get('/faq', async function(req, res, next) {
     //Vérification si l'user à la permission
     if (!req.session.user.role == 1) return res.redirect("/");
     // Response de la base de donnée
-    var reponseFAQ = await query_faq.viewFAQ();
+    var reponseFAQ = await query_faq.viewFAQ(req);
     return res.render('./pages/panel-faq', { online: req.session.user, title: 'Film 2022 - Panel FAQ', reponseFAQView : reponseFAQ});
-  });
+});
   
-  /* GET panel-faq-add page. */
-  router.get('/faq-add', function(req, res, next) {
+/* GET panel-faq page. */
+router.get('/faq/:page', async function(req, res, next) {
+    //Vérification si l'admin est connecter
+    if (!req.session.user) return res.redirect("/");
+    //Vérification si l'user à la permission
+    if (!req.session.user.role == 1) return res.redirect("/");
+    // Response de la base de donnée
+    var reponseFAQ = await query_faq.viewFAQ(req);
+    if (req.params.page > reponseFAQ.page.pageFinish) return res.redirect(reponseFAQ.url);
+    return res.render('./pages/panel-faq', { online: req.session.user, title: 'Film 2022 - Panel FAQ', reponseFAQView : reponseFAQ});
+});
+
+/* GET panel-faq-add page. */
+router.get('/faq-add', function(req, res, next) {
     //Vérification si l'admin est connecter
     if (!req.session.user) return res.redirect("/");
     return res.render('./pages/panel-faq-add', { online: req.session.user, title: 'Film 2022 - Panel FAQ - Ajouter', faqADD: req.session.reponseFAQAdd});

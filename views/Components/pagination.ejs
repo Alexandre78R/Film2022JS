@@ -1,0 +1,41 @@
+<!-- Import du css Pagination -->
+<link rel="stylesheet" href="../../stylesheets/pagination.css">
+
+<!-- pagination -->
+<div class="pagination-center">
+    <div class="pagination">
+        <% if (reponse.page.start) { %>
+            <% if (reponse.url == "/") { %>
+                <a href="<%= reponse.url %><%= reponse.page.start %>">&laquo;</a>
+            <% } else { %>
+                <a href="<%= reponse.url %>/<%= reponse.page.start %>">&laquo;</a> 
+            <% } %>
+        <% } %> 
+        <% if (reponse.page.previous) { %>
+            <% if (reponse.url == "/") { %>
+                <a href="<%= reponse.url %><%= reponse.page.previous %>"><%= reponse.page.previous %></a>
+            <% } else { %>
+                <a href="<%= reponse.url %>/<%= reponse.page.previous %>"><%= reponse.page.previous %></a>
+            <% } %>
+        <% } %>
+            <% if (reponse.url == "/") { %>
+                <a href="<%= reponse.url %><%= reponse.page.current %>" class="active"><%= reponse.page.current %></a>
+            <% } else { %>
+                <a href="<%= reponse.url %>/<%= reponse.page.current %>" class="active"><%= reponse.page.current %></a>
+            <% } %>
+        <% if (reponse.page.next) { %>
+            <% if (reponse.url == "/") { %>
+                <a href="<%= reponse.url %><%= reponse.page.next %>"><%= reponse.page.next %></a>
+            <% } else { %>
+                <a href="<%= reponse.url %>/<%= reponse.page.next %>"><%= reponse.page.next %></a>
+            <% } %>
+        <% } %>
+        <% if (reponse.page.pages) { %>
+            <% if (reponse.url == "/") { %>
+                <a href="<%= reponse.url %><%= reponse.page.pages %>">&raquo;</a>
+            <% } else { %>
+                <a href="<%= reponse.url %>/<%= reponse.page.pages %>">&raquo;</a>
+            <% } %>
+        <% } %>
+    </div>
+</div>

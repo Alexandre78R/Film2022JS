@@ -1,24 +1,44 @@
-// Import model faq
+// Import model Contact
 const CONTACT = require("../models/contact.js");
 
 var reponse = {};
 
+// Import function Pagination 
+var pagination = require("../function/pagination.js");
+
 // Function pour voir les contacts
-async function viewContact () {
+async function viewContact (req) {
 
-    var searchListContact = await search_list_contact();
-
-    if (searchListContact.length == 0) {
-        reponse.status = false;
+    var paginationResult = await pagination.pagination(req, CONTACT, 5);
+    // console.log("paginationResult", paginationResult);
+    if (paginationResult.results.length == 0) {
+        reponse.status =  false;
         reponse.text = "Aucun message de contact se trouve dans la base de données !";
-        reponse.data = searchListContact;
+        reponse.page = paginationResult.param;
+        reponse.url = paginationResult.path;
         return reponse;
     } else {
         reponse.status = true;
         reponse.text = "Listes contact trouver !";
-        reponse.data = searchListContact;
+        reponse.page = paginationResult.param;
+        reponse.data = paginationResult.results;
+        reponse.url = paginationResult.path;
         return reponse;
     }
+
+    // var searchListContact = await search_list_contact();
+
+    // if (searchListContact.length == 0) {
+    //     reponse.status = false;
+    //     reponse.text = "Aucun message de contact se trouve dans la base de données !";
+    //     reponse.data = searchListContact;
+    //     return reponse;
+    // } else {
+    //     reponse.status = true;
+    //     reponse.text = "Listes contact trouver !";
+    //     reponse.data = searchListContact;
+    //     return reponse;
+    // }
 }
 
 // Function pour gérer l'ajout message Contact

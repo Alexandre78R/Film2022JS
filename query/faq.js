@@ -3,22 +3,42 @@ var FAQ = require("../models/faq.js");
 
 var reponse = {};
 
-// Function pour voir les faq
-async function viewFAQ () {
+// Import function Pagination 
+var pagination = require("../function/pagination.js");
 
-    var searchListFAQ = await search_list_faq();
-    // console.log("searchListFAQ", searchListFAQ);
-    if (searchListFAQ.length == 0) {
-        reponse.status = false;
+// Function pour voir les faq
+async function viewFAQ (req) {
+
+    var paginationResult = await pagination.pagination(req, FAQ, 5);
+    // console.log("paginationResult", paginationResult);
+    if (paginationResult.results.length == 0) {
+        reponse.status =  false;
         reponse.text = "Aucune FAQ se trouve dans la base de données !";
-        reponse.data = searchListFAQ;
+        reponse.page = paginationResult.param;
+        reponse.url = paginationResult.path;
         return reponse;
     } else {
         reponse.status = true;
         reponse.text = "Listes FAQ trouver !";
-        reponse.data = searchListFAQ;
+        reponse.page = paginationResult.param;
+        reponse.data = paginationResult.results;
+        reponse.url = paginationResult.path;
         return reponse;
     }
+
+    // var searchListFAQ = await search_list_faq();
+    // // console.log("searchListFAQ", searchListFAQ);
+    // if (searchListFAQ.length == 0) {
+    //     reponse.status = false;
+    //     reponse.text = "Aucune FAQ se trouve dans la base de données !";
+    //     reponse.data = searchListFAQ;
+    //     return reponse;
+    // } else {
+    //     reponse.status = true;
+    //     reponse.text = "Listes FAQ trouver !";
+    //     reponse.data = searchListFAQ;
+    //     return reponse;
+    // }
 }
 
 // Function pour voir une faq

@@ -57,6 +57,10 @@ var reponseFilmEdit = {
 
 /* GET Acceuil page. */
 router.get('/', async function(req, res, next) {
+    return res.redirect('/film');
+});
+
+router.get('/film', async function(req, res, next) {
 
     // Session Pour ajout FAQ
     if (!req.session.reponseFAQAdd) req.session.reponseFAQAdd = reponseFAQAdd;
@@ -70,19 +74,33 @@ router.get('/', async function(req, res, next) {
     // Session Pour modifier un film
     if (!req.session.reponseFilmEdit) req.session.reponseFilmEdit = reponseFilmEdit;
 
-    // var perPage = 2;
-    // var pages = Math.ceil(total / perPage);
-    // var pageNumber = (res.query.page == null) ? 1 : req.query.page;
-    // var startFrom = (pageNumber - 1) * perPage;
-    var reponseFimviewBDD = await query_film.viewFilm();
-    // .sort({ "id": -1})
-    // .skip(startFrom)
-    // .limit(perPage)
-    // .toAray();
+    var reponseFimviewBDD = await query_film.viewFilm(req);
 
     res.render('./pages/index', { online: req.session.user, title: 'Film 2022 - Panel Film', reponseFilmView : reponseFimviewBDD});
 });
 
+/* GET Acceuil page. */
+router.get('/film/:page', async function(req, res, next) {
+
+    // Session Pour ajout FAQ
+    if (!req.session.reponseFAQAdd) req.session.reponseFAQAdd = reponseFAQAdd;
+    
+    // Session Pour modifier FAQ
+    if (!req.session.reponseFaqEdit) req.session.reponseFaqEdit = reponseFaqEdit;
+
+    // Session Pour ajout d'un film
+    if (!req.session.reponseFilmAdd) req.session.reponseFilmAdd = reponseFilmAdd;
+
+    // Session Pour modifier un film
+    if (!req.session.reponseFilmEdit) req.session.reponseFilmEdit = reponseFilmEdit;
+
+
+    var reponseFimviewBDD = await query_film.viewFilm(req);
+    console.log("reponseFimviewBDD", reponseFimviewBDD);
+    if (req.params.page > reponseFimviewBDD.page.pageFinish) return res.redirect(reponseFimviewBDD.url);
+
+    res.render('./pages/index', { online: req.session.user, title: 'Film 2022 - Panel Film', reponseFilmView : reponseFimviewBDD});
+});
 // ------------------------------ FIN ROUTE Film  ---------------------------
 
 // ------------------------------ Début ROUTE Contact ---------------------------

@@ -75,6 +75,10 @@
             </table>
             <% } %>
         </div>
+        <% if (reponseFilmView.status){ %>
+            <!-- Import footer -->
+            <%- include('../Components/pagination', {reponse: reponseFilmView}); %>
+        <% } %>
     </main>
     <!-- Import footer -->
     <%- include('../Components/footer', {online}); %>
