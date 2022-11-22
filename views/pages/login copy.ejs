@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <!-- Import l'icon -->
+    <link rel="icon" href="../../images/icon.png" />
+    <!-- Import du css de container -->
+    <link rel="stylesheet" href="../../stylesheets/container.css">
+    <!-- Import du css des from -->
+    <link rel="stylesheet" href="../../stylesheets/from.css">
+    <!-- Import du css des Alert -->
+    <link rel="stylesheet" href="../../stylesheets/alert.css">
+    <!-- Titre de la page -->
+    <title><%= title %></title>
+</head>
+<body>
+    <header>
+        <!-- Import Nav Bar -->
+        <%- include('../Components/navBar', {online}); %>
+        <!-- Import Carrousel -->
+        <%- include('../Components/Carrousel', {online}); %>
+    </header>
+
+    <main>
+        <div class="container_app">
+            <div class="container_app_Contact">
+                <form id="contact_form" action="/user/login" method="POST">
+                    <% console.log("reponseUserLogin -->", reponseUserLogin); %>
+                    <% if(reponseUserLogin.status == false){ %>
+                        <div class="alertError">
+                            <span> <%=reponseUserLogin.text%> </span>
+                        </div>
+                    <% } %>
+                    <h3>Administrateur</h3>
+                        <div class="structure-contact">
+                            <label>Identifiant</label><br/>
+                            <input id="username" name="username" type="text" placeholder="Identifiant" size="30" /><br />
+                            <span id="username_validation"></span>
+                        </div>
+                        <div class="structure-contact">
+                            <label>Mot de passe</label><br />
+                            <input id="password" name="password" type="password" placeholder="Mot de passe" size="30" /><br />
+                            <span id="password_validation"></span>
+                        </div>
+                        <div class="structure-button-contact">
+                            <input id="submit_button" class="button-contact" type="submit" value="Connexion"/>
+                        </div>
+                  </form>
+              </div>
+        </div>
+    </main>
+    <!-- Import footer -->
+    <%- include('../Components/footer', {online}); %>
+</body>
+</html>
